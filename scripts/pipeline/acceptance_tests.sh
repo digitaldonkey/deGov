@@ -79,16 +79,21 @@ docker run --name mysql-$1 -e MYSQL_USER=testing -e MYSQL_PASSWORD=testing -e MY
 BUILD_BRANCH="feature/DEGOV-678-remove-usage-of-node-in-twig";
 BUILD_BRANCH=${BITBUCKET_BRANCH:=$RELEASE_BRANCH}
 
-_info "### TESTING $BITBUCKET_BRANCH"
+_info "### TESTING CHECKING IF LFS BRANCH EXISTS FOR FOR $BITBUCKET_BRANCH"
+LFS_BRANCH="$BITBUCKET_BRANCH"
+git ls-remote --exit-code --heads git@bitbucket.org:publicplan/nrwgov_devel_git_lfs.git "$BITBUCKET_BRANCH"
+if [ $? -eq 0 ]
+then
+  LFS_BRANCH="$RELEASE_BRANCH"
+fi
 
-
-_info "### Setting up project folder with branch $BUILD_BRANCH"
+_info "### Setting up project folder with branch $BITBUCKET_BRANCH and LFS $LFS_BRANCH"
 _composer create-project --no-progress degov/degov-project:dev-$BUILD_BRANCH --no-install
 cd degov-project
 rm composer.lock
 
 _info "### Install profile"
-_composer require --no-progress "degov/degov:dev-$BITBUCKET_BRANCH#$BITBUCKET_COMMIT" degov/degov_devel_git_lfs:dev-$RELEASE_BRANCH --update-with-all-dependencies
+_composer require --no-progress "degov/degov:dev-$BITBUCKET_BRANCH#$BITBUCKET_COMMIT" degov/degov_devel_git_lfs:dev-$LFS_BRANCH --update-with-all-dependencies
 
 PATH="$(pwd)/bin/:$PATH"
 export PATH
