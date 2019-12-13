@@ -80,11 +80,9 @@ BUILD_BRANCH="feature/DEGOV-678-remove-usage-of-node-in-twig";
 BUILD_BRANCH=${BITBUCKET_BRANCH:=$RELEASE_BRANCH}
 
 _info "### TESTING CHECKING IF LFS BRANCH EXISTS FOR FOR $BITBUCKET_BRANCH"
-LFS_BRANCH="$BITBUCKET_BRANCH"
-git ls-remote --exit-code --heads git@bitbucket.org:publicplan/nrwgov_devel_git_lfs.git "$BITBUCKET_BRANCH"
-if [ $? -eq 0 ]
-then
-  LFS_BRANCH="$RELEASE_BRANCH"
+LFS_BRANCH="$RELEASE_BRANCH"
+if git ls-remote --heads git@bitbucket.org:publicplan/nrwgov_devel_git_lfs.git "$BITBUCKET_BRANCH" |grep -q "$BITBUCKET_BRANCH"; then
+  LFS_BRANCH="$BITBUCKET_BRANCH"
 fi
 
 _info "### Setting up project folder with branch $BITBUCKET_BRANCH and LFS $LFS_BRANCH"
