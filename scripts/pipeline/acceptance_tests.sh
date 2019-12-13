@@ -75,18 +75,20 @@ done
 
 docker run --name mysql-$1 -e MYSQL_USER=testing -e MYSQL_PASSWORD=testing -e MYSQL_DATABASE=testing -p 3306:3306 -d mysql/mysql-server:5.7 --max_allowed_packet=1024M
 
-# Change BUILD_BRANCH to build custom project branch.
-BUILD_BRANCH="feature/DEGOV-678-remove-usage-of-node-in-twig";
-BUILD_BRANCH=${BITBUCKET_BRANCH:=$RELEASE_BRANCH}
-
-_info "### TESTING CHECKING IF LFS BRANCH EXISTS FOR FOR $BITBUCKET_BRANCH"
+_info "### Check if LFS repo has $BITBUCKET_BRANCH"
 LFS_BRANCH="$RELEASE_BRANCH"
 if git ls-remote --heads git@bitbucket.org:publicplan/nrwgov_devel_git_lfs.git "$BITBUCKET_BRANCH" |grep -q "$BITBUCKET_BRANCH"; then
   LFS_BRANCH="$BITBUCKET_BRANCH"
 fi
 
-_info "### Setting up project folder with branch $BITBUCKET_BRANCH and LFS $LFS_BRANCH"
-_composer create-project --no-progress degov/degov-project:dev-$BUILD_BRANCH --no-install
+_info "### Check if PROJECT repo has $BITBUCKET_BRANCH"
+PROJECT_BRANCH="$RELEASE_BRANCH"
+if git ls-remote --heads git@bitbucket.org:publicplan/degov_project.git "$BITBUCKET_BRANCH" |grep -q "$BITBUCKET_BRANCH"; then
+  PROJECT_BRANCH="$BITBUCKET_BRANCH"
+fi
+
+_info "### Setting up project folder with branch $PROJECT_BRANCH and LFS $LFS_BRANCH"
+_composer create-project --no-progress "degov/degov-project:dev-$PROJECT_BRANCH" --no-install
 cd degov-project
 rm composer.lock
 
