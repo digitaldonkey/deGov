@@ -1,5 +1,4 @@
 <?php
-
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -13,11 +12,11 @@ function degov_content_types_shared_fields_preprocess_node(&$variables) {
   /* @var \Drupal\node\NodeInterface $node */
   $node = $variables['elements']['#node'];
   $shariff_settings = \Drupal::configFactory()->get('shariff.settings');
-
   if ($node->hasField('field_social_media')
     && $node->field_social_media->value == '1'
     && !empty($variables['content']['shariff_field']) && !$shariff_settings->get('enable_1_click_sharing')) {
     $variables['content']['shariff_field']['#attached']['library'] = ['degov_content_types_shared_fields/shariff-2click'];
+    $variables['content']['social_media_sharing'] = TRUE;
   }
 }
 

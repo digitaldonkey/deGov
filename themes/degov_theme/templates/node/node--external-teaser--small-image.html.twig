@@ -80,6 +80,8 @@
 ]
 %}
 
+{% set external_link_url = content.field_link[0]['#url'] %}
+
 {% if content.field_teaser_image|field_value %}
   {% set class_sidebar = 'col-xs-2' %}
   {% set class_content = 'col-xs-10' %}
@@ -92,7 +94,7 @@
   {{ title_suffix }}
 
   {% if content.field_teaser_image %}
-    <a href="{{ node.field_link.uri }}" target="_blank" rel="bookmark">
+    <a href="{{ external_link_url }}" target="_blank" title="{{ content.field_link[0]['#title'] }}">
       <div class="normal-page__teaser-image teaser-image {{ class_sidebar }}">
         {{ content.field_teaser_image|field_value }}
       </div>
@@ -102,7 +104,7 @@
   <div class="normal-page__teaser-content teaser-content {{ class_content }}">
     <div class="teaser-content-inner p-md-3 p-2">
       {% if label %}
-        <a href="{{ node.field_link.uri }}" target="_blank" rel="bookmark">
+        <a href="{{ external_link_url }}" target="_blank" title="{{ content.field_link[0]['#title'] }}">
           <div class="normal-page__teaser-title teaser-title">
             <h3{{ label|quickedit_attr }}>
               {{ label|field_value }}
@@ -111,11 +113,11 @@
         </a>
       {% endif %}
 
-      {% if node.field_teaser_text.value is not empty %}
+      {% set text = content.field_teaser_text|field_value|render|striptags %}
+      {% if text is not empty %}
         <div class="normal-page__teaser-text"{{ content.field_teaser_text|quickedit_attr }}>
-          <a href="{{ node.field_link.uri }}" target="_blank" rel="bookmark">
+          <a href="{{ external_link_url }}" target="_blank" title="{{ content.field_link[0]['#title'] }}">
             {% autoescape false %}
-              {% set text = node.field_teaser_text.value|render|striptags %}
               {{ text|length > 110 ? text|slice(0, 110) ~ '...' : text }}
             {% endautoescape %}
           </a>
@@ -124,8 +126,7 @@
     </div>
   </div>
 
-
-  <a href="{{ node.field_link.uri }}" target="_blank" rel="bookmark">
+  <a href="{{ external_link_url }}" target="_blank" title="{{ content.field_link[0]['#title'] }}">
     <div class="normal-page__teaser-arrow bg-blue learn-more h-100 px-2 px-md-3">
       <i class="fa fa-external-link-alt my-auto" aria-hidden="true"></i>
     </div>

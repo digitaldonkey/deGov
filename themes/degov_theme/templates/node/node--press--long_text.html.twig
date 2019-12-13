@@ -5,9 +5,9 @@
  *
  * Available variables:
  * - node: The node entity with limited access to object properties and methods.
-     Only "getter" methods (method names starting with "get", "has", or "is")
-     and a few common methods such as "id" and "label" are available. Calling
-     other methods (such as node.delete) will result in an exception.
+ *    Only "getter" methods (method names starting with "get", "has", or "is")
+ *    and a few common methods such as "id" and "label" are available. Calling
+ *    other methods (such as node.delete) will result in an exception.
  * - label: The title of the node.
  * - content: All node items. Use {{ content }} to print them all,
  *   or print a subset such as {{ content.field_example }}. Use
@@ -98,8 +98,7 @@
   {% endif %}
 
 
-  <div
-      class="press-page__teaser-content teaser-content p-md-3 p-2 {{ class_content }}">
+  <div class="press-page__teaser-content teaser-content p-md-3 p-2 {{ class_content }}">
     <div class="teaser-content-inner">
       {% if content.field_teaser_title %}
         <a href="{{ url }}" rel="bookmark">
@@ -110,10 +109,10 @@
           </div>
         </a>
       {% endif %}
-      {% if content.field_teaser_text %}
+      {% if content.field_teaser_text is not empty %}
         <div class="press__teaser-text teaser-text" {{ content.field_teaser_text|quickedit_attr }}>
           {% autoescape false %}
-            {% set text = node.field_teaser_text.value|render|striptags %}
+            {% set text = content.field_teaser_text|field_value|render|striptags %}
             {{ text|length > 400 ? text|slice(0, 400) ~ '...' : text }}
           {% endautoescape %}
         </div>

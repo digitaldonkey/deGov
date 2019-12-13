@@ -80,12 +80,14 @@
 ]
 %}
 
+{% set external_link_url = content.field_link[0]['#url'] %}
+
 <article{{ attributes.addClass(classes)|without('role') }}>
   {{ title_suffix }}
 
   {% if content.field_teaser_image %}
-    <a class="img-top" href="{{ node.field_link.uri }}" target="_blank" rel="bookmark">
-      <div class="normal-page__teaser-image teaser-image">
+      <a class="img-top" href="{{ external_link_url }}" target="_blank" title="{{ content.field_link[0]['#title'] }}">
+        <div class="normal-page__teaser-image teaser-image">
         {{ content.field_teaser_image|field_value }}
       </div>
     </a>
@@ -93,7 +95,7 @@
 
   <div class="normal-page__teaser-content teaser-content p-3">
     {% if label %}
-      <a href="{{ node.field_link.uri }}" target="_blank" rel="bookmark">
+      <a href="{{ external_link_url }}" target="_blank" title="{{ content.field_link[0]['#title'] }}">
         <div class="normal-page__teaser-title teaser-title">
           <h3 class="text-align-center" {{ label|quickedit_attr }}>
             {{ label }}
@@ -104,7 +106,7 @@
 
   </div>
 
-  <a href="{{ node.field_link.uri }}" target="_blank" rel="bookmark">
+  <a href="{{ external_link_url }}" target="_blank" title="{{ content.field_link[0]['#title'] }}">
     <div class="learn-more bg-blue text-align-center p-2">learn more <i class="fas fa-external-link-alt" aria-hidden="true"></i></div>
   </a>
 

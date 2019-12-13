@@ -110,7 +110,7 @@
       <div class="blog__teaser-text"{{ content.field_teaser_text|quickedit_attr }}>
         <a href="{{ url }}" rel="bookmark">
           {% autoescape false %}
-            {% set text = node.field_teaser_text.value|striptags %}
+            {% set text = content.field_teaser_text|field_value|render|striptags %}
             {{ text|length > 310 ? text|slice(0, 310) ~ '...' : text }}
           {% endautoescape %}
         </a>

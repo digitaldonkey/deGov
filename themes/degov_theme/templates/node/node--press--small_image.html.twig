@@ -109,12 +109,12 @@
         </a>
       {% endif %}
 
-      {% if node.field_teaser_text.value is not empty %}
+      {% if content.field_teaser_text is not empty %}
         <div
             class="press__teaser-text"{{ content.field_teaser_text|quickedit_attr }}>
           <a href="{{ url }}" rel="bookmark">
             {% autoescape false %}
-              {% set text = node.field_teaser_text.value|render|striptags %}
+              {% set text = content.field_teaser_text|field_value|render|striptags %}
               {{ text|length > 110 ? text|slice(0, 110) ~ '...' : text }}
             {% endautoescape %}
           </a>

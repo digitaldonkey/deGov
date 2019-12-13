@@ -91,7 +91,7 @@
 
   {% if content.field_press_date %}
       <div class="press__teaser-date-left teaser-date col-xs-5 col-sm-4 col-md-3">
-          <div class="press__teaser__day">{{ node.field_press_date.value|date('d') }}</div>
+          <div class="press__teaser__day">{{ content.field_press_date.date|date('d') }}</div>
       </div>
   {% endif %}
 
@@ -102,7 +102,7 @@
         {% endif %}
         {% if content.field_press_date %}
         <div class="press__teaser__month"{{ content.field_press_date|quickedit_attr }}>
-          {{ content.field_press_date|field_value }}
+          {{ content.field_press_date }}
         </div>
         {% endif %}
         {% if content.field_content_type %}
@@ -129,11 +129,11 @@
               </div>
             {% endif %}
             <!-- Teaser text -->
-            {% if content.field_teaser_text.value %}
+          {% set text = content.field_teaser_text|field_value|render|striptags %}
+          {% if text is not empty %}
               <a href="{{ url }}" rel="bookmark">
                 <div class="press__teaser-text {{ class_content }}"{{ content.field_teaser_text|quickedit_attr }}>
                   {% autoescape false %}
-                    {% set text = node.field_teaser_text.value|striptags %}
                     {{ text|length > 440 ? text|slice(0, 440) ~ '...' : text }}
                   {% endautoescape %}
                 </div>

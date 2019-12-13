@@ -94,9 +94,17 @@
 
   <!-- teaser image -->
   <div class="event__teaser-date-left teaser-date col-xs-5 col-sm-4 col-md-3 arrow">
-    <div class="event__teaser__day">{% if start_date_timestamp is not empty %}{{ start_date_timestamp|format_date('custom', 'd') }}{% endif %}</div>
+    {% if start_date_timestamp is not empty %}
+    <div class="event__teaser__day">
+      {{- start_date_timestamp|format_date('custom', 'd') -}}
+    </div>
+    {% endif %}
     <div class="event__teaser__location">{{ content.field_event_location.0.locality}}</div>
-    <div class="event__teaser__time">{% if node.field_event_display_time.value == true %}{{ start_date_timestamp|format_date('custom', 'G:i') }}{% endif %}</div>
+    {% if field_event_display_time %}
+    <div class="event__teaser__time">
+      {{- start_date_timestamp|format_date('custom', 'G:i') -}}
+    </div>
+    {% endif %}
   </div>
 
   <div class="event__teaser-content teaser-content col-xs-7 col-sm-8 col-md-9"> <!-- from medium screen up, show on the right sidebar -->
@@ -132,12 +140,12 @@
           </a>
         </div>
       {% endif %}
-      <!-- Teaser text -->
-      {% if content.field_teaser_text %}
+      {# Teaser text #}
+      {% if content.field_teaser_text is not empty %}
         <a href="{{ url }}" rel="bookmark">
           <div class="event__teaser-text {{ class_content }}"{{ content.field_teaser_text|quickedit_attr }}>
             {% autoescape false %}
-              {% set text = node.field_teaser_text.value|striptags %}
+              {% set text = content.field_teaser_text|field_value|render|striptags %}
               {{ text|length > 440 ? text|slice(0, 440) ~ '...' : text }}
             {% endautoescape %}
           </div>

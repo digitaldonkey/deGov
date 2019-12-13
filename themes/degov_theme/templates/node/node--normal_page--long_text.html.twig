@@ -5,9 +5,9 @@
  *
  * Available variables:
  * - node: The node entity with limited access to object properties and methods.
-     Only "getter" methods (method names starting with "get", "has", or "is")
-     and a few common methods such as "id" and "label" are available. Calling
-     other methods (such as node.delete) will result in an exception.
+ *    Only "getter" methods (method names starting with "get", "has", or "is")
+ *    and a few common methods such as "id" and "label" are available. Calling
+ *    other methods (such as node.delete) will result in an exception.
  * - label: The title of the node.
  * - content: All node items. Use {{ content }} to print them all,
  *   or print a subset such as {{ content.field_example }}. Use
@@ -78,6 +78,7 @@
 
 ] %}
 
+
 {% if content.field_teaser_image %}
   {% set class_sidebar = 'col-xs-2' %}
   {% set class_content = 'col-xs-10' %}
@@ -96,8 +97,7 @@
     </a>
   {% endif %}
 
-  <div
-      class="normal-page__teaser-content teaser-content p-md-3 p-2 {{ class_content }}">
+  <div class="normal-page__teaser-content teaser-content p-md-3 p-2 {{ class_content }}">
     <div class="teaser-content-inner">
       {% if content.field_teaser_title %}
         <a href="{{ url }}" rel="bookmark">
@@ -110,22 +110,20 @@
       {% endif %}
 
       {% if content.field_teaser_text %}
-        <div
-            class="normal-page__teaser-text teaser-text"{{ content.field_teaser_text|quickedit_attr }}>
+        <div class="normal-page__teaser-text teaser-text"{{ content.field_teaser_text|quickedit_attr }}>
           {% autoescape false %}
-            {% set text = node.field_teaser_text.value|render|striptags %}
+            {% set text = content.field_teaser_text|field_value|render|striptags %}
             {{ text|length > 400 ? text|slice(0, 400) ~ '...' : text }}
           {% endautoescape %}
         </div>
       {% endif %}
+
     </div>
   </div>
 
-
   {#Teaser Arrow link#}
   <a href="{{ url }}" rel="bookmark">
-    <div
-        class="normal-page__teaser-arrow learn-more bg-blue h-100 px-2 px-md-3">
+    <div class="normal-page__teaser-arrow learn-more bg-blue h-100 px-2 px-md-3">
       <i class="fa fa-arrow-right my-auto" aria-hidden="true"></i>
     </div>
   </a>

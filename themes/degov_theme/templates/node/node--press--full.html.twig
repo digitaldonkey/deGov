@@ -79,7 +79,7 @@
   {{ title_suffix }}
 
   <div class="press__header-paragraphs">
-    {% if node.field_header_paragraphs.value %}
+    {% if not is_empty(content.field_header_paragraphs) %}
       {{ content.field_header_paragraphs }}
     {% endif %}
     {% if not is_front %}
@@ -117,8 +117,7 @@
       </div>
       {% endif %}
     </div>
-
-    {% if content.field_tags|field_value or node.field_social_media.value == '1' or node.field_header_paragraphs.value %}
+    {% if content.social_media_sharing or (not is_empty(content.field_tags)) or (not is_empty(content.field_header_paragraphs) %}
       <div class="press__header header container ">
 
         {# Tags #}
@@ -129,7 +128,7 @@
         {% endif %}
 
         {# Social media sharing #}
-        {% if node.field_social_media and node.field_social_media.value == '1' %}
+        {% if content.social_media_sharing %}
           {% if content.shariff_field %}
             <div class="sharing">
               {{ content.shariff_field }}
@@ -139,9 +138,9 @@
       </div>
     {% endif %}
 
-    {% if node.field_content_paragraphs.value %}
+    {% if not is_empty(content.field_content_paragraphs) %}
       <div class="press__content-paragraphs">
-        {{ content.field_content_paragraphs|field_value }}
+        {{ content.field_content_paragraphs }}
       </div>
     {% endif %}
 

@@ -5,9 +5,9 @@
  *
  * Available variables:
  * - node: The node entity with limited access to object properties and methods.
-     Only "getter" methods (method names starting with "get", "has", or "is")
-     and a few common methods such as "id" and "label" are available. Calling
-     other methods (such as node.delete) will result in an exception.
+ *    Only "getter" methods (method names starting with "get", "has", or "is")
+ *    and a few common methods such as "id" and "label" are available. Calling
+ *    other methods (such as node.delete) will result in an exception.
  * - label: The title of the node.
  * - content: All node items. Use {{ content }} to print them all,
  *   or print a subset such as {{ content.field_example }}. Use
@@ -65,23 +65,21 @@
  *   in different view modes.
  */
 #}
-{%
-  set classes = [
-    node.bundle|clean_class,
-    node.isPromoted() ? 'is-promoted',
-    node.isSticky() ? 'is-sticky',
-    not node.isPublished() ? 'is-unpublished',
-    view_mode ? view_mode|clean_class,
-    'clearfix',
-  ]
-%}
+{% set classes = [
+  node.bundle|clean_class,
+  node.isPromoted() ? 'is-promoted',
+  node.isSticky() ? 'is-sticky',
+  not node.isPublished() ? 'is-unpublished',
+  view_mode ? view_mode|clean_class,
+  'clearfix',
+] %}
 
 {% if content.field_teaser_image|field_value %}
   {% set class_sidebar = 'col-xs-12 col-sm-4' %}
   {% set class_content = 'col-xs-12 col-sm-8' %}
 {% else %}
   {% set class_sidebar = 'invisible' %}
-  {% set class_content = 'col-xs-12 col-sm-12' %}
+  {% set class_content = 'col-xs-12' %}
 {% endif %}
 
 <article{{ attributes.addClass(classes)|without('role') }}>
@@ -95,26 +93,26 @@
     </a>
   {% endif %}
 
-    <div class="normal-page__teaser-content teaser-content {{ class_content }}">
-      {% if content.field_teaser_title %}
-        <div class="normal-page__teaser-title teaser-title">
-          <a href="{{ url }}" rel="bookmark">
-            <h3{{ content.field_teaser_title|quickedit_attr }}>
-              {{ content.field_teaser_title|field_value|striptags }}
-            </h3>
-          </a>
-        </div>
-      {% endif %}
-      {% if content.field_teaser_text %}
+  <div class="normal-page__teaser-content teaser-content {{ class_content }}">
+    {% if content.field_teaser_title %}
+      <div class="normal-page__teaser-title teaser-title">
+        <a href="{{ url }}" rel="bookmark">
+          <h3{{ content.field_teaser_title|quickedit_attr }}>
+            {{ content.field_teaser_title|field_value|striptags }}
+          </h3>
+        </a>
+      </div>
+    {% endif %}
+    {% if content.field_teaser_text %}
       <a href="{{ url }}" rel="bookmark">
         <div class="normal-page__teaser-text"{{ content.field_teaser_text|quickedit_attr }}>
           {% autoescape false %}
-            {% set text = node.field_teaser_text.value|striptags %}
+            {% set text = content.field_teaser_text|field_value|render|striptags %}
             {{ text|length > 440 ? text|slice(0, 440) ~ '...' : text }}
           {% endautoescape %}
-          </div>
+        </div>
       </a>
-      {% endif %}
-    </div>
+    {% endif %}
+  </div>
 
 </article>

@@ -5,9 +5,9 @@
  *
  * Available variables:
  * - node: The node entity with limited access to object properties and methods.
-     Only "getter" methods (method names starting with "get", "has", or "is")
-     and a few common methods such as "id" and "label" are available. Calling
-     other methods (such as node.delete) will result in an exception.
+ *    Only "getter" methods (method names starting with "get", "has", or "is")
+ *    and a few common methods such as "id" and "label" are available. Calling
+ *    other methods (such as node.delete) will result in an exception.
  * - label: The title of the node.
  * - content: All node items. Use {{ content }} to print them all,
  *   or print a subset such as {{ content.field_example }}. Use
@@ -65,26 +65,25 @@
  *   in different view modes.
  */
 #}
-{%
-  set classes = [
-    node.bundle|clean_class,
-    node.isPromoted() ? 'is-promoted',
-    node.isSticky() ? 'is-sticky',
-    not node.isPublished() ? 'is-unpublished',
-    view_mode ? view_mode|clean_class,
-    'clearfix',
-    'col-sm-12',
-    'col-md-6',
-    'col-lg-3',
-    'mb-4'
-  ]
-%}
+{% set classes = [
+  node.bundle|clean_class,
+  node.isPromoted() ? 'is-promoted',
+  node.isSticky() ? 'is-sticky',
+  not node.isPublished() ? 'is-unpublished',
+  view_mode ? view_mode|clean_class,
+  'clearfix',
+  'col-sm-12',
+  'col-md-6',
+  'col-lg-3',
+  'mb-4'
+] %}
+{% set external_link_url = content.field_link[0]['#url'] %}
 
 <article{{ attributes.addClass(classes)|without('role') }}>
   {{ title_suffix }}
 
-  {% if content.field_teaser_image %}
-    <a class="img-top" href="{{ node.field_link.uri }}" target="_blank" rel="bookmark">
+  {% if content.field_teaser_image is not empty %}
+    <a class="img-top" href="{{ external_link_url }}" target="_blank" title="{{ content.field_link[0]['#title'] }}">
       <div class="normal-page__teaser-image teaser-image">
         {{ content.field_teaser_image|field_value }}
       </div>
@@ -93,8 +92,8 @@
 
   <div class="normal-page__teaser-content teaser-content p-3">
     {% if label %}
-      <a href="{{ node.field_link.uri }}" target="_blank" rel="bookmark">
-        <div class="normal-page__teaser-title teaser-title">
+      <a href="{{ external_link_url }}" target="_blank" title="{{ content.field_link[0]['#title'] }}">
+      <div class="normal-page__teaser-title teaser-title">
           <h3{{ label|quickedit_attr }}>
             {{ label }}
           </h3>
@@ -104,18 +103,20 @@
 
     {% if content.field_teaser_text %}
       <div class="normal-page__teaser-text"{{ content.field_teaser_text|quickedit_attr }}>
-        <a href="{{ node.field_link.uri }}" target="_blank" rel="bookmark">
-          {% autoescape false %}
+        <a href="{{ external_link_url }}" target="_blank" title="{{ content.field_link[0]['#title'] }}">
+        {% autoescape false %}
             {% set teaser_text = content.field_teaser_text[0]|render|striptags %}
             {{ teaser_text|length > 140 ? teaser_text|slice(0, 140) ~ '...' : teaser_text }}
           {% endautoescape %}
         </a>
       </div>
-      {% endif %}
+    {% endif %}
   </div>
 
-  <a href="{{ node.field_link.uri }}" target="_blank" rel="bookmark">
-    <div class="learn-more bg-blue text-align-center p-2">learn more <i class="fas fa-external-link-alt" aria-hidden="true"></i></div>
+  <a href="{{ external_link_url }}" target="_blank" title="{{ content.field_link[0]['#title'] }}">
+    <div class="learn-more bg-blue text-align-center p-2">
+      learn more <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+    </div>
   </a>
 
 </article>

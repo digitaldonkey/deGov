@@ -5,9 +5,9 @@
  *
  * Available variables:
  * - node: The node entity with limited access to object properties and methods.
-     Only "getter" methods (method names starting with "get", "has", or "is")
-     and a few common methods such as "id" and "label" are available. Calling
-     other methods (such as node.delete) will result in an exception.
+ *    Only "getter" methods (method names starting with "get", "has", or "is")
+ *    and a few common methods such as "id" and "label" are available. Calling
+ *    other methods (such as node.delete) will result in an exception.
  * - label: The title of the node.
  * - content: All node items. Use {{ content }} to print them all,
  *   or print a subset such as {{ content.field_example }}. Use
@@ -80,6 +80,8 @@
   ]
 %}
 
+{% set external_link_url = content.field_link[0]['#url'] %}
+
 {% if content.field_teaser_image|field_value %}
   {% set class_sidebar = '' %}
   {% set class_content = '' %}
@@ -92,7 +94,7 @@
   {{ title_suffix }}
 
   {% if content.field_teaser_image %}
-    <a href="{{ node.field_link.uri }}" target="_blank" rel="bookmark">
+    <a href="{{ external_link_url }}" target="_blank" title="{{ content.field_link[0]['#title'] }}">
       <div class="normal-page__teaser-image teaser-image {{ class_sidebar }} arrow">
         {{ content.field_teaser_image|field_value }}
       </div>
@@ -103,7 +105,7 @@
   <div class="normal-page__teaser-content teaser-content p-md-3 p-2 {{ class_content }}">
     <div class="teaser-content-inner">
       {% if label %}
-        <a href="{{ node.field_link.uri }}" target="_blank"  rel="bookmark">
+        <a href="{{ external_link_url }}" target="_blank" title="{{ content.field_link[0]['#title'] }}">
           <div class="normal-page__teaser-title teaser-title">
             <h3{{ label|quickedit_attr }}>
               {{ label }}
@@ -114,7 +116,7 @@
       {% if content.field_teaser_text %}
         <div class="normal-page__teaser-text teaser-text"{{ content.field_teaser_text|quickedit_attr }}>
           {% autoescape false %}
-            {% set text = node.field_teaser_text.value|render|striptags %}
+            {% set text = content.field_teaser_text|field_value|render|striptags %}
             {{ text|length > 400 ? text|slice(0, 400) ~ '...' : text }}
           {% endautoescape %}
         </div>
@@ -122,7 +124,7 @@
     </div>
   </div>
 
-  <a href="{{ node.field_link.uri }}" target="_blank"  rel="bookmark">
+  <a href="{{ external_link_url }}" target="_blank" title="{{ content.field_link[0]['#title'] }}">
     <div class="normal-page__teaser-arrow bg-blue learn-more h-100 px-2 px-md-3">
       <i class="fa fa-external-link-alt my-auto" aria-hidden="true"></i>
     </div>

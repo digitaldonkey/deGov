@@ -36,6 +36,7 @@ function degov_node_event_preprocess_node(&$variables) {
   if ($node->bundle() == 'event') {
     $variables['start_date_timestamp'] = FALSE;
     $variables['end_date_timestamp'] = FALSE;
+    $variables['field_event_display_time'] = $node->get('field_event_display_time')->value;
     $timezone = drupal_get_user_timezone();
 
     if (!$node->get('field_event_date')->isEmpty()) {

@@ -82,7 +82,7 @@
   {{ title_suffix }}
 
 
-  {% if node.field_header_paragraphs.value %}
+  {% if not is_empty(content.field_header_paragraphs) %}
     <div class="event__header-paragraphs">
       {{ content.field_header_paragraphs }}
     </div>
@@ -103,7 +103,7 @@
       </div>
     {% endif %}
   {% endif %}
-  {% if node.field_event_date.value or node.field_event_location.value %}
+  {% if content.field_event_date or content.field_event_location %}
     <div class="event__address container">
       {% if start_date_timestamp %}
         <div class="event__address__date row">
@@ -116,7 +116,7 @@
           </span>
         </div>
       {% endif %}
-      {% if node.field_event_location.value %}
+      {% if content.field_event_location %}
         <div class="event__address__location row">
           <span class="field-label col-xs-4 col-sm-2">{{ 'Wo'|trans }}:</span>
           <span class="content col-xs-8 col-sm-10">
@@ -138,7 +138,7 @@
           </span>
         </div>
       {% endif %}
-      {% if start_date_timestamp and end_date_timestamp and node.field_event_display_time.value == true %}
+      {% if start_date_timestamp and end_date_timestamp and field_event_display_time %}
         <div class="event__address__time row">
           <span class="field-label col-xs-4 col-sm-2">{{ 'Uhr'|trans }}:</span>
           <span class="content col-xs-8 col-sm-10">{{ start_date_timestamp|format_date('custom', 'H:i') }}  bis {{ end_date_timestamp|format_date('custom', 'H:i') }} </span>
@@ -157,7 +157,7 @@
     {% endif %}
 
     {# Social media sharing #}
-    {% if node.field_social_media and node.field_social_media.value == '1' %}
+    {% if content.social_media_sharing %}
       {% if content.shariff_field %}
         <div class="sharing">
           {{ content.shariff_field }}
@@ -167,14 +167,14 @@
   </div>
 
   <div class="event__content content">
-    {% if node.field_content_paragraphs.value %}
+    {% if not is_empty(content.field_content_paragraphs) %}
       <div class="event__content-paragraphs">
-        {{ content.field_content_paragraphs|field_value }}
+        {{ content.field_content_paragraphs }}
       </div>
     {% endif %}
 
-    {% if node.field_sidebar_right_paragraphs.value %}
-      {{ content.field_sidebar_right_paragraphs|field_value }}
+    {% if not is_empty(content.field_sidebar_right_paragraphs) %}
+      {{ content.field_sidebar_right_paragraphs }}
     {% endif %}
   </div>
 

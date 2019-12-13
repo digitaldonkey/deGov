@@ -113,7 +113,7 @@
       {% if content.field_teaser_text %}
         <div class="blog__teaser-text teaser-text"{{ content.field_teaser_text|quickedit_attr }}>
           {% autoescape false %}
-            {% set text = node.field_teaser_text.value|render|striptags %}
+            {% set text = content.field_teaser_text|field_value|render|striptags %}
             {{ text|length > 400 ? text|slice(0, 400) ~ '...' : text }}
           {% endautoescape %}
         </div>
