@@ -76,8 +76,11 @@ done
 docker run --name mysql-$1 -e MYSQL_USER=testing -e MYSQL_PASSWORD=testing -e MYSQL_DATABASE=testing -p 3306:3306 -d mysql/mysql-server:5.7 --max_allowed_packet=1024M
 
 # Change BUILD_BRANCH to build custom project branch.
-BUILD_BRANCH="feature/DEGOV-737-fixColorSchemaUi";
-BUILD_BRANCH=${BUILD_BRANCH:=$RELEASE_BRANCH}
+BUILD_BRANCH="feature/DEGOV-678-remove-usage-of-node-in-twig";
+BUILD_BRANCH=${BITBUCKET_BRANCH:=$RELEASE_BRANCH}
+
+_info "### TESTING $BITBUCKET_BRANCH"
+
 
 _info "### Setting up project folder with branch $BUILD_BRANCH"
 _composer create-project --no-progress degov/degov-project:dev-$BUILD_BRANCH --no-install
