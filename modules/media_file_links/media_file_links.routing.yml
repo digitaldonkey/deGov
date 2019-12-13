@@ -1,0 +1,6 @@
+media_file_links.autocomplete:
+  path: '/media-file-links-autocomplete/{target_type}/{selection_handler}/{selection_settings_key}'
+  defaults:
+    _controller: '\Drupal\media_file_links\Controller\EntityAutocompleteController::handleAutocomplete'
+  requirements:
+    _permission: 'access content'

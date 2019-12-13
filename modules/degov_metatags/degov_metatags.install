@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * The deGov Metatags module.
+ */
+
+/**
+ * Fix the path for OpenGraph and Twitter card images.
+ */
+function degov_metatags_update_870502() {
+  // Update config.
+  $globalMetatagsConfig = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.global');
+  $tags = $globalMetatagsConfig->get('tags');
+  $fields = [
+    'og_image',
+    'twitter_cards_image',
+  ];
+
+  foreach ($fields as $field) {
+    if (isset($tags[$field]) && $tags[$field] === '[node:field_teaser_image:entity:image]') {
+      $tags[$field] = '[node:field_teaser_image:entity:image:crop_1_to_1]';
+    }
+  }
+
+  $globalMetatagsConfig->set('tags', $tags)->save();
+}

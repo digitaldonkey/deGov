@@ -19,11 +19,6 @@ services:
     class: Drupal\media_file_links\Service\MediaFileLinkPlaceholderHandler
     arguments: [ ]
 
-  media_file_links.route_subscriber:
-    class: Drupal\media_file_links\Routing\AutocompleteRouteSubscriber
-    tags:
-    - { name: event_subscriber }
-
   media_file_links.autocomplete_matcher:
     class: Drupal\media_file_links\EntityAutocompleteMatcher
     arguments: ['@plugin.manager.entity_reference_selection']

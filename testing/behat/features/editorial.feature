@@ -8,7 +8,7 @@ Feature: deGov - Editorial
       | manager | editor@example.com | password | manager |
     Given I proof that Drupal module "degov_node_normal_page" is installed
 
-  Scenario: "I am creating content with role 'Redakteur' and publisheding it with the 'Chefredakteur' role"
+  Scenario: I am creating content with role 'Redakteur' and publishing it with the 'Chefredakteur' role
     Then I am logged in as "editor"
     And I am on "/node/add/normal_page"
     And I fill in "Titel" with "Test1234"

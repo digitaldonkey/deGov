@@ -45,6 +45,7 @@ function media_file_links_entity_base_field_info_alter(&$fields, EntityTypeInter
  * Implements hook_form_FORM_ID_alter().
  */
 function media_file_links_form_menu_link_content_menu_link_content_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['link']['widget'][0]['uri']['#type'] = 'media_file_links_autocomplete';
   if (!empty($form['link']['widget'][0]['uri']['#element_validate']) && is_array($form['link']['widget'][0]['uri']['#element_validate'])) {
     foreach ($form['link']['widget'][0]['uri']['#element_validate'] as $key => $validator) {
       if (is_array($validator) && in_array('validateUriElement', $validator)) {
@@ -142,6 +143,11 @@ function media_file_links_form_alter(&$form, FormStateInterface $form_state, $fo
   }
 }
 
+/**
+ * @param $mediaUsage
+ *
+ * @return \Drupal\Core\StringTranslation\TranslatableMarkup|null
+ */
 function _media_file_links_get_usage_message($mediaUsage): ?TranslatableMarkup {
   switch (TRUE) {
     case $mediaUsage['referencing_entity'] instanceof MediaInterface:

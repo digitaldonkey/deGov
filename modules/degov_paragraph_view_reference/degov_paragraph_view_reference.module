@@ -136,16 +136,6 @@ function degov_paragraph_view_reference_field_widget_form_alter(&$element, \Drup
     $arguments_weight = !empty($element['options']['argument']['#weight']) ? $element['options']['argument']['#weight'] : 10;
     // Add empty option and ajax callback for the display_id field.
     $element['display_id']['#options'] = ['_none' => t('-- Choose view display --')] + $element['display_id']['#options'];
-    $element['display_id']['#ajax'] = [
-      'event' => 'change',
-      'progress' => [
-        'type' => 'throbber',
-        'message' => t('Loading view details ...'),
-      ],
-      'callback' => 'degov_views_argument_getter',
-      'wrapper' => $arguments_wrapper_selector,
-      'method' => 'replace',
-    ];
     $element['target_id']['#attributes']['class'][] = 'viewreference_target_id';
     $element['display_id']['#attributes']['class'][] = 'viewreference_display_id';
     $element['#attached']['library'][] = 'degov_paragraph_view_reference/viewsreference';

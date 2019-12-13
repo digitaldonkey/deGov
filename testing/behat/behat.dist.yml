@@ -53,7 +53,7 @@ default:
         features: '%paths.base%/docroot/profiles/contrib/degov/testing/behat/features'
   extensions:
     Behat\MinkExtension:
-      files_path: '/degov-project/docroot/profiles/contrib/degov/modules/degov_demo_content/fixtures'
+      files_path: '%paths.base%/docroot/profiles/contrib/degov/modules/degov_demo_content/fixtures'
       browser_name: chrome
       javascript_session: selenium2
       default_session: selenium2
