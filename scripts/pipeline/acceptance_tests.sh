@@ -23,6 +23,8 @@ export CI_ROOT_DIR
 RELEASE_BRANCH=release/7.6.x-dev
 export RELEASE_BRANCH
 
+export COMPOSER_ALLOW_SUPERUSER=1
+
 _info() {
   local color_info="\\x1b[32m"
   local color_reset="\\x1b[0m"
