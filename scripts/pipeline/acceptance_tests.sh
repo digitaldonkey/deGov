@@ -77,7 +77,7 @@ docker run --name mysql-$1 -e MYSQL_USER=testing -e MYSQL_PASSWORD=testing -e MY
 
 _info "### Check if LFS repo has $BITBUCKET_BRANCH"
 LFS_BRANCH="$RELEASE_BRANCH"
-if git ls-remote --heads git@bitbucket.org:publicplan/nrwgov_devel_git_lfs.git "$BITBUCKET_BRANCH" |grep -q "$BITBUCKET_BRANCH"; then
+if git ls-remote --heads git@bitbucket.org:org:publicplan/degov_devel_git_lfs.git "$BITBUCKET_BRANCH" |grep -q "$BITBUCKET_BRANCH"; then
   LFS_BRANCH="$BITBUCKET_BRANCH"
 fi
 
