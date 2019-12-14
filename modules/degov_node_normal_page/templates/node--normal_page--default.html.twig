@@ -83,7 +83,7 @@
       {{ content.field_header_paragraphs }}
     </div>
   {% endif %}
-  {% if content.social_media_sharing or (not is_empty(content.field_tags)) or (not is_empty(content.field_header_paragraphs) %}
+  {% if not is_empty(content.field_tags) or not is_empty(content.field_header_paragraphs) or content.social_media_sharing %}
     <div class="normal-page__header header">
 
       {# Tags #}
