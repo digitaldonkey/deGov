@@ -31,9 +31,14 @@ jobs:
       - run:
           name: Apache Setup
           command: |
-            sudo apt update && sudo apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev
-            sudo docker-php-ext-configure gd --with-freetype --with-jpeg
-            sudo docker-php-ext-install -j$(nproc) gd
+            sudo apt-get update \
+            && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            libfreetype6-dev \
+            libjpeg62-turbo-dev \
+            libpng-dev \
+            && rm -rf /var/lib/apt/lists/*
+            sudo docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --with-png-dir=/usr \
+            && docker-php-ext-install -j "$(nproc)" gd
 
       - run:
           name: Set up Environment Variables for project and LFS repository
@@ -54,12 +59,6 @@ jobs:
               echo 'export LFS_BRANCH="$RELEASE_BRANCH"' >> $BASH_ENV
               echo "LFS_BRANCH = $RELEASE_BRANCH"
             fi
-
-      - run:
-        name: Review Environment Variables
-        command: |
-           echo "LFS BRANCH: $LFS_BRANCH"
-           echo "PROJECT BRANCH: $PROJECT_BRANCH"
 
       # PROJECT SETUP
       - restore_cache:
