@@ -32,9 +32,9 @@ jobs:
           command: |
             if git ls-remote --heads git@bitbucket.org:org:publicplan/degov_devel_git_lfs.git "$CIRCLE_BRANCH" |grep -q "$CIRCLE_BRANCH";
             then
-              echo 'export LFS_BRANCH="$CIRCLE_BRANCH"' >> $BASH_ENV \
+              echo 'export LFS_BRANCH="$CIRCLE_BRANCH"' >> $BASH_ENV
             else
-              echo 'export LFS_BRANCH="$RELEASE_BRANCH"' >> $BASH_ENV \
+              echo 'export LFS_BRANCH="$RELEASE_BRANCH"' >> $BASH_ENV
             fi
 
       - run:
