@@ -30,7 +30,7 @@ jobs:
       - run:
           name: Setup Environment Variables
           command: |
-            if git ls-remote --heads git@bitbucket.org:org:publicplan/degov_devel_git_lfs.git "$CIRCLE_BRANCH" |grep -q "$CIRCLE_BRANCH";
+            if git ls-remote --exit-code --heads git@bitbucket.org:org:publicplan/degov_devel_git_lfs.git "$CIRCLE_BRANCH";
             then
               echo 'export LFS_BRANCH="$CIRCLE_BRANCH"' >> $BASH_ENV
             else
