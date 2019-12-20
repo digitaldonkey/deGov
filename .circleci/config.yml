@@ -6,7 +6,6 @@ version: 2
 jobs:
   build:
     docker:
-      # Specify the version you desire here
       - image: circleci/php:apache-stretch
         environment:
           RELEASE_BRANCH: release/7.6.x-dev
@@ -31,14 +30,11 @@ jobs:
       - run:
           name: Apache Setup
           command: |
-            sudo apt-get update \
-            && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-            libfreetype6-dev \
-            libjpeg62-turbo-dev \
-            libpng-dev \
-            && rm -rf /var/lib/apt/lists/*
-            sudo docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --with-png-dir=/usr \
-            && docker-php-ext-install -j "$(nproc)" gd
+            sudo apt-get update
+            DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends libfreetype6-dev libjpeg62-turbo-dev libpng-dev
+            sudo rm -rf /var/lib/apt/lists/*
+            sudo docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --with-png-dir=/usr
+            docker-php-ext-install -j "$(nproc)" gd
 
       - run:
           name: Set up Environment Variables for project and LFS repository
