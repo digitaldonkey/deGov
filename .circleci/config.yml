@@ -68,12 +68,12 @@ jobs:
             - v1-dependencies-
 
       - run:
-		      name: Set up Project
+          name: Set up Project
           command: |
             composer create-project --remove-vcs --no-progress "degov/degov-project:dev-$PROJECT_BRANCH" --no-install
 
       - run:
-		      name: Install profile
+          name: Install profile
           command: |
             cd degov-project
             rm composer.lock
