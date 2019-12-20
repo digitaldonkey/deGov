@@ -59,7 +59,7 @@ jobs:
       # PROJECT SETUP
       - restore_cache:
           keys:
-            - v1-project-dependencies-{{ .Environment.PROJECT_BRANCH }}-{{ .Environment.CIRCLE_BRANCH }}
+            - v1-project-dependencies-{{ $PROJECT_BRANCH }}-{{ $LFS_BRANCH }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
