@@ -8,6 +8,8 @@ jobs:
     docker:
       # Specify the version you desire here
       - image: circleci/php:apache-stretch
+        environment:
+          RELEASE_BRANCH: release/7.6.x-dev
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -22,9 +24,17 @@ jobs:
 
     steps:
       - checkout
-
       - run: sudo apt update # PHP CircleCI 2.0 Configuration File# PHP CircleCI 2.0 Configuration File sudo apt install zlib1g-dev libsqlite3-dev
       - run: sudo docker-php-ext-install zip
+      # Run a step to setup an environment variable.
+      - run:
+          name: Setup Environment Variables
+          command: |
+          LFS_BRANCH=$CIRCLE_BRANCH
+          if git ls-remote --heads git@bitbucket.org:org:publicplan/degov_devel_git_lfs.git "$CIRCLE_BRANCH" |grep -q "$CIRCLE_BRANCH"; then \
+            LFS_BRANCH="$CIRCLE_BRANCH" \
+          fi
+          echo 'export LFS_BRANCH="$LFS_BRANCH"' >> $BASH_ENV
 
       # Download and cache dependencies
       - restore_cache:
