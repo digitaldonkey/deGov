@@ -15,8 +15,10 @@ jobs:
       # Using the RAM variation mitigates I/O contention
       # for database intensive operations.
       - image: circleci/mysql:5.7-ram
-      #
-      # - image: redis:2.8.19
+        environment:
+          MYSQL_DATABASE: testing
+          MYSQL_USER: testing
+          MYSQL_PASSWORD: testing
 
     steps:
       - checkout
@@ -31,8 +33,6 @@ jobs:
             - v1-dependencies-{{ checksum "composer.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
-
-      - run --name mysql-$1 -e MYSQL_USER=testing -e MYSQL_PASSWORD=testing -e MYSQL_DATABASE=testing -p 3306:3306 -d circleci/mysql:5.7-ram --max_allowed_packet=1024M
 
       - run: composer create-project --no-progress "degov/degov-project:dev-relese/7.6.x-dev" --no-install --ansi --profile "$@"
 
