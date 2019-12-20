@@ -74,7 +74,7 @@ jobs:
             composer create-project --remove-vcs --no-progress "degov/degov-project:dev-$PROJECT_BRANCH" --no-install
 
       - save_cache:
-          keys:
+          key:
             - v1-project-dependencies-{{ .Environment.PROJECT_BRANCH }}-{{ .Environment.CIRCLE_BRANCH }}
           paths:
             - ./degov-project
