@@ -10,6 +10,9 @@ jobs:
       - image: circleci/php:apache-stretch
         environment:
           RELEASE_BRANCH: release/7.6.x-dev
+          COMPOSER_ALLOW_SUPERUSER: 1
+          COMPOSER_MEMORY_LIMIT: -1
+          COMPOSER_EXIT_ON_PATCH_FAILURE: 1
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
