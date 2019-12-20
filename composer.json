@@ -98,6 +98,12 @@
         "leaflet/leaflet": "^1.1.0",
         "symfony/filesystem": "^3.4"
     },
+    "repositories": [
+      {
+        "type": "vcs",
+        "url":  "git@github.com:digitaldonkey/deGov.git"
+      }
+    ],
     "autoload": {
         "classmap": [
             "modules/lightning_core/tests/contexts/AwaitTrait.inc"
