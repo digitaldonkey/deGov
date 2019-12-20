@@ -26,7 +26,7 @@ jobs:
           MYSQL_PASSWORD: testing
 
     steps:
-    - run
+    - run:
         name: Setup Apache
         command: sudo apt update && sudo apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev && \
              sudo docker-php-ext-configure gd --with-freetype --with-jpeg && sudo docker-php-ext-install -j$(nproc) gd && \
