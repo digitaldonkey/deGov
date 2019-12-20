@@ -61,6 +61,10 @@ jobs:
             echo "LFS BRANCH: $LFS_BRANCH"
             echo "PROJECT BRANCH: $PROJECT_BRANCH"
 
+      - run:
+          name: Set up Project
+          command: |
+            composer create-project --remove-vcs --no-progress "degov/degov-project:dev-$PROJECT_BRANCH" --no-install
 
       # Download and cache dependencies
       - restore_cache:
@@ -69,11 +73,6 @@ jobs:
             - v1-dependencies-{{ checksum "composer.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
-
-      - run:
-          name: Set up Project
-          command: |
-            composer create-project --remove-vcs --no-progress "degov/degov-project:dev-$PROJECT_BRANCH" --no-install
 
       - run:
           name: Install profile
@@ -87,15 +86,15 @@ jobs:
           key: v1-dependencies-{{ checksum "composer.json" }}
           paths:
             - ./vendor
-      - restore_cache:
-          keys:
-            - node-v1-{{ checksum "package.json" }}
-            - node-v1-
-#      - run: yarn install
-      - save_cache:
-          key: node-v1-{{ checksum "package.json" }}
-          paths:
-            - node_modules
+#      - restore_cache:
+#          keys:
+#            - node-v1-{{ checksum "package.json" }}
+#            - node-v1-
+##      - run: yarn install
+#      - save_cache:
+#          key: node-v1-{{ checksum "package.json" }}
+#          paths:
+#            - node_modules
 
       # prepare the database
 #      - run: touch storage/testing.sqlite
@@ -105,3 +104,6 @@ jobs:
       #- run: ./vendor/bin/phpunit
 #      - run: ./vendor/bin/codecept build
 #      - run: ./vendor/bin/codecept run
+dependencies:
+  cache_directories:
+    - ~/.composer/cache
