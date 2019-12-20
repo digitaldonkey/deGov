@@ -34,7 +34,6 @@ jobs:
             sudo apt update && sudo apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev
             sudo docker-php-ext-configure gd --with-freetype --with-jpeg
             sudo docker-php-ext-install -j$(nproc) gd
-            sudo docker-php-ext-install zip
 
       - run:
           name: Set up Environment Variables for project and LFS repository
@@ -56,20 +55,10 @@ jobs:
               echo "LFS_BRANCH = $RELEASE_BRANCH"
             fi
 
-
-      - run:
-          name: Set up Environment Variables for project and LFS repository
-          command: |
-            if git ls-remote --exit-code --heads https://digitaldonkey@bitbucket.org/publicplan/degov_devel_git_lfs.git "$CIRCLE_BRANCH";
-            then
-              echo 'export LFS_BRANCH="$CIRCLE_BRANCH"' >> $BASH_ENV
-              echo "LFS_BRANCH = $CIRCLE_BRANCH"
-            else
-              echo 'export LFS_BRANCH="$RELEASE_BRANCH"' >> $BASH_ENV
-              echo "LFS_BRANCH = $RELEASE_BRANCH"
-            fi
-            echo "LFS BRANCH: $LFS_BRANCH"
-            echo "PROJECT BRANCH: $PROJECT_BRANCH"
+     - run:
+         name: Review Environment Variables
+           echo "LFS BRANCH: $LFS_BRANCH"
+           echo "PROJECT BRANCH: $PROJECT_BRANCH"
 
       # PROJECT SETUP
       - restore_cache:
