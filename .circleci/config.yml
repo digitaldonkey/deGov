@@ -61,7 +61,6 @@ jobs:
             echo "LFS BRANCH: $LFS_BRANCH"
             echo "PROJECT BRANCH: $PROJECT_BRANCH"
 
-
       # PROJECT SETUP
       - restore_cache:
           keys:
