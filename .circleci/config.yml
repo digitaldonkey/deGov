@@ -31,7 +31,7 @@ jobs:
       - run:
           name: Check for LFS_BRANCH
           command: |
-            if git ls-remote --exit-code --heads https://digitaldonkey@bitbucket.org/publicplan/degov_devel_git_lfs.git "$CIRCLE_BRANCH";
+            if git ls-remote --exit-code --heads https://digitaldonkey@bitbucket.org/publicplan/degov_devel_git_lfs.git feature/fix-pipeline-for-8.x;
             then
               echo 'export LFS_BRANCH="$CIRCLE_BRANCH"' >> $BASH_ENV
               echo "LFS_BRANCH = $CIRCLE_BRANCH"
