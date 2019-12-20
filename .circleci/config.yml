@@ -34,7 +34,7 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: composer --ansi --profile "$@" create-project --no-progress "degov/degov-project:dev-release/7.6.x-dev" --no-install
+      - run: composer create-project --no-progress "degov/degov-project:dev-release/7.6.x-dev" --no-install
 
       - save_cache:
           key: v1-dependencies-{{ checksum "composer.json" }}
