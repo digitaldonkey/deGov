@@ -58,19 +58,21 @@ jobs:
             source $BASH_ENV && echo "$LFS_BRANCH,$PROJECT_BRANCH" > /tmp/repositories-in-use
 
       # PROJECT SETUP
-      - restore_cache:
-          keys:
-            - v1-project-dependencies-{{ checksum "/tmp/repositories-in-use" }}
+#      - restore_cache:
+#          keys:
+#            - v1-project-dependencies-{{ checksum "/tmp/repositories-in-use" }}
 
       - run:
           name: Set up Project
           command: |
             composer create-project --remove-vcs --no-progress "degov/degov-project:dev-$PROJECT_BRANCH" --no-install
-
-      - save_cache:
-          key: v1-project-dependencies-{{ checksum "/tmp/repositories-in-use" }}
-          paths:
-            - ./degov-project
+          save_cache:
+            key: v1-project-dependencies-{{ checksum "/tmp/repositories-in-use" }}
+            paths:
+              - ./degov-project
+          restore_cache:
+            keys:
+              - v1-project-dependencies-{{ checksum "/tmp/repositories-in-use" }}
 
 
       # INSTALL PROFILE
