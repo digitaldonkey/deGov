@@ -37,7 +37,7 @@ jobs:
             sudo docker-php-ext-install -j "$(nproc)" gd
 
       - run:
-          name: Set up Environment Variables for project and LFS repository
+          name: Repository Environment Variables for project and LFS
           command: |
             if git ls-remote --exit-code --heads https://digitaldonkey@bitbucket.org/publicplan/degov_project.git "$CIRCLE_BRANCH";
             then
@@ -61,8 +61,6 @@ jobs:
       - restore_cache:
           keys:
             - v1-project-dependencies-{{ checksum "/tmp/repositories-in-use" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
 
       - run:
           name: Set up Project
