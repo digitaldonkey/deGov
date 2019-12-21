@@ -59,7 +59,7 @@ jobs:
       # PROJECT SETUP
       - restore_cache:
           keys:
-            - v1-project-dependencies-{{ checksum "/tmp/repositories-in-use" }}
+            - v2-project-dependencies-{{ checksum "/tmp/repositories-in-use" }}
       - run:
           name: Set up Project
           command: |
@@ -75,7 +75,7 @@ jobs:
             cd ..
 
       - save_cache:
-          key: v1-project-dependencies-{{ checksum "/tmp/repositories-in-use" }}
+          key: v2-project-dependencies-{{ checksum "/tmp/repositories-in-use" }}
           paths:
             - ./degov-project
 
