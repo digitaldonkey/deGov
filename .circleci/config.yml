@@ -83,7 +83,7 @@ jobs:
       - run:
           name: Set up Project
           command: |
-            composer create-project --remove-vcs --no-progress "degov/degov-project:dev-$PROJECT_BRANCH" --no-install .
+            composer create-project --remove-vcs "degov/degov-project:dev-$PROJECT_BRANCH" --no-install .
 
       - save_cache:
           key: v3-project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
@@ -94,7 +94,7 @@ jobs:
       - run:
           name: Composer require deGov
           command: |
-            composer require --no-progress "degov/degov:dev-$CIRCLE_BRANCH#$CIRCLE_SHA1" degov/degov_devel_git_lfs:dev-$LFS_BRANCH --update-with-all-dependencies
+            composer require "degov/degov:dev-$CIRCLE_BRANCH#$CIRCLE_SHA1" degov/degov_devel_git_lfs:dev-$LFS_BRANCH --update-with-all-dependencies
 
       - save_cache:
           key: v3-project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}
