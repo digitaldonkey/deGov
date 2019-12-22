@@ -25,10 +25,9 @@ jobs:
           MYSQL_PASSWORD: testing
 
     steps:
-#      - checkout # Checkout will colone the current repo (deGov) into Workdir.
-
+      # Prepeare git uses the code from "- checkout" step without cloning repository.
       - run:
-          name: Prepare Git
+          name: Prepare git
           command: |
             mkdir -p ~/.ssh
             echo 'github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
@@ -75,10 +74,10 @@ jobs:
                 echo "$PROJECT_BRANCH,$LFS_BRANCH" > /tmp/cache--project-setup
                 echo "$LFS_BRANCH,$PROJECT_BRANCH,$CIRCLE_BRANCH,$CIRCLE_SHA1" > /tmp/cache--composer
 
-      - restore_cache:
-          keys:
-            - v3-project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
-            - v3-project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}
+#      - restore_cache:
+#          keys:
+#            - v3-project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
+#            - v3-project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}
 
       # PROJECT SETUP
       - run:
