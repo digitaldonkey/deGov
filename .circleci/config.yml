@@ -25,7 +25,7 @@ jobs:
           MYSQL_PASSWORD: testing
 
     steps:
-      - checkout
+#      - checkout
 #      - run:
 #          name: Apache Setup
 #          command: |
@@ -34,6 +34,10 @@ jobs:
 #            sudo rm -rf /var/lib/apt/lists/*
 #            sudo docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --with-png-dir=/usr
 #            sudo docker-php-ext-install -j "$(nproc)" gd
+      - restore_cache:
+          keys:
+            - v3-project-dependencies-{{ checksum "/cache--project-setup" }}
+
       - run:
           name: Repository Environment Variables for project and LFS
           command: |
@@ -53,17 +57,22 @@ jobs:
                 echo "PROJECT_BRANCH = $PROJECT_BRANCH"
                 echo "LFS_BRANCH = $CIRCLE_BRANCH"
                 # Used for caching
-                echo "$LFS_BRANCH,$PROJECT_BRANCH,$CIRCLE_BRANCH,$CIRCLE_SHA1" > /tmp/cache--project-setup
+                echo "$PROJECT_BRANCH,$LFS_BRANCH" > /tmp/cache--project-setup
+                echo "$LFS_BRANCH,$PROJECT_BRANCH,$CIRCLE_BRANCH,$CIRCLE_SHA1" > /tmp/cache--composer
 
       # PROJECT SETUP
-      - restore_cache:
-          keys:
-            - v3-project-dependencies-{{ checksum "/tmp/repositories-in-use" }}
-            - v3-project-dependencies
+
+
       - run:
           name: Set up Project
           command: |
             composer create-project --remove-vcs --no-progress "degov/degov-project:dev-$PROJECT_BRANCH" --no-install
+
+      - save_cache:
+          key: v3-project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
+          paths:
+            - ./degov-project
+
 
       # INSTALL PROFILE
       - run:
@@ -74,7 +83,7 @@ jobs:
             cd ..
 
       - save_cache:
-          key: v3-project-dependencies-{{ checksum "/tmp/cache--project-setup" }}
+          key: v3-project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}
           paths:
             - ./degov-project
 
@@ -83,6 +92,7 @@ jobs:
           command: |
             pwd
             ls -al .
+            ls -al degov-project
 
 
 #      - restore_cache:
