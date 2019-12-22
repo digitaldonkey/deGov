@@ -6,7 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/php:apache-stretch
+      - image: digitaldonkey/circleci-degov:latest
         environment:
           RELEASE_BRANCH: release/7.6.x-dev
           COMPOSER_ALLOW_SUPERUSER: 1
@@ -26,14 +26,14 @@ jobs:
 
     steps:
       - checkout
-      - run:
-          name: Apache Setup
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y --no-install-recommends libfreetype6-dev libjpeg62-turbo-dev libpng-dev
-            sudo rm -rf /var/lib/apt/lists/*
-            sudo docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --with-png-dir=/usr
-            sudo docker-php-ext-install -j "$(nproc)" gd
+#      - run:
+#          name: Apache Setup
+#          command: |
+#            sudo apt-get update
+#            sudo apt-get install -y --no-install-recommends libfreetype6-dev libjpeg62-turbo-dev libpng-dev
+#            sudo rm -rf /var/lib/apt/lists/*
+#            sudo docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --with-png-dir=/usr
+#            sudo docker-php-ext-install -j "$(nproc)" gd
       - run:
           name: Repository Environment Variables for project and LFS
           command: |
@@ -69,7 +69,6 @@ jobs:
           name: Composer require deGov
           command: |
             cd degov-project
-            rm composer.lock
             composer require --no-progress "degov/degov:dev-$CIRCLE_BRANCH#$CIRCLE_SHA1" degov/degov_devel_git_lfs:dev-$LFS_BRANCH --update-with-all-dependencies
             cd ..
 
