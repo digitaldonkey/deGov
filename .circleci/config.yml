@@ -94,9 +94,7 @@ jobs:
       - run:
           name: Composer require deGov
           command: |
-            cd degov-project
             composer require --no-progress "degov/degov:dev-$CIRCLE_BRANCH#$CIRCLE_SHA1" degov/degov_devel_git_lfs:dev-$LFS_BRANCH --update-with-all-dependencies
-            cd ..
 
       - save_cache:
           key: v3-project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}
