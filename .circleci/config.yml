@@ -3,10 +3,6 @@
 # Check https://circleci.com/docs/2.0/language-php/ for more details
 #
 version: 2.1
-parameters:
-  ci-cache-tag:
-    type: string
-    default: "latest"
 jobs:
   build:
     docker:
@@ -16,7 +12,7 @@ jobs:
           COMPOSER_ALLOW_SUPERUSER: 1
           COMPOSER_MEMORY_LIMIT: -1
           COMPOSER_EXIT_ON_PATCH_FAILURE: 1
-          CIRCLECI_CAHCHE_TAG: << pipeline.parameters.ci-cache-tag >>
+          CIRCLECI_CAHCHE_tag: v4
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
