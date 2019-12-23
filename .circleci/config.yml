@@ -58,7 +58,7 @@ jobs:
 #            git config --global gc.auto 0 || true
 
       - save_cache:
-          key: project-dependencies-apache-vhost-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/vhost.conf" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
+          key: project-dependencies-apache-vhost-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/vhost.conf" }}-{{ checksum "/home/circleci/project/.circleci/config.yml" }}
           paths:
             - .
             - ./.ssh
@@ -87,10 +87,10 @@ jobs:
 
 #      - restore_cache:
 #          keys:
-#            - project-dependencies-apache-vhost-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/vhost.conf" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
-#            - project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
-#            - project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
-#            - project-dependencies-checkout-config-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
+#            - project-dependencies-apache-vhost-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/vhost.conf" }}-{{ checksum "/home/circleci/project/.circleci/config.yml" }}
+#            - project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}-{{ checksum "/home/circleci/project/.circleci/config.yml" }}
+#            - project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}-{{ checksum "/home/circleci/project/.circleci/config.yml" }}
+#            - project-dependencies-checkout-config-{{ checksum "/home/circleci/project/.circleci/config.yml" }}
 
       # PROJECT SETUP
       - run:
@@ -100,7 +100,7 @@ jobs:
             composer create-project --remove-vcs "degov/degov-project:dev-$PROJECT_BRANCH" --no-install .
 
       - save_cache:
-          key: project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
+          key: project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}-{{ checksum "/home/circleci/project/.circleci/config.yml" }}
           paths:
             - .
 
@@ -111,7 +111,7 @@ jobs:
             composer require "degov/degov:dev-$CIRCLE_BRANCH#$CIRCLE_SHA1" degov/degov_devel_git_lfs:dev-$LFS_BRANCH --update-with-all-dependencies
 
       - save_cache:
-          key: project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
+          key: project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}-{{ checksum "/home/circleci/project/.circleci/config.yml" }}
           paths:
             - .
 
@@ -123,7 +123,7 @@ jobs:
             sudo service apache2 start
 
       - save_cache:
-          key: project-dependencies-apache-vhost-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/vhost.conf" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
+          key: project-dependencies-apache-vhost-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/vhost.conf" }}-{{ checksum "/home/circleci/project/.circleci/config.yml" }}
           paths:
             - .
 
