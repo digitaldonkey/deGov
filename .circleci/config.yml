@@ -12,8 +12,6 @@ jobs:
           COMPOSER_ALLOW_SUPERUSER: 1
           COMPOSER_MEMORY_LIMIT: -1
           COMPOSER_EXIT_ON_PATCH_FAILURE: 1
-          # Counter for
-          CIRCLECI_CAHCHE_TAG: v4
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -27,7 +25,7 @@ jobs:
           MYSQL_PASSWORD: testing
 
     steps:
-      # Prepeare git uses the code from "- checkout" step without cloning repository.
+      # Prepare git uses the code from "- checkout" step without cloning repository.
       - run:
           name: Prepare git
           command: |
@@ -44,15 +42,6 @@ jobs:
             # use git+ssh instead of https
             git config --global url."ssh://git@github.com".insteadOf "https://github.com" || true
             git config --global gc.auto 0 || true
-
-#      - run:
-#          name: Apache Setup
-#          command: |
-#            sudo apt-get update
-#            sudo apt-get install -y --no-install-recommends libfreetype6-dev libjpeg62-turbo-dev libpng-dev
-#            sudo rm -rf /var/lib/apt/lists/*
-#            sudo docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr --with-png-dir=/usr
-#            sudo docker-php-ext-install -j "$(nproc)" gd
 
       - run:
           name: Repository Environment Variables for project and LFS
@@ -78,6 +67,7 @@ jobs:
 
 #      - restore_cache:
 #          keys:
+
 #            - project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
 #            - project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}
 
@@ -88,7 +78,7 @@ jobs:
             composer create-project --remove-vcs "degov/degov-project:dev-$PROJECT_BRANCH" --no-install .
 
       - save_cache:
-          key: project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
+          key: project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
           paths:
             - .
       # INSTALL PROFILE
@@ -98,7 +88,7 @@ jobs:
             composer require "degov/degov:dev-$CIRCLE_BRANCH#$CIRCLE_SHA1" degov/degov_devel_git_lfs:dev-$LFS_BRANCH --update-with-all-dependencies
 
       - save_cache:
-          key: v3-project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}
+          key: project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
           paths:
             - .
 
@@ -115,6 +105,12 @@ jobs:
             sudo cp ~/docroot/profiles/contrib/degov/.circleci/vhost.conf /etc/apache2/sites-available/project.conf
             sudo a2ensite project
             sudo service apache2 start
+
+      - save_cache:
+          key: project-dependencies-apache-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/vhost.conf" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
+          paths:
+            - .
+
 
 
 #      - restore_cache:
