@@ -91,7 +91,7 @@ jobs:
             composer create-project --remove-vcs "degov/degov-project:dev-$PROJECT_BRANCH" --no-install .
 
       - save_cache:
-          key: "${CIRCLECI_CACHE_PREFIX}-project-dependencies-project-setup-"{{ checksum "/tmp/cache--project-setup" }}
+          key: ${CIRCLECI_CACHE_PREFIX}-project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
           paths:
             - ./degov-project
 
@@ -102,7 +102,7 @@ jobs:
             composer require "degov/degov:dev-$CIRCLE_BRANCH#$CIRCLE_SHA1" degov/degov_devel_git_lfs:dev-$LFS_BRANCH --update-with-all-dependencies
 
       - save_cache:
-          key: "${CIRCLECI_CACHE_PREFIX}-project-dependencies-composer-"{{ checksum "/tmp/cache--composer" }}
+          key: ${CIRCLECI_CACHE_PREFIX}-project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}
           paths:
             - ./degov-project
 
