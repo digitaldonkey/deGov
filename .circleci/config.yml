@@ -178,8 +178,9 @@ jobs:
           MYSQL_PASSWORD: testing
     steps:
      - restore_cache:
-          keys:
-            - project-dependencies-apache-vhost-{{ checksum "./docroot/profiles/contrib/.circleci/degov/vhost.conf" }}-{{ checksum "./docroot/profiles/contrib/degov/.circleci/config.yml" }}
+        keys:
+          - project-dependencies-apache-vhost-{{ checksum "./docroot/profiles/contrib/.circleci/degov/vhost.conf" }}-{{ checksum "./docroot/profiles/contrib/degov/.circleci/config.yml" }}
+
      - run:
           name: Start Apache
           command: |
