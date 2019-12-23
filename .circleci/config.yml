@@ -29,7 +29,7 @@ jobs:
       - checkout:
           path: /home/circleci/project/docroot/profiles/contrib/
 
-      # Prepare git uses the code from "- checkout" step without cloning repository.
+### Prepare git uses the code from "- checkout" step without cloning repository.
 #      - run:
 #          name: Prepare Cloning
 #          command: |
@@ -48,9 +48,10 @@ jobs:
 #            git config --global gc.auto 0 || true
 
       - save_cache:
-          key: project-dependencies-checkout-config
+          key: project-dependencies-apache-vhost-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/vhost.conf" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
           paths:
-            - ~/.ssh
+            - .
+            - ./.ssh
 
       - run:
           name: Repository Environment Variables for project and LFS
@@ -77,9 +78,9 @@ jobs:
 #      - restore_cache:
 #          keys:
 #            - project-dependencies-apache-vhost-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/vhost.conf" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
-#            - project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}
-#            - project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
-#            - project-dependencies-ssh
+#            - project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
+#            - project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
+#            - project-dependencies-checkout-config-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
 
       # PROJECT SETUP
       - run:
@@ -89,7 +90,7 @@ jobs:
             composer create-project --remove-vcs "degov/degov-project:dev-$PROJECT_BRANCH" --no-install .
 
       - save_cache:
-          key: project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
+          key: project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
           paths:
             - .
 
@@ -143,6 +144,7 @@ jobs:
       #- run: ./vendor/bin/phpunit
 #      - run: ./vendor/bin/codecept build
 #      - run: ./vendor/bin/codecept run
+
 dependencies:
   cache_directories:
     - ~/.composer/cache
