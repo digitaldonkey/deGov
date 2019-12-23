@@ -6,7 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: digitaldonkey/circleci-degov:latest
+      - image: digitaldonkey/circleci-degov:0.0.6
         environment:
           RELEASE_BRANCH: release/7.6.x-dev
           COMPOSER_ALLOW_SUPERUSER: 1
@@ -104,9 +104,16 @@ jobs:
       - run:
           name: Where are we?
           command: |
-            pwd
+            echo "pwd $(pwd)"
             ls -al .
-            ls -al degov-project
+            ls -al docroot/
+
+      - run:
+          name: Configure & start Apache
+          command: |
+            sudo cp ~/.circleci/vhost.conf /etc/apache2/sites-available/project.conf
+            sudo a2ensite project
+            sudo service apache2 start
 
 
 #      - restore_cache:
