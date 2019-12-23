@@ -96,6 +96,7 @@ jobs:
       - run:
           name: Set up Project
           command: |
+            ls -al .
             rm -rf ./*  # removing default -checkout as we use composer, but we keep circleci known_hosts setup.
             composer create-project --remove-vcs "degov/degov-project:dev-$PROJECT_BRANCH" --no-install .
 
