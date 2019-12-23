@@ -95,16 +95,16 @@ jobs:
       # PROJECT SETUP
       - run:
           name: Set up Project
-          command: |
-            ls -al .
-            rm -rf ./*  # removing default -checkout as we use composer, but we keep circleci known_hosts setup.
-            composer create-project --remove-vcs "degov/degov-project:dev-$PROJECT_BRANCH" --no-install .
+          command: | # only if not in cache
+            if [ ! -f ./composer.json ]; then
+              rm -rf ./*  # removing default -checkout as we use composer, but we keep circleci known_hosts setup.
+              composer create-project --remove-vcs "degov/degov-project:dev-$PROJECT_BRANCH" --no-install .
+            fi
 
       - save_cache:
           key: project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
           paths:
            - .
-           - /tmp/cache--*
 
       # INSTALL PROFILE
       - run:
@@ -116,7 +116,7 @@ jobs:
           key: project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}-{{ checksum "./docroot/profiles/contrib/degov/.circleci/config.yml" }}
           paths:
             - .
-            - /tmp/cache--*
+
       - run:
           name: Configure & start Apache
           command: |
