@@ -89,7 +89,7 @@ jobs:
 #          keys:
 #            - project-dependencies-apache-vhost-{{ checksum "/home/circleci/project/docroot/profiles/contrib/.circleci/vhost.conf" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/.circleci/config.yml" }}
 #            - project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/.circleci/config.yml" }}
-#            - project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/.circleci/config.yml" }}
+#            - project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
 #            - project-dependencies-checkout-config-{{ checksum "/home/circleci/project/docroot/profiles/contrib/.circleci/config.yml" }}
 
       # PROJECT SETUP
@@ -100,8 +100,7 @@ jobs:
             composer create-project --remove-vcs "degov/degov-project:dev-$PROJECT_BRANCH" --no-install .
 
       - save_cache:
-          key: project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
-          paths:
+          key: project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
             - .
 
       # INSTALL PROFILE
