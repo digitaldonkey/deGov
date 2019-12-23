@@ -12,6 +12,7 @@ jobs:
           COMPOSER_ALLOW_SUPERUSER: 1
           COMPOSER_MEMORY_LIMIT: -1
           COMPOSER_EXIT_ON_PATCH_FAILURE: 1
+          CIRCLECI_CACHE_PREFIX:
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -111,7 +112,7 @@ jobs:
       - run:
           name: Configure & start Apache
           command: |
-            sudo cp ~/.circleci/vhost.conf /etc/apache2/sites-available/project.conf
+            sudo cp ~/project/.circleci/vhost.conf /etc/apache2/sites-available/project.conf
             sudo a2ensite project
             sudo service apache2 start
 
