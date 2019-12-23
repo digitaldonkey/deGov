@@ -6,7 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: digitaldonkey/circleci-degov:0.0.6
+      - image: digitaldonkey/circleci-degov:0.0.7
         environment:
           RELEASE_BRANCH: release/7.6.x-dev
           COMPOSER_ALLOW_SUPERUSER: 1

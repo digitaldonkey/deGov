@@ -11,9 +11,6 @@
 #
 # We use circleci/php:apache-stretch image and add config from docker-library/drupal
 # (https://github.com/docker-library/docs/tree/master/drupal)
-#
-# Apache document root is adopted for deGov/nrwGov
-# /home/circleci/project/docroot
 
 FROM circleci/php:7.3-apache-stretch
 # which is based on php:7.3.3-apache-stretch
@@ -22,10 +19,10 @@ FROM circleci/php:7.3-apache-stretch
 
 USER root
 
-ENV APACHE_DOCUMENT_ROOT /home/circleci/project/docroot
+#ENV APACHE_DOCUMENT_ROOT /home/circleci/project/docroot
 
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+#RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+#RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
 # Drupal Recommended Config from
 # https://github.com/docker-library/drupal/blob/6a99936a0870ae9d95d9e6070d1ffe7eb0e1f406/8.7/apache/Dockerfile
@@ -85,26 +82,6 @@ RUN { \
 		echo 'opcache.fast_shutdown=1'; \
 	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
-
-# PHP files should be handled by PHP, and should be preferred over any other file type
-#RUN { \
-#		echo '<FilesMatch \.php$>'; \
-#		echo '\tSetHandler application/x-httpd-php'; \
-#		echo '</FilesMatch>'; \
-#		echo; \
-#		echo 'DirectoryIndex disabled'; \
-#		echo 'DirectoryIndex index.php index.html'; \
-#		echo; \
-#		echo "<Directory $APACHE_DOCUMENT_ROOT>"; \
-#		echo '\tOptions -Indexes'; \
-#		echo '\tAllowOverride All'; \
-#		echo '</Directory>'; \
-#	} | tee "$APACHE_CONFDIR/conf-available/project-php.conf" \
-#	&& a2enconf project-php \
-#	&& a2disconf docker-php
-
-#COPY .docker/vhost.conf /etc/apache2/sites-available/000-default.conf
-
 USER circleci
 
-ENV PATH /home/circleci/.local/bin:/home/circleci/bin:${PATH}
+ENV PATH /home/circleci/project/bin:/home/circleci/.local/bin:/home/circleci/bin:${PATH}
