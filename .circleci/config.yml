@@ -29,6 +29,16 @@ jobs:
       - checkout:
           path: /home/circleci/project/docroot/profiles/contrib/
 
+      - run:
+          name: Verify Checkout
+          command: |
+            echo "working_directory: $(pwd)"
+            echo "###"
+            ls -al /home/circleci/project/docroot/profiles/contrib/
+            echo "###"
+            ls -al /home/circleci/project/docroot/profiles/contrib/degov/.circleci
+            echo "###"
+
 ### Prepare git uses the code from "- checkout" step without cloning repository.
 #      - run:
 #          name: Prepare Cloning
