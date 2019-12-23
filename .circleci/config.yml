@@ -176,12 +176,14 @@ jobs:
           MYSQL_DATABASE: testing
           MYSQL_USER: testing
           MYSQL_PASSWORD: testing
+
     steps:
-     - restore_cache:
-        keys:
+
+      - restore_cache:
+         keys:
           - project-dependencies-apache-vhost-{{ checksum "./docroot/profiles/contrib/.circleci/degov/vhost.conf" }}-{{ checksum "./docroot/profiles/contrib/degov/.circleci/config.yml" }}
 
-     - run:
+      - run:
           name: Start Apache
           command: |
             sudo service apache2 start
