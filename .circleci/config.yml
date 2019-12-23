@@ -26,8 +26,8 @@ jobs:
 
     steps:
 
-      checkout:
-        path: /home/circleci/project/docroot/profiles/contrib/
+      - checkout:
+          path: /home/circleci/project/docroot/profiles/contrib/
 
       # Prepare git uses the code from "- checkout" step without cloning repository.
 #      - run:
