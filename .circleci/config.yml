@@ -67,9 +67,9 @@ jobs:
 
 #      - restore_cache:
 #          keys:
-
-#            - project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
+#            - project-dependencies-apache-vhost-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/vhost.conf" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
 #            - project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}
+#            - project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
 
       # PROJECT SETUP
       - run:
@@ -78,7 +78,7 @@ jobs:
             composer create-project --remove-vcs "degov/degov-project:dev-$PROJECT_BRANCH" --no-install .
 
       - save_cache:
-          key: project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
+          key: project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
           paths:
             - .
       # INSTALL PROFILE
@@ -102,12 +102,12 @@ jobs:
       - run:
           name: Configure & start Apache
           command: |
-            sudo cp ~/docroot/profiles/contrib/degov/.circleci/vhost.conf /etc/apache2/sites-available/project.conf
+            sudo cp ./docroot/profiles/contrib/degov/.circleci/vhost.conf /etc/apache2/sites-available/project.conf
             sudo a2ensite project
             sudo service apache2 start
 
       - save_cache:
-          key: project-dependencies-apache-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/vhost.conf" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
+          key: project-dependencies-apache-vhost-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/vhost.conf" }}-{{ checksum "/home/circleci/project/docroot/profiles/contrib/degov/.circleci/config.yml" }}
           paths:
             - .
 
