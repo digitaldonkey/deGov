@@ -106,13 +106,6 @@ jobs:
             - .
 
       - run:
-          name: Where are we?
-          command: |
-            echo "pwd $(pwd)"
-            ls -al .
-            ls -al docroot/
-
-      - run:
           name: Configure & start Apache
           command: |
             sudo cp ./docroot/profiles/contrib/degov/.circleci/vhost.conf /etc/apache2/sites-available/project.conf
@@ -124,6 +117,13 @@ jobs:
           paths:
             - .
 
+      - run:
+          name: Where are we?
+          command: |
+            echo "working_directory: $(pwd)"
+            echo "###"
+            ls -al .
+            echo "###"
 
 
 #      - restore_cache:
