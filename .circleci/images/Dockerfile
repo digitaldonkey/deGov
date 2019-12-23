@@ -19,11 +19,6 @@ FROM circleci/php:7.3-apache-stretch
 
 USER root
 
-#ENV APACHE_DOCUMENT_ROOT /home/circleci/project/docroot
-
-#RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-#RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
-
 # Drupal Recommended Config from
 # https://github.com/docker-library/drupal/blob/6a99936a0870ae9d95d9e6070d1ffe7eb0e1f406/8.7/apache/Dockerfile
 # install the PHP extensions we need
