@@ -35,7 +35,7 @@ jobs:
             echo "###"
             echo "working_directory: $(pwd)"
             echo "###"
-            echo "# ls -al /home/circleci/project/docroot/profiles/contrib/degov/.circleci/"
+            echo "# ls -al /home/circleci/project/docroot/profiles/.circleci/"
             sudo ls -al ./docroot/profiles/contrib/degov/.circleci/
             echo "###"
 
