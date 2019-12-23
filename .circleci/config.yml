@@ -12,6 +12,7 @@ jobs:
           COMPOSER_ALLOW_SUPERUSER: 1
           COMPOSER_MEMORY_LIMIT: -1
           COMPOSER_EXIT_ON_PATCH_FAILURE: 1
+          # Counter for
           CIRCLECI_CAHCHE_TAG: v4
 
       # Specify service dependencies here if necessary
@@ -72,13 +73,13 @@ jobs:
                 echo "PROJECT_BRANCH = $PROJECT_BRANCH"
                 echo "LFS_BRANCH = $LFS_BRANCH"
                 # Used for caching
-                echo "$PROJECT_BRANCH,$LFS_BRANCH" > /tmp/cache--project-setup
-                echo "$LFS_BRANCH,$PROJECT_BRANCH,$CIRCLE_BRANCH,$CIRCLE_SHA1" > /tmp/cache--composer
+                echo "$PROJECT_BRANCH, $LFS_BRANCH, $CIRCLECI_CAHCHE_TAG," > /tmp/cache--project-setup
+                echo " $CIRCLE_SHA1, $CIRCLE_BRANCH, $PROJECT_BRANCH, $LFS_BRANCH, $CIRCLECI_CAHCHE_TAG" > /tmp/cache--composer
 
 #      - restore_cache:
 #          keys:
-#            - v3-project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
-#            - v3-project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}
+#            - project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
+#            - project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}
 
       # PROJECT SETUP
       - run:
@@ -87,10 +88,9 @@ jobs:
             composer create-project --remove-vcs "degov/degov-project:dev-$PROJECT_BRANCH" --no-install .
 
       - save_cache:
-          key: v3-project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
+          key: project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
           paths:
-            - ./degov-project
-
+            - .
       # INSTALL PROFILE
       - run:
           name: Composer require deGov
@@ -100,7 +100,7 @@ jobs:
       - save_cache:
           key: v3-project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}
           paths:
-            - ./degov-project
+            - .
 
       - run:
           name: Where are we?
@@ -112,7 +112,7 @@ jobs:
       - run:
           name: Configure & start Apache
           command: |
-            sudo cp ~/.circleci/vhost.conf /etc/apache2/sites-available/project.conf
+            sudo cp ~/docroot/profiles/contrib/degov/.circleci/vhost.conf /etc/apache2/sites-available/project.conf
             sudo a2ensite project
             sudo service apache2 start
 
