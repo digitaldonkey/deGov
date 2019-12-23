@@ -16,7 +16,7 @@ jobs:
           COMPOSER_ALLOW_SUPERUSER: 1
           COMPOSER_MEMORY_LIMIT: -1
           COMPOSER_EXIT_ON_PATCH_FAILURE: 1
-          CIRCLECI_CACHE_PREFIX: << pipeline.parameters.cache-tag-prefix >>
+          CIRCLECI_CACHE_PREFIX: "<< pipeline.parameters.cache-tag-prefix >>"
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
