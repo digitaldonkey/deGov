@@ -101,7 +101,8 @@ jobs:
 
       - save_cache:
           key: project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
-            - .
+            paths:
+              - .
 
       # INSTALL PROFILE
       - run:
