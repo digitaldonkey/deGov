@@ -35,9 +35,9 @@ jobs:
             echo "###"
             echo "working_directory: $(pwd)"
             echo "###"
-            ls -al /home/circleci/project/docroot/profiles/contrib/*
+            ls -al /home/circleci/project/docroot/profiles/contrib/.*
             echo "###"
-            ls -al /home/circleci/project/.circleci
+            ls -al ./docroot/profiles/contrib/*
             echo "###"
 
 ### Prepare git uses the code from "- checkout" step without cloning repository.
