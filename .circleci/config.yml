@@ -12,7 +12,7 @@ jobs:
           COMPOSER_ALLOW_SUPERUSER: 1
           COMPOSER_MEMORY_LIMIT: -1
           COMPOSER_EXIT_ON_PATCH_FAILURE: 1
-          CIRCLECI_CACHE_PREFIX: "v4"
+          CIRCLECI_CAHCHE_PREFIX: v4
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -87,7 +87,7 @@ jobs:
             composer create-project --remove-vcs "degov/degov-project:dev-$PROJECT_BRANCH" --no-install .
 
       - save_cache:
-          key: ${CIRCLECI_CACHE_PREFIX}-project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
+          key: v3-project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}
           paths:
             - ./degov-project
 
@@ -98,7 +98,7 @@ jobs:
             composer require "degov/degov:dev-$CIRCLE_BRANCH#$CIRCLE_SHA1" degov/degov_devel_git_lfs:dev-$LFS_BRANCH --update-with-all-dependencies
 
       - save_cache:
-          key: ${CIRCLECI_CACHE_PREFIX}-project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}
+          key: v3-project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}
           paths:
             - ./degov-project
 
