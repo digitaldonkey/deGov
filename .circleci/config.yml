@@ -155,6 +155,24 @@ jobs:
 #      - run: ./vendor/bin/codecept build
 #      - run: ./vendor/bin/codecept run
 
+  test1:
+    steps:
+      - run:
+          name: Verify Checkout
+          command: |
+            echo "# HELLO TEST1 #"
+
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - build
+      - test1:
+          requires:
+            - build
+
+
 dependencies:
   cache_directories:
     - ~/.composer/cache
