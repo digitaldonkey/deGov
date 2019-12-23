@@ -156,6 +156,24 @@ jobs:
 #      - run: ./vendor/bin/codecept run
 
   test1:
+    docker:
+      - image: digitaldonkey/circleci-degov:0.0.7
+        environment:
+          RELEASE_BRANCH: release/7.6.x-dev
+          COMPOSER_ALLOW_SUPERUSER: 1
+          COMPOSER_MEMORY_LIMIT: -1
+          COMPOSER_EXIT_ON_PATCH_FAILURE: 1
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # Using the RAM variation mitigates I/O contention
+      # for database intensive operations.
+      - image: circleci/mysql:5.7-ram
+        environment:
+          MYSQL_DATABASE: testing
+          MYSQL_USER: testing
+          MYSQL_PASSWORD: testing
     steps:
       - run:
           name: Verify Checkout
