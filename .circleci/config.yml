@@ -2,33 +2,33 @@
 #
 # Check https://circleci.com/docs/2.0/language-php/ for more details
 #
+defaults: &defaults
+  docker:
+    - image: digitaldonkey/circleci-degov:0.0.7
+      environment:
+        RELEASE_BRANCH: release/7.6.x-dev
+        COMPOSER_ALLOW_SUPERUSER: 1
+        COMPOSER_MEMORY_LIMIT: -1
+        COMPOSER_EXIT_ON_PATCH_FAILURE: 1
+
+    # Specify service dependencies here if necessary
+    # CircleCI maintains a library of pre-built images
+    # documented at https://circleci.com/docs/2.0/circleci-images/
+    # Using the RAM variation mitigates I/O contention
+    # for database intensive operations.
+    - image: circleci/mysql:5.7-ram
+      environment:
+        MYSQL_DATABASE: testing
+        MYSQL_USER: testing
+        MYSQL_PASSWORD: testing
+
 version: 2
 jobs:
   build:
-    docker:
-      - image: digitaldonkey/circleci-degov:0.0.7
-        environment:
-          RELEASE_BRANCH: release/7.6.x-dev
-          COMPOSER_ALLOW_SUPERUSER: 1
-          COMPOSER_MEMORY_LIMIT: -1
-          COMPOSER_EXIT_ON_PATCH_FAILURE: 1
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # Using the RAM variation mitigates I/O contention
-      # for database intensive operations.
-      - image: circleci/mysql:5.7-ram
-        environment:
-          MYSQL_DATABASE: testing
-          MYSQL_USER: testing
-          MYSQL_PASSWORD: testing
-
+    <<: *defaults
     steps:
-
       - checkout:
           path: /home/circleci/project/docroot/profiles/contrib/
-
       - run:
           name: Verify Checkout
           command: |
@@ -61,8 +61,7 @@ jobs:
           key: project-dependencies-checkout-config-{{ checksum "./docroot/profiles/contrib/.circleci/config.yml" }}
           paths:
             - .
-            - ./.ssh
-
+#            - ./.ssh
       - run:
           name: Repository Environment Variables for project and LFS
           command: |
@@ -137,6 +136,11 @@ jobs:
             ls -al .
             echo "###"
 
+      - persist_to_workspace:
+          root: /
+          paths:
+            - home/circleci
+            - etc/apache2
 
 #      - restore_cache:
 #          keys:
@@ -158,30 +162,12 @@ jobs:
 #      - run: ./vendor/bin/codecept run
 
   test1:
-    docker:
-      - image: digitaldonkey/circleci-degov:0.0.7
-        environment:
-          RELEASE_BRANCH: release/7.6.x-dev
-          COMPOSER_ALLOW_SUPERUSER: 1
-          COMPOSER_MEMORY_LIMIT: -1
-          COMPOSER_EXIT_ON_PATCH_FAILURE: 1
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # Using the RAM variation mitigates I/O contention
-      # for database intensive operations.
-      - image: circleci/mysql:5.7-ram
-        environment:
-          MYSQL_DATABASE: testing
-          MYSQL_USER: testing
-          MYSQL_PASSWORD: testing
-
+    <<: *defaults
     steps:
-
-      - restore_cache:
-         keys:
-          - project-dependencies-apache-vhost-{{ checksum "./docroot/profiles/contrib/.circleci/degov/vhost.conf" }}-{{ checksum "./docroot/profiles/contrib/degov/.circleci/config.yml" }}
+      - attach_workspace:
+          at: /home/circleci
+      - attach_workspace:
+          at: /etc/apache2
 
       - run:
           name: Start Apache
