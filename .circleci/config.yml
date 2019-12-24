@@ -10,6 +10,7 @@ defaults: &defaults
         COMPOSER_ALLOW_SUPERUSER: 1
         COMPOSER_MEMORY_LIMIT: -1
         COMPOSER_EXIT_ON_PATCH_FAILURE: 1
+        CIRCLECI_CACHE_TAG: v1
 
     # Specify service dependencies here if necessary
     # CircleCI maintains a library of pre-built images
@@ -81,13 +82,14 @@ jobs:
                 echo "PROJECT_BRANCH = $PROJECT_BRANCH"
                 echo "LFS_BRANCH = $LFS_BRANCH"
                 # Used for caching
-                echo "$PROJECT_BRANCH, $LFS_BRANCH, $CIRCLECI_CAHCHE_TAG," > /tmp/cache--project-setup
-                echo " $CIRCLE_SHA1, $CIRCLE_BRANCH, $PROJECT_BRANCH, $LFS_BRANCH, $CIRCLECI_CAHCHE_TAG" > /tmp/cache--composer
+                echo "$PROJECT_BRANCH, $LFS_BRANCH, $CIRCLECI_CACHE_TAG," > /tmp/cache--project-setup
+                echo "$CIRCLE_SHA1, $CIRCLE_BRANCH, $PROJECT_BRANCH, $LFS_BRANCH, $CIRCLECI_CACHE_TAG" > /tmp/cache--composer
 
       - restore_cache:
           keys:
             - project-dependencies-apache-vhost-{{ checksum "./docroot/profiles/contrib/.circleci/vhost.conf" }}-{{ checksum "./docroot/profiles/contrib/.circleci/config.yml" }}
-            - project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}-{{ checksum "./docroot/profiles/contrib/.circleci/config.yml" }}
+          # Where is the composer.json???
+            - project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}-{{ checksum "./docroot/profiles/contrib/.circleci/config.yml" }}--{{ checksum "./docroot/profiles/contrib/degov/composer.json" }}
             - project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}-v1
             - project-dependencies-checkout-config-{{ checksum "./docroot/profiles/contrib/.circleci/config.yml" }}
 
@@ -139,8 +141,9 @@ jobs:
       - persist_to_workspace:
           root: /
           paths:
-            - home/circleci
+            - home
             - etc/apache2
+            - tmp
 
 #      - restore_cache:
 #          keys:
@@ -165,9 +168,11 @@ jobs:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: /home/circleci
+          at: home
       - attach_workspace:
-          at: /etc/apache2
+          at: etc/apache2
+      - attach_workspace:
+          at: tmp
 
       - run:
           name: Start Apache
