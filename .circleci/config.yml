@@ -3,13 +3,13 @@
 # Check https://circleci.com/docs/2.0/language-php/ for more details
 #
 baseimage: &baseimage
-    - image: digitaldonkey/circleci-degov:0.0.7
-      environment:
-        RELEASE_BRANCH: release/7.6.x-dev
-        COMPOSER_ALLOW_SUPERUSER: 1
-        COMPOSER_MEMORY_LIMIT: -1
-        COMPOSER_EXIT_ON_PATCH_FAILURE: 1
-        CIRCLECI_CACHE_TAG: v1
+  - image: digitaldonkey/circleci-degov:0.0.7
+    environment:
+      RELEASE_BRANCH: release/7.6.x-dev
+      COMPOSER_ALLOW_SUPERUSER: 1
+      COMPOSER_MEMORY_LIMIT: -1
+      COMPOSER_EXIT_ON_PATCH_FAILURE: 1
+      CIRCLECI_CACHE_TAG: v1
 
     # Specify service dependencies here if necessary
     # CircleCI maintains a library of pre-built images
@@ -17,11 +17,11 @@ baseimage: &baseimage
     # Using the RAM variation mitigates I/O contention
     # for database intensive operations.
 dbimage: &dbimage
-    - image: circleci/mysql:5.7-ram
-      environment:
-        MYSQL_DATABASE: testing
-        MYSQL_USER: testing
-        MYSQL_PASSWORD: testing
+  - image: circleci/mysql:5.7-ram
+    environment:
+      MYSQL_DATABASE: testing
+      MYSQL_USER: testing
+      MYSQL_PASSWORD: testing
 
 version: 2
 jobs:
