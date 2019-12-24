@@ -2,8 +2,7 @@
 #
 # Check https://circleci.com/docs/2.0/language-php/ for more details
 #
-defaults:
-  &baseimage
+defaults: &baseimage
     - image: digitaldonkey/circleci-degov:0.0.7
       environment:
         RELEASE_BRANCH: release/7.6.x-dev
@@ -17,7 +16,7 @@ defaults:
     # documented at https://circleci.com/docs/2.0/circleci-images/
     # Using the RAM variation mitigates I/O contention
     # for database intensive operations.
-  &dbimage
+defaults: &dbimage
     - image: circleci/mysql:5.7-ram
       environment:
         MYSQL_DATABASE: testing
