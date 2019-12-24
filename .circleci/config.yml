@@ -27,7 +27,7 @@ version: 2
 jobs:
   build:
     docker:
-      <<: *baseimage
+      - *baseimage
     steps:
       - checkout:
           path: /home/circleci/project/docroot/profiles/contrib/
