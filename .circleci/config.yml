@@ -2,8 +2,8 @@
 #
 # Check https://circleci.com/docs/2.0/language-php/ for more details
 #
-defaults: &defaults
-  docker:
+defaults:
+  &baseimage
     - image: digitaldonkey/circleci-degov:0.0.7
       environment:
         RELEASE_BRANCH: release/7.6.x-dev
@@ -17,6 +17,7 @@ defaults: &defaults
     # documented at https://circleci.com/docs/2.0/circleci-images/
     # Using the RAM variation mitigates I/O contention
     # for database intensive operations.
+  &dbimage
     - image: circleci/mysql:5.7-ram
       environment:
         MYSQL_DATABASE: testing
@@ -26,7 +27,8 @@ defaults: &defaults
 version: 2
 jobs:
   build:
-    <<: *defaults
+    docker:
+      <<: *baseimage
     steps:
       - checkout:
           path: /home/circleci/project/docroot/profiles/contrib/
@@ -87,7 +89,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}-{{ checksum "./docroot/profiles/contrib/.circleci/config.yml" }}--{{ checksum "./docroot/profiles/contrib/degov/composer.json" }}
+            - project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}-{{ checksum "./docroot/profiles/contrib/.circleci/config.yml" }}--{{ checksum "./docroot/profiles/contrib/composer.json" }}
             - project-dependencies-project-setup-{{ checksum "/tmp/cache--project-setup" }}-v1
             - project-dependencies-checkout-config-{{ checksum "./docroot/profiles/contrib/.circleci/config.yml" }}
 
@@ -175,7 +177,9 @@ jobs:
 #      - run: ./vendor/bin/codecept run
 
   test1:
-    <<: *defaults
+    docker:
+      <<: *baseimage
+      <<: *dbimage
     steps:
       - attach_workspace:
           at: home
