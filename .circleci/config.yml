@@ -110,8 +110,11 @@ jobs:
       # INSTALL PROFILE
       - run:
           name: Composer require deGov
-          command: |
-            composer require "degov/degov:dev-$CIRCLE_BRANCH#$CIRCLE_SHA1" degov/degov_devel_git_lfs:dev-$LFS_BRANCH --update-with-all-dependencies
+          command: | # if not in cache
+            if [ ! -f /tmp/cache--project-setup-done ]; then
+              composer require "degov/degov:dev-$CIRCLE_BRANCH#$CIRCLE_SHA1" degov/degov_devel_git_lfs:dev-$LFS_BRANCH --update-with-all-dependencies
+              touch /tmp/cache--project-setup-done
+            fi
 
       - save_cache:
           key: project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}-{{ checksum "./docroot/profiles/contrib/degov/.circleci/config.yml" }}
