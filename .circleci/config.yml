@@ -177,7 +177,8 @@ jobs:
 
   test1:
     docker:
-      <<: [*baseimage, *dbimage]
+      <<: *baseimage
+      <<: *dbimage
     steps:
       - attach_workspace:
           at: home
