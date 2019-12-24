@@ -27,7 +27,7 @@ version: 2
 jobs:
   build:
     docker:
-      - *baseimage
+      <<: *baseimage
     steps:
       - checkout:
           path: /home/circleci/project/docroot/profiles/contrib/
@@ -177,8 +177,8 @@ jobs:
 
   test1:
     docker:
-      - *baseimage
-      - *dbimage
+     - <<: *baseimage
+     - <<: *dbimage
     steps:
       - attach_workspace:
           at: home
@@ -196,7 +196,6 @@ jobs:
           name: Verify Checkout
           command: |
             echo "# HELLO TEST1 #"
-
 
 workflows:
   version: 2
