@@ -115,11 +115,6 @@ jobs:
               touch /tmp/cache--project-setup-done
             fi
 
-      - save_cache:
-          key: project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}-{{ checksum "./docroot/profiles/contrib/degov/.circleci/config.yml" }}
-          paths:
-            - .
-
       - run:
           name: Set up Drupal
           command: |
@@ -133,6 +128,11 @@ jobs:
             mkdir -p docroot/sites/default/files/private/
             mkdir docroot/sites/default/files/translations/
             chmod 777 -R docroot/sites/default/files/
+
+      - save_cache:
+          key: project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}-{{ checksum "./docroot/profiles/contrib/degov/.circleci/config.yml" }}
+          paths:
+            - .
 
       - restore_cache:
           keys:
@@ -205,6 +205,7 @@ jobs:
           name: Verify Checkout
           command: |
             echo "# HELLO TEST1 #"
+            cat /
 
 workflows:
   version: 2
