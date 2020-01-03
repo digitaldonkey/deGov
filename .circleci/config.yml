@@ -142,13 +142,22 @@ jobs:
             - .
 
       - run:
-          name: Where are we?
+          name: Set up Drupal
           command: |
-            echo "working_directory: $(pwd)"
-            echo "###"
-            ls -al .
-            echo "###"
+            echo '$settings["file_private_path"] = "sites/default/files/private";' >> docroot/sites/default/settings.php
+            echo '$settings["file_public_path"] = "sites/default/files";' >> docroot/sites/default/settings.php
+            echo '$config["system.file"]["path"]["temporary"] = "/tmp";' >> docroot/sites/default/settings.php
+            echo '$settings["trusted_host_patterns"] = ["^127.0.0.1$","^localhost$","^host.docker.internal$"];' >> docroot/sites/default/settings.php
+            echo '$config["locale.settings"]["translation"]["path"] = "sites/default/files/translations";' >> docroot/sites/default/settings.php
+            echo '$config["swiftmailer.transport"]["transport"] = "spool";' >> docroot/sites/default/settings.php
+            echo '$config["swiftmailer.transport"]["spool_directory"] = "/tmp/swiftmailer-spool";' >> docroot/sites/default/settings.php
+            mkdir -p docroot/sites/default/files/private/
+            mkdir docroot/sites/default/files/translations/
+            chmod 777 -R docroot/sites/default/files/
 
+
+
+      # TODO THIS REQUIRES OPTIMISATION
       - persist_to_workspace:
           root: /
           paths:
