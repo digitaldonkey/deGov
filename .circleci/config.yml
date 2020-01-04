@@ -173,7 +173,7 @@ jobs:
           command: |
             pwd
             cd
-            tee <<EOF docroot/sites/default/settings.php >/dev/null
+            tee <<EOF > docroot/sites/default/settings.php
               $settings["file_private_path"] = "sites/default/files/private";
               $settings["file_public_path"] = "sites/default/files";
               $config["system.file"]["path"]["temporary"] = "/tmp";
