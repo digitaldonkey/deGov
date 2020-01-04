@@ -119,16 +119,29 @@ jobs:
           name: Set up Drupal
           command: |
             pwd
-            echo '$settings["file_private_path"] = "sites/default/files/private";' >> docroot/sites/default/settings.php
-            echo '$settings["file_public_path"] = "sites/default/files";' >> docroot/sites/default/settings.php
-            echo '$config["system.file"]["path"]["temporary"] = "/tmp";' >> docroot/sites/default/settings.php
-            echo '$settings["trusted_host_patterns"] = ["^127.0.0.1$","^localhost$","^host.docker.internal$"];' >> docroot/sites/default/settings.php
-            echo '$config["locale.settings"]["translation"]["path"] = "sites/default/files/translations";' >> docroot/sites/default/settings.php
-            echo '$config["swiftmailer.transport"]["transport"] = "spool";' >> docroot/sites/default/settings.php
-            echo '$config["swiftmailer.transport"]["spool_directory"] = "/tmp/swiftmailer-spool";' >> docroot/sites/default/settings.php
-            mkdir -p docroot/sites/default/files/private/
-            mkdir docroot/sites/default/files/translations/
-            chmod 777 -R docroot/sites/default/files/
+            cd
+            tee <<EOF project/docroot/sites/default/settings.php >/dev/null
+              $settings["file_private_path"] = "sites/default/files/private";
+              $settings["file_public_path"] = "sites/default/files";
+              $config["system.file"]["path"]["temporary"] = "/tmp";
+              $settings["trusted_host_patterns"] = ["^127.0.0.1$","^localhost$","^host.docker.internal$"];
+              $config["locale.settings"]["translation"]["path"] = "sites/default/files/translations";
+              $config["swiftmailer.transport"]["transport"] = "spool";
+              $config["swiftmailer.transport"]["spool_directory"] = "/tmp/swiftmailer-spool";
+            EOF
+            mkdir -p project/docroot/sites/default/files/private/
+            mkdir project/docroot/sites/default/files/translations/
+            chmod 777 -R project/docroot/sites/default/files/
+
+#  echo '$settings["file_private_path"] = "sites/default/files/private";' >> docroot/sites/default/settings.php
+#  echo '$settings["file_public_path"] = "sites/default/files";' >> docroot/sites/default/settings.php
+#  echo '$config["system.file"]["path"]["temporary"] = "/tmp";' >> docroot/sites/default/settings.php
+#  echo '$settings["trusted_host_patterns"] = ["^127.0.0.1$","^localhost$","^host.docker.internal$"];' >> docroot/sites/default/settings.php
+#  echo '$config["locale.settings"]["translation"]["path"] = "sites/default/files/translations";' >> docroot/sites/default/settings.php
+#  echo '$config["swiftmailer.transport"]["transport"] = "spool";' >> docroot/sites/default/settings.php
+#  echo '$config["swiftmailer.transport"]["spool_directory"] = "/tmp/swiftmailer-spool";' >> docroot/sites/default/settings.php
+
+
 
       - save_cache:
           key: project-dependencies-composer-{{ checksum "/tmp/cache--composer" }}-{{ checksum "./docroot/profiles/contrib/degov/.circleci/config.yml" }}
@@ -206,7 +219,7 @@ jobs:
           name: Verify Checkout
           command: |
             echo "# HELLO TEST1 #"
-            cat docroot/sites/default/settings.php
+            cat /home/circleci/project/docroot/sites/default/settings.php
 
 workflows:
   version: 2
