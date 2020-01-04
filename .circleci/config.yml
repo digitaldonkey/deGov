@@ -174,6 +174,9 @@ jobs:
           name: Set up Drupal
           command: |
             pwd
+            mkdir -p docroot/sites/default/files/private/
+            mkdir docroot/sites/default/files/translations/
+            chmod 777 -R docroot/sites/default/files/
             tee <<EOF > docroot/sites/default/settings.php
               $settings["file_private_path"] = "sites/default/files/private";
               $settings["file_public_path"] = "sites/default/files";
@@ -183,9 +186,6 @@ jobs:
               $config["swiftmailer.transport"]["transport"] = "spool";
               $config["swiftmailer.transport"]["spool_directory"] = "/tmp/swiftmailer-spool";
             EOF
-            mkdir -p docroot/sites/default/files/private/
-            mkdir docroot/sites/default/files/translations/
-            chmod 777 -R docroot/sites/default/files/
 
       - run:
           name: Verify Checkout
