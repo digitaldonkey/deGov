@@ -118,6 +118,7 @@ jobs:
       - run:
           name: Set up Drupal
           command: |
+            pwd
             echo '$settings["file_private_path"] = "sites/default/files/private";' >> docroot/sites/default/settings.php
             echo '$settings["file_public_path"] = "sites/default/files";' >> docroot/sites/default/settings.php
             echo '$config["system.file"]["path"]["temporary"] = "/tmp";' >> docroot/sites/default/settings.php
