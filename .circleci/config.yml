@@ -67,6 +67,7 @@ jobs:
       - run:
           name: Repository Environment Variables for project and LFS
           command: |
+              mkdir -p /tmp/ci-cache
               if git ls-remote --exit-code --heads https://digitaldonkey@bitbucket.org/publicplan/degov_project.git "$CIRCLE_BRANCH";
               then
                 echo 'export PROJECT_BRANCH="$CIRCLE_BRANCH"' >> $BASH_ENV
@@ -90,7 +91,7 @@ jobs:
          keys:
            - project-dependencies-composer-{{ checksum "/tmp/ci-cache/composer" }}-{{ checksum "docroot/profiles/contrib/.circleci/config.yml" }}--{{ checksum "docroot/profiles/contrib/composer.json" }}
            - project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
-#           - project-dependencies-checkout-config-{{ checksum "docroot/profiles/contrib/.circleci/config.yml" }}
+           - project-dependencies-checkout-config-{{ checksum "docroot/profiles/contrib/.circleci/config.yml" }}
 
       # PROJECT SETUP
       - run:
