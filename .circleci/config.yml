@@ -98,7 +98,7 @@ jobs:
           command: | # if not in cache
             if [ ! -f ./composer.json ]; then
               rm -rf ./*  # removing default -checkout as we use composer, but we keep circleci known_hosts setup.
-              composer create-project --remove-vcs "degov/degov-project:dev-$PROJECT_BRANCH" --no-install --ansi .
+              composer create-project --remove-vcs "degov/degov-project:dev-$PROJECT_BRANCH" --no-install --ansi --no-progress .
             fi
 
       - save_cache:
@@ -111,7 +111,7 @@ jobs:
           name: Composer require deGov
           command: | # if not in cache
             if [ ! -f /tmp/cache--project-setup-done ]; then
-              composer require "degov/degov:dev-$CIRCLE_BRANCH#$CIRCLE_SHA1" degov/degov_devel_git_lfs:dev-$LFS_BRANCH --update-with-all-dependencies --ansi
+              composer require "degov/degov:dev-$CIRCLE_BRANCH#$CIRCLE_SHA1" degov/degov_devel_git_lfs:dev-$LFS_BRANCH --update-with-all-dependencies --ansi --no-progress
               touch /tmp/cache--project-setup-done
             fi
 
