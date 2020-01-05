@@ -114,8 +114,11 @@ jobs:
           command: | # if not in cache
             if [ ! -f /tmp/project-setup-done ]; then
               composer require "degov/degov:dev-$CIRCLE_BRANCH#$CIRCLE_SHA1" degov/degov_devel_git_lfs:dev-$LFS_BRANCH --update-with-all-dependencies --ansi --no-progress
-              touch /tmp/ci-cache/project-setup-done
+              cp composer.lock /tmp/ci-cache/project-setup-done
             fi
+
+      # TODO
+      # For propper caching we would require a solution invloving composer.lock from commit which is not committed.
 
       - save_cache:
           key: project-dependencies-composer-{{ checksum "/tmp/ci-cache/composer" }}-{{ checksum "docroot/profiles/contrib/degov/.circleci/config.yml" }}
@@ -178,13 +181,13 @@ jobs:
             mkdir docroot/sites/default/files/translations/
             chmod 777 -R docroot/sites/default/files/
             tee <<EOF > docroot/sites/default/settings.php
-              $settings["file_private_path"] = "sites/default/files/private";
-              $settings["file_public_path"] = "sites/default/files";
-              $config["system.file"]["path"]["temporary"] = "/tmp";
-              $settings["trusted_host_patterns"] = ["^127.0.0.1$","^localhost$","^host.docker.internal$"];
-              $config["locale.settings"]["translation"]["path"] = "sites/default/files/translations";
-              $config["swiftmailer.transport"]["transport"] = "spool";
-              $config["swiftmailer.transport"]["spool_directory"] = "/tmp/swiftmailer-spool";
+             \$settings["file_private_path"] = "sites/default/files/private";
+             \$settings["file_public_path"] = "sites/default/files";
+             \$config["system.file"]["path"]["temporary"] = "/tmp";
+             \$settings["trusted_host_patterns"] = ["^127.0.0.1$","^localhost$","^host.docker.internal$"];
+             \$config["locale.settings"]["translation"]["path"] = "sites/default/files/translations";
+             \$config["swiftmailer.transport"]["transport"] = "spool";
+             \$config["swiftmailer.transport"]["spool_directory"] = "/tmp/swiftmailer-spool";
             EOF
 
       - run:
