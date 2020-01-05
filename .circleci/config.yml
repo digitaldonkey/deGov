@@ -217,7 +217,7 @@ jobs:
             echo "###"
             echo "working_directory: $(pwd)"
             echo "###"
-            ls -al docroot/sites/default/
+            ls -al docroot
             find . | grep \\.git$
 
 
