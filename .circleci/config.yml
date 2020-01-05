@@ -112,7 +112,7 @@ jobs:
       - run:
           name: Composer update composer.lock
           command: |
-            composer composer update --lock "degov/degov:dev-$CIRCLE_BRANCH#$CIRCLE_SHA1" degov/degov_devel_git_lfs:dev-$LFS_BRANCH
+            composer update --lock "degov/degov:dev-$CIRCLE_BRANCH#$CIRCLE_SHA1" degov/degov_devel_git_lfs:dev-$LFS_BRANCH
             cat composer.lock
             cat md5sum composer.lock
 
