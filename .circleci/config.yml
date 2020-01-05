@@ -211,7 +211,9 @@ jobs:
       - run:
           name: Verify Checkout
           command: |
-            echo "# HELLO TEST1 #"
+            echo "###"
+            echo "working_directory: $(pwd)"
+            echo "###"
             cat docroot/sites/default/settings.php
             find . | grep \\.git$
 
