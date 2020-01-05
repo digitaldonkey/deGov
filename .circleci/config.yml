@@ -108,6 +108,14 @@ jobs:
            - .
            - /tmp/ci-cache
 
+      # Create latest composer lock.
+      - run:
+          name: Composer update composer.lock
+          command: |
+            composer composer update --lock "degov/degov:dev-$CIRCLE_BRANCH#$CIRCLE_SHA1" degov/degov_devel_git_lfs:dev-$LFS_BRANCH
+            cat composer.lock
+            cat md5sum composer.lock
+
       # INSTALL PROFILE
       - run:
           name: Composer require deGov
@@ -118,6 +126,7 @@ jobs:
             fi
 
       # TODO
+      # composer update --lock ??
       # For propper caching we would require a solution invloving composer.lock from commit which is not committed.
 
       - run:
