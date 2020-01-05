@@ -187,9 +187,9 @@ jobs:
       - persist_to_workspace:
           root: /
           paths:
-            - home/circleci
-            - etc/apache2
-            - tmp/ci-cache
+            - home/circleci/
+            - etc/apache2/sites-*
+            - tmp/ci-cache/*
 
   test1:
     docker:
@@ -197,11 +197,7 @@ jobs:
      - <<: *dbimage
     steps:
       - attach_workspace:
-          at: /home/circleci
-      - attach_workspace:
-          at: /etc/apache2
-      - attach_workspace:
-          at: /tmp/ci-cache
+          at: /
 
       - run:
           name: Start Apache
@@ -213,6 +209,8 @@ jobs:
           command: |
             echo "# HELLO TEST1 #"
             cat docroot/sites/default/settings.php
+            find . | grep \\.git$
+
 
 workflows:
   version: 2
