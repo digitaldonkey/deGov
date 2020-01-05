@@ -197,7 +197,11 @@ jobs:
      - <<: *dbimage
     steps:
       - attach_workspace:
-          at: /
+          at: home/circleci
+      - attach_workspace:
+          at: etc/apache2
+      - attach_workspace:
+          at: tmp/ci-cache
 
       - run:
           name: Start Apache
