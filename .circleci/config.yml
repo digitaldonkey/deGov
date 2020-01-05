@@ -109,21 +109,6 @@ jobs:
            - /tmp/ci-cache
 
 
-      - run:
-          name: Configure & start Apache
-          command: |
-            sudo cp docroot/profiles/contrib/degov/.circleci/vhost.conf /etc/apache2/sites-available/project.conf
-            if [ ! -f /etc/apache2/sites-enabled/project.conf ]; then
-              sudo a2ensite project
-              sudo service apache2 start
-            fi
-
-      - save_cache:
-          key: project-dependencies-apache-vhost-{{ checksum "docroot/profiles/contrib/degov/.circleci/vhost.conf" }}-{{ checksum "docroot/profiles/contrib/degov/.circleci/config.yml" }}
-          paths:
-            - /etc/apache2
-
-
       # INSTALL PROFILE
       - run:
           name: Composer require deGov
@@ -173,6 +158,21 @@ jobs:
           paths:
             - .
           # TODO is paths ok?
+
+      - run:
+          name: Configure & start Apache
+          command: |
+            sudo cp docroot/profiles/contrib/degov/.circleci/vhost.conf /etc/apache2/sites-available/project.conf
+            if [ ! -f /etc/apache2/sites-enabled/project.conf ]; then
+              sudo a2ensite project
+              sudo service apache2 start
+            fi
+
+      - save_cache:
+          key: project-dependencies-apache-vhost-{{ checksum "docroot/profiles/contrib/degov/.circleci/vhost.conf" }}-{{ checksum "docroot/profiles/contrib/degov/.circleci/config.yml" }}
+          paths:
+            - /etc/apache2
+
 
       - restore_cache:
          keys:
