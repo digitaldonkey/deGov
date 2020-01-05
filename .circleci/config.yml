@@ -108,13 +108,28 @@ jobs:
            - .
            - /tmp/ci-cache
 
-      # Create latest composer lock.
+
+      - run:
+          name: Configure & start Apache
+          command: |
+            sudo cp docroot/profiles/contrib/degov/.circleci/vhost.conf /etc/apache2/sites-available/project.conf
+            if [ ! -f /etc/apache2/sites-enabled/project.conf ]; then
+              sudo a2ensite project
+              sudo service apache2 start
+            fi
+
+      - save_cache:
+          key: project-dependencies-apache-vhost-{{ checksum "docroot/profiles/contrib/degov/.circleci/vhost.conf" }}-{{ checksum "docroot/profiles/contrib/degov/.circleci/config.yml" }}
+          paths:
+            - /etc/apache2
+
 
       # INSTALL PROFILE
       - run:
           name: Composer require deGov
           command: | # if not in cache
             if [ ! -f /tmp/project-setup-done ]; then
+              rm composer.lock
               composer require "degov/degov:dev-$CIRCLE_BRANCH#$CIRCLE_SHA1" degov/degov_devel_git_lfs:dev-$LFS_BRANCH --update-with-all-dependencies --ansi --no-progress
               cp composer.lock /tmp/ci-cache/project-setup-done
             fi
@@ -123,13 +138,15 @@ jobs:
       # composer update --lock ??
       # For propper caching we would require a solution invloving composer.lock from commit which is not committed.
       # We should ensure to have everything updated at build time. ??
-
-#      - run:
-#          name: Composer update composer.lock
-#          command: |
-#            composer update --lock --ansi --no-progress
-#            cat composer.lock
-#            cat md5sum composer.lock
+      # Probably
+      # - check the lock file and compare with /tmp/ci-cache/project-setup-done
+      #   - if lock differs then update project and "project-setup-done", use cache somehow.
+      # - run:
+      #     name: Composer update composer.lock
+      #     command: |
+      #       composer update --lock --ansi --no-progress
+      #       cat composer.lock
+      #       cat md5sum composer.lock
 
       - run:
           name: Set up Drupal config & directories
@@ -164,19 +181,6 @@ jobs:
            - project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
            - project-dependencies-checkout-config-{{ checksum "docroot/profiles/contrib/.circleci/config.yml" }}
 
-      - run:
-          name: Configure & start Apache
-          command: |
-            sudo cp docroot/profiles/contrib/degov/.circleci/vhost.conf /etc/apache2/sites-available/project.conf
-            if [ ! -f /etc/apache2/sites-available/project.conf ]; then
-              sudo a2ensite project
-              sudo service apache2 start
-            fi
-
-      - save_cache:
-          key: project-dependencies-apache-vhost-{{ checksum "docroot/profiles/contrib/degov/.circleci/vhost.conf" }}-{{ checksum "docroot/profiles/contrib/degov/.circleci/config.yml" }}
-          paths:
-            - /etc/apache2
 
 
       # TODO THIS REQUIRES OPTIMISATION
