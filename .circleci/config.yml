@@ -187,9 +187,10 @@ jobs:
       - persist_to_workspace:
           root: /
           paths:
-            - home/circleci/
-            - etc/apache2/sites-*
-            - tmp/ci-cache/*
+            - home/circleci
+            - etc/apache2/sites-available
+            - etc/apache2/sites-enabled
+            - tmp/ci-cache
 
   test1:
     docker:
@@ -199,7 +200,9 @@ jobs:
       - attach_workspace:
           at: home/circleci
       - attach_workspace:
-          at: etc/apache2
+          at: etc/apache2/sites-available
+      - attach_workspace:
+          at: etc/apache2/sites-enabled
       - attach_workspace:
           at: tmp/ci-cache
 
