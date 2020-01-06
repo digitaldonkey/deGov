@@ -284,7 +284,8 @@ jobs:
             drush cc drush
             cd docroot/
             drush status
-            # drush sql:drop --yes --ansi
+            drush sql:drop --yes --ansi
+            ll profiles/contrib/degov/testing/behat/degov-7.x-dev.sql.gz
             zcat profiles/contrib/degov/testing/behat/degov-7.x-dev.sql.gz | docker exec -i mysql-$1 mysql -u "$MYSQL_USER" -p "$MYSQL_PASSWORD" "$MYSQL_DATABASE"
 #            drush --yes --ansi cr
 #            drush --yes --ansi watchdog:delete all
