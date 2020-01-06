@@ -118,7 +118,7 @@ jobs:
           command: | # if not in cache
             if [ -f /tmp/ci-cache/profile-setup-lock ]; then
               composer update --lock --ansi --no-progress
-              diff composer.lock /tmp/ci-cache/profile-setup-lock
+              git diff --no-index composer.lock /tmp/ci-cache/profile-setup-lock
             fi
 
 
@@ -228,7 +228,6 @@ jobs:
             echo "###"
             ls -al /home/circleci
             ls -al docroot/sites/default/settings.php
-            find . | grep \\.git$ | xargs du -sh
 
 
 workflows:
