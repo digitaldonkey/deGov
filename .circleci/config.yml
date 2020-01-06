@@ -196,7 +196,6 @@ jobs:
           root: /
           paths:
             - home/circleci
-            - etc/apache2/sites-*/project.conf
             - tmp/ci-cache/*
 
   test1:
@@ -205,7 +204,10 @@ jobs:
      - <<: *dbimage
     steps:
       - attach_workspace:
-          at: /
+          at: /home/circleci
+      - attach_workspace:
+          at: /tmp/ci-cache
+
 
       - run:
           name: Start Apache
