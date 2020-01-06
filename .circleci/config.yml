@@ -250,18 +250,18 @@ jobs:
             sed -i 's/{{ mysql_host }}/127.0.0.1/g' docroot/sites/default/settings.local.php
             echo '$settings["hash_salt"] = "7asdiugasd8f623gjwgasgf7a8stfasjdfsdafasdfasdfasdf";' >> docroot/sites/default/settings.local.php
             cd docroot
-            drush --yes --ansi sql:drop
-            zcat profiles/contrib/degov/testing/behat/degov-7.x-dev.sql.gz | docker exec -i mysql-$1 mysql -u "$MYSQL_USER" -p "$MYSQL_PASSWORD" "$MYSQL_DATABASE"
-            drush --yes --ansi cr
-            drush --yes --ansi watchdog:delete all
-            drush --yes --ansi updb
-            drush --yes --ansi cr
-            drush --yes --ansi pm:uninstall degov_demo_content
-            drush --yes --ansi en degov_demo_content
-            drush --yes --ansi locale:check
-            drush --yes --ansi locale:update
-            drush --yes --ansi php-eval 'Drupal\degov\TranslationImporter::importForProfile()'
-            drush --yes --ansi cr
+            drush sql:drop --yes --ansi
+#            zcat profiles/contrib/degov/testing/behat/degov-7.x-dev.sql.gz | docker exec -i mysql-$1 mysql -u "$MYSQL_USER" -p "$MYSQL_PASSWORD" "$MYSQL_DATABASE"
+#            drush --yes --ansi cr
+#            drush --yes --ansi watchdog:delete all
+#            drush --yes --ansi updb
+#            drush --yes --ansi cr
+#            drush --yes --ansi pm:uninstall degov_demo_content
+#            drush --yes --ansi en degov_demo_content
+#            drush --yes --ansi locale:check
+#            drush --yes --ansi locale:update
+#            drush --yes --ansi php-eval 'Drupal\degov\TranslationImporter::importForProfile()'
+#            drush --yes --ansi cr
 
 workflows:
   version: 2
