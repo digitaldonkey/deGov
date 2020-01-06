@@ -3,7 +3,7 @@
 # Check https://circleci.com/docs/2.0/language-php/ for more details
 #
 x-baseimage: &baseimage
-  - image: digitaldonkey/circleci-degov:0.0.9
+  - image: digitaldonkey/circleci-degov:0.0.10
     environment:
       RELEASE_BRANCH: release/7.6.x-dev
       COMPOSER_ALLOW_SUPERUSER: 1
@@ -13,7 +13,7 @@ x-baseimage: &baseimage
       MYSQL_DATABASE: testing
       MYSQL_USER: testing
       MYSQL_PASSWORD: testing
-
+      PATH: /home/circleci/project/bin/:$PATH
 
     # Specify service dependencies here if necessary
     # CircleCI maintains a library of pre-built images
