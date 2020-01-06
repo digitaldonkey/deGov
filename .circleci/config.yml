@@ -97,9 +97,9 @@ jobs:
 #           - project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
 #           - project-dependencies-checkout-config-{{ checksum "docroot/profiles/contrib/.circleci/config.yml" }}
 
-     - restore_cache:
-        keys:
-          - composer-global-cache
+      - restore_cache:
+         keys:
+           - composer-global-cache
 
 
       # PROJECT SETUP
