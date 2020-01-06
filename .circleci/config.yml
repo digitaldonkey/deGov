@@ -271,6 +271,7 @@ jobs:
       - run:
           name: Install DB dump
           command: |
+            drush cc drush
             cp docroot/profiles/contrib/degov/testing/behat/template/settings.local.php docroot/sites/default/settings.local.php
             sed -i "s/{{ mysql_auth.db }}/$MYSQL_DATABASE/g" docroot/sites/default/settings.local.php
             sed -i "s/{{ mysql_auth.user }}/$MYSQL_USER/g" docroot/sites/default/settings.local.php
@@ -284,8 +285,8 @@ jobs:
             cd docroot/
             drush status
             drush sql:conf
-            drush sql:drop --yes --ansi
-#            zcat profiles/contrib/degov/testing/behat/degov-7.x-dev.sql.gz | docker exec -i mysql-$1 mysql -u "$MYSQL_USER" -p "$MYSQL_PASSWORD" "$MYSQL_DATABASE"
+            # drush sql:drop --yes --ansi
+            zcat profiles/contrib/degov/testing/behat/degov-7.x-dev.sql.gz | docker exec -i mysql-$1 mysql -u "$MYSQL_USER" -p "$MYSQL_PASSWORD" "$MYSQL_DATABASE"
 #            drush --yes --ansi cr
 #            drush --yes --ansi watchdog:delete all
 #            drush --yes --ansi updb
