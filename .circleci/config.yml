@@ -245,8 +245,9 @@ jobs:
             sudo service apache2 start
 
       - run:
-      # Our primary container isn't MYSQL so run a sleep command until it's ready.
           name: Waiting for MySQL to be ready
+          # Our primary container isn't MYSQL so run a sleep command until it's ready.
+          # @see https://circleci.com/docs/2.0/postgres-config/#example-mysql-project
           command: |
             for i in `seq 1 10`;
             do
@@ -259,6 +260,8 @@ jobs:
       - run:
           name: Install DB dump
           command: |
+            php -i | egrep 'PDO drivers|Loaded Configuration File'
+            drush php-eval "phpinfo();" | egrep 'PDO drivers|Loaded Configuration File'
             cp docroot/profiles/contrib/degov/testing/behat/template/settings.local.php docroot/sites/default/settings.local.php
             sed -i "s/{{ mysql_auth.db }}/$MYSQL_DATABASE/g" docroot/sites/default/settings.local.php
             sed -i "s/{{ mysql_auth.user }}/$MYSQL_USER/g" docroot/sites/default/settings.local.php
