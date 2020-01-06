@@ -279,7 +279,7 @@ jobs:
             sed -i 's/{{ mysql_host }}/127.0.0.1/g' docroot/sites/default/settings.local.php
             echo '$settings["hash_salt"] = "7asdiugasd8f623gjwgasgf7a8stfasjdfsdafasdfasdfasdf";' >> docroot/sites/default/settings.local.php
 
-            cat /home/circleci/docroot/sites/default/drushrc.php
+            cat docroot/sites/default/drushrc.php
             drush cc drush
             cd docroot/
             drush status
