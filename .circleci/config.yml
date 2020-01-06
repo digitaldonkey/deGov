@@ -118,8 +118,8 @@ jobs:
           command: | # if not in cache
             if [ -f /tmp/ci-cache/profile-setup-lock ]; then
               composer update --lock --ansi --no-progress
+              diff composer.lock /tmp/ci-cache/profile-setup-lock
             fi
-            diff composer.lock /tmp/ci-cache/profile-setup-lock
 
 
       - run:
@@ -177,13 +177,9 @@ jobs:
       - run:
           name: Configure & start Apache
           command: |
-            ls -al /etc/apache2/sites-enabled
-            ls -al /etc/apache2/sites-available
             if [ ! -f /etc/apache2/sites-enabled/project.conf ]; then
               sudo a2ensite project
             fi
-            ls -al /etc/apache2/sites-enabled
-            ls -al /etc/apache2/sites-available
             sudo service apache2 start
 
 #      - save_cache:
