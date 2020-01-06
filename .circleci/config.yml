@@ -91,15 +91,16 @@ jobs:
 #                  head -c 64 </dev/urandom > /tmp/ci-cache/profile-setup-lock
 #                fi
 
-#      - restore_cache:
-#         keys:
-#           - project-dependencies-composer-{{ checksum "/tmp/ci-cache/profile-setup-lock" }}-{{ checksum "/tmp/ci-cache/composer" }}-{{ checksum "docroot/profiles/contrib/degov/.circleci/config.yml" }}
-#           - project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
-#           - project-dependencies-checkout-config-{{ checksum "docroot/profiles/contrib/.circleci/config.yml" }}
+     - restore_cache:
+        keys:
+          - composer-global-cache-{{ epoch }}
+          - composer-global-cache-
 
-      - restore_cache:
-         keys:
-           - composer-global-cache
+     - restore_cache:
+        keys:
+#          - project-dependencies-composer-{{ checksum "/tmp/ci-cache/profile-setup-lock" }}-{{ checksum "/tmp/ci-cache/composer" }}-{{ checksum "docroot/profiles/contrib/degov/.circleci/config.yml" }}
+          - project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
+          - project-dependencies-checkout-config-{{ checksum "docroot/profiles/contrib/.circleci/config.yml" }}
 
 
       # PROJECT SETUP
@@ -118,14 +119,13 @@ jobs:
            - /tmp/ci-cache
 
       # INSTALL PROFILE
-      - run:
-          name: TEST LOCK CACHING
-          command: | # if not in cache
-            if [ -f /tmp/ci-cache/profile-setup-lock ]; then
-              composer update --lock --ansi --no-progress
-              git diff --no-index composer.lock /tmp/ci-cache/profile-setup-lock
-            fi
-
+#      - run:
+#          name: TEST LOCK CACHING
+#          command: | # if not in cache
+#            if [ -f /tmp/ci-cache/profile-setup-lock ]; then
+#              composer update --lock --ansi --no-progress
+#              git diff --no-index composer.lock /tmp/ci-cache/profile-setup-lock
+#            fi
 
       - run:
           name: Composer require deGov
@@ -180,7 +180,7 @@ jobs:
            - /tmp/ci-cache
 
       - save_cache:
-          key: composer-global-cache
+          key: composer-global-cache-{{ epoch }}
           paths:
            - ~/.composer/cache
 
@@ -192,18 +192,11 @@ jobs:
             fi
             sudo service apache2 start
 
+# We need to save a cache based on the lock file which we don't commit :/
 #      - save_cache:
 #          key: project-dependencies-apache-vhost-{{ checksum "docroot/profiles/contrib/degov/.circleci/vhost.conf" }}-{{ checksum "docroot/profiles/contrib/degov/.circleci/config.yml" }}
 #          paths:
 #            - .
-
-#  TODO VERIFY ALL CAHCES...
-#  Must be restored in right order on top
-#           - project-dependencies-apache-vhost-{{ checksum "docroot/profiles/contrib/degov/.circleci/vhost.conf" }}-{{ checksum "docroot/profiles/contrib/degov/.circleci/config.yml" }}
-#           - project-dependencies-composer-{{ checksum "/tmp/ci-cache/composer" }}-{{ checksum "docroot/profiles/contrib/.circleci/config.yml" }}--{{ checksum "docroot/profiles/contrib/degov/composer.json" }}
-#           - project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
-#           - project-dependencies-checkout-config-{{ checksum "docroot/profiles/contrib/.circleci/config.yml" }}
-#
 
       - run:
           name: Remove Git Repos
