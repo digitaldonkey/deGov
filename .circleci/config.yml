@@ -270,3 +270,6 @@ workflows:
       - test1:
           requires:
             - build
+      - db_dump_setup:
+          requires:
+            - build
