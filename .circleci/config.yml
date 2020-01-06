@@ -249,8 +249,9 @@ jobs:
             sed -i 's/{{ mysql_auth.password }}/testing/g' docroot/sites/default/settings.local.php
             sed -i 's/{{ mysql_host }}/127.0.0.1/g' docroot/sites/default/settings.local.php
             echo '$settings["hash_salt"] = "7asdiugasd8f623gjwgasgf7a8stfasjdfsdafasdfasdfasdf";' >> docroot/sites/default/settings.local.php
+            cd docroot
             drush --yes --ansi sql:drop
-            zcat docroot/profiles/contrib/degov/testing/behat/degov-7.x-dev.sql.gz | docker exec -i mysql-$1 mysql -u "$MYSQL_USER" -p "$MYSQL_PASSWORD" "$MYSQL_DATABASE"
+            zcat profiles/contrib/degov/testing/behat/degov-7.x-dev.sql.gz | docker exec -i mysql-$1 mysql -u "$MYSQL_USER" -p "$MYSQL_PASSWORD" "$MYSQL_DATABASE"
             drush --yes --ansi cr
             drush --yes --ansi watchdog:delete all
             drush --yes --ansi updb
