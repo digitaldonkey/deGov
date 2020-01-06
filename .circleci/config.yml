@@ -87,10 +87,10 @@ jobs:
                 echo "$PROJECT_BRANCH, $LFS_BRANCH, $CIRCLECI_CACHE_TAG," > /tmp/ci-cache/project-setup
                 echo "$CIRCLE_SHA1, $CIRCLE_BRANCH, $PROJECT_BRANCH, $LFS_BRANCH, $CIRCLECI_CACHE_TAG" > /tmp/ci-cache/composer
 
-      - restore_cache:
-         keys:
-           - project-dependencies-composer-{{ checksum "/tmp/ci-cache/composer" }}-{{ checksum "docroot/profiles/contrib/.circleci/config.yml" }}--{{ checksum "docroot/profiles/contrib/composer.json" }}
-           - project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
+#      - restore_cache:
+#         keys:
+#           - project-dependencies-composer-{{ checksum "/tmp/ci-cache/composer" }}-{{ checksum "docroot/profiles/contrib/.circleci/config.yml" }}--{{ checksum "docroot/profiles/contrib/composer.json" }}
+#           - project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
 #           - project-dependencies-checkout-config-{{ checksum "docroot/profiles/contrib/.circleci/config.yml" }}
 
       # PROJECT SETUP
@@ -102,11 +102,11 @@ jobs:
               composer create-project --remove-vcs "degov/degov-project:dev-$PROJECT_BRANCH" --no-install --ansi --no-progress .
             fi
 
-      - save_cache:
-          key: project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
-          paths:
-           - .
-           - /tmp/ci-cache
+#      - save_cache:
+#          key: project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
+#          paths:
+#           - .
+#           - /tmp/ci-cache
 
       # INSTALL PROFILE
       - run:
@@ -153,10 +153,10 @@ jobs:
             fi
             cat docroot/sites/default/settings.php
 
-      - save_cache:
-          key: project-dependencies-composer-{{ checksum "/tmp/ci-cache/composer" }}-{{ checksum "docroot/profiles/contrib/degov/.circleci/config.yml" }}
-          paths:
-            - .
+#      - save_cache:
+#          key: project-dependencies-composer-{{ checksum "/tmp/ci-cache/composer" }}-{{ checksum "docroot/profiles/contrib/degov/.circleci/config.yml" }}
+#          paths:
+#            - .
           # TODO is paths ok?
 
 
@@ -169,10 +169,10 @@ jobs:
             fi
             sudo service apache2 start
 
-      - save_cache:
-          key: project-dependencies-apache-vhost-{{ checksum "docroot/profiles/contrib/degov/.circleci/vhost.conf" }}-{{ checksum "docroot/profiles/contrib/degov/.circleci/config.yml" }}
-          paths:
-            - .
+#      - save_cache:
+#          key: project-dependencies-apache-vhost-{{ checksum "docroot/profiles/contrib/degov/.circleci/vhost.conf" }}-{{ checksum "docroot/profiles/contrib/degov/.circleci/config.yml" }}
+#          paths:
+#            - .
 
 #  TODO VERIFY ALL CAHCES...
 #  Must be restored in right order on top
