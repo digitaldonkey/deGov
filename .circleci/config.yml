@@ -86,6 +86,10 @@ jobs:
                 # Used for caching
                 echo "$PROJECT_BRANCH, $LFS_BRANCH, $CIRCLECI_CACHE_TAG," > /tmp/ci-cache/project-setup
                 echo "$CIRCLE_SHA1, $CIRCLE_BRANCH, $PROJECT_BRANCH, $LFS_BRANCH, $CIRCLECI_CACHE_TAG" > /tmp/ci-cache/composer
+                if [ ! -f /tmp/ci-cache/profile-setup-lock ]; then
+                  # Generate file with arbitrary content to have a file for cache checksum.
+                  head -c 64 </dev/urandom > /tmp/ci-cache/profile-setup-lock
+                fi
 
       - restore_cache:
          keys:
