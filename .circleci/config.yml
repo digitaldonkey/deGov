@@ -10,6 +10,10 @@ x-baseimage: &baseimage
       COMPOSER_MEMORY_LIMIT: -1
       COMPOSER_EXIT_ON_PATCH_FAILURE: 1
       CIRCLECI_CACHE_TAG: v1
+      MYSQL_DATABASE: testing
+      MYSQL_USER: testing
+      MYSQL_PASSWORD: testing
+
 
     # Specify service dependencies here if necessary
     # CircleCI maintains a library of pre-built images
