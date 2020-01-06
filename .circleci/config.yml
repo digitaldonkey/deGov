@@ -193,9 +193,8 @@ jobs:
           root: /
           paths:
             - home/circleci
-            - etc/apache2/sites-available
-            - etc/apache2/sites-enabled
-            - tmp/ci-cache/*
+            - etc/apache2
+            - tmp/ci-cache
 
   test1:
     docker:
@@ -203,13 +202,11 @@ jobs:
      - <<: *dbimage
     steps:
       - attach_workspace:
-          at: /home/circleci
+          at: home/circleci
       - attach_workspace:
-          at: /etc/apache2/sites-available
+          at: etc/apache2
       - attach_workspace:
-          at: /etc/apache2/sites-enabled
-      - attach_workspace:
-          at: /tmp/ci-cache
+          at: tmp/ci-cache
 
       - run:
           name: Start Apache
@@ -222,6 +219,9 @@ jobs:
             echo "###"
             echo "working_directory: $(pwd)"
             echo "###"
+            du -h /etc/apache2
+            du -h /home/circleci
+            du -h /tmp/ci-cache
             ls -al /home/circleci/project
             ls -al docroot/sites/default/settings.php
             find . | grep \\.git$
