@@ -13,7 +13,7 @@ x-baseimage: &baseimage
       MYSQL_DATABASE: testing
       MYSQL_USER: testing
       MYSQL_PASSWORD: testing
-      PATH: /home/circleci/project/bin/:/home/circleci/project/bin:/home/circleci/.local/bin:/home/circleci/bin:$PATH
+      PATH: /home/circleci/project/bin:/home/circleci/project/bin:/home/circleci/.local/bin:/home/circleci/bin:$PATH
 
     # Specify service dependencies here if necessary
     # CircleCI maintains a library of pre-built images
