@@ -194,7 +194,7 @@ jobs:
           paths:
             - home/circleci
             - etc/apache2/sites-*/project.conf
-            - tmp/ci-cache
+            - tmp/ci-cache/*
 
   test1:
     docker:
