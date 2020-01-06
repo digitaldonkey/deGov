@@ -172,6 +172,7 @@ jobs:
             EOF
             cat docroot/sites/default/settings.php
 
+            mkdir -p ~/.drush
             tee <<EOF >  ~/.drush/drushrc.php
             <?php
 
