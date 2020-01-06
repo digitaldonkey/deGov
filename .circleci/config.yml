@@ -168,6 +168,10 @@ jobs:
             \$config["swiftmailer.transport"]["transport"] = "spool";
             \$config["swiftmailer.transport"]["spool_directory"] = "/tmp/swiftmailer-spool";
 
+            if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
+              include $app_root . '/' . $site_path . '/settings.local.php';
+            }
+
             EOF
             cat docroot/sites/default/settings.php
 
