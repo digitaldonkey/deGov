@@ -271,6 +271,7 @@ jobs:
             cat docroot/sites/default/settings.local.php
             cd docroot/
             drush status
+            drush sql:conf
             drush sql:drop --yes --ansi
 #            zcat profiles/contrib/degov/testing/behat/degov-7.x-dev.sql.gz | docker exec -i mysql-$1 mysql -u "$MYSQL_USER" -p "$MYSQL_PASSWORD" "$MYSQL_DATABASE"
 #            drush --yes --ansi cr
