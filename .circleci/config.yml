@@ -220,7 +220,7 @@ jobs:
             echo "###"
             ls -al /home/circleci
             ls -al docroot/sites/default/settings.php
-            find . | grep \\.git$
+            find . | grep \\.git$ | xargs du -h
 
 
 workflows:
