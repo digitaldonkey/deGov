@@ -155,7 +155,7 @@ jobs:
               mkdir docroot/sites/default/files/translations/
               chmod 777 -R docroot/sites/default/files/
               tee <<EOF > docroot/sites/default/settings.php
-
+            <?php
             \$settings["file_private_path"] = "sites/default/files/private";
             \$settings["file_public_path"] = "sites/default/files";
             \$config["system.file"]["path"]["temporary"] = "/tmp";
