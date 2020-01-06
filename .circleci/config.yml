@@ -59,10 +59,6 @@ jobs:
 #            git config --global url."ssh://git@github.com".insteadOf "https://github.com" || true
 #            git config --global gc.auto 0 || true
 
-      - save_cache:
-          key: project-dependencies-checkout-config-{{ checksum "docroot/profiles/contrib/.circleci/config.yml" }}
-          paths:
-            - .
 
       - run:
           name: Repository Environment Variables for project and LFS
@@ -91,19 +87,17 @@ jobs:
 #                  head -c 64 </dev/urandom > /tmp/ci-cache/profile-setup-lock
 #                fi
 
-     - restore_cache:
-        keys:
-          - composer-global-cache-{{ epoch }}
-          - composer-global-cache-
-
-     - restore_cache:
-        keys:
-#          - project-dependencies-composer-{{ checksum "/tmp/ci-cache/profile-setup-lock" }}-{{ checksum "/tmp/ci-cache/composer" }}-{{ checksum "docroot/profiles/contrib/degov/.circleci/config.yml" }}
-          - project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
-          - project-dependencies-checkout-config-{{ checksum "docroot/profiles/contrib/.circleci/config.yml" }}
+     #  Composer cache
+      - restore_cache:
+         keys:
+           - composer-global-cache-{{ epoch }}
+           - composer-global-cache-
 
 
       # PROJECT SETUP
+      - restore_cache:
+         keys:
+          - project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
       - run:
           name: Set up Project
           command: | # if not in cache
@@ -111,7 +105,6 @@ jobs:
               rm -rf ./*  # removing default -checkout as we use composer, but we keep circleci known_hosts setup.
               composer create-project --remove-vcs "degov/degov-project:dev-$PROJECT_BRANCH" --no-install --ansi --no-progress .
             fi
-
       - save_cache:
           key: project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
           paths:
