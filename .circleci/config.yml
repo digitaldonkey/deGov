@@ -237,7 +237,7 @@ jobs:
             echo "working_directory: $(pwd)"
             echo "###"
             ls -al /home/circleci
-            ls -al docroot/sites/default/settings.php
+            cat docroot/sites/default/settings.php
 
 
 workflows:
