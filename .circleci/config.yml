@@ -217,7 +217,8 @@ jobs:
             echo "###"
             echo "working_directory: $(pwd)"
             echo "###"
-            ls -al docroot
+            ls -al /home/circleci/project
+            ls -al docroot/sites/default/settings.php
             find . | grep \\.git$
 
 
