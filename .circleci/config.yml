@@ -196,7 +196,7 @@ jobs:
           root: /
           paths:
             - home/circleci
-            - tmp/ci-cache
+            - tmp/ci-cache/*
 
   test1:
     docker:
@@ -204,9 +204,9 @@ jobs:
      - <<: *dbimage
     steps:
       - attach_workspace:
-          at: home/circleci
+          at: /home/circleci
       - attach_workspace:
-          at: tmp/ci-cache
+          at: /tmp/ci-cache
 
 
       - run:
