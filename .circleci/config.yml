@@ -3,7 +3,7 @@
 # Check https://circleci.com/docs/2.0/language-php/ for more details
 #
 x-baseimage: &baseimage
-  - image: digitaldonkey/circleci-degov:0.0.7
+  - image: digitaldonkey/circleci-degov:0.0.8
     environment:
       RELEASE_BRANCH: release/7.6.x-dev
       COMPOSER_ALLOW_SUPERUSER: 1
@@ -168,10 +168,13 @@ jobs:
       - run:
           name: Configure & start Apache
           command: |
-            sudo cp docroot/profiles/contrib/degov/.circleci/vhost.conf /etc/apache2/sites-available/project.conf
+            ls -al /etc/apache2/sites-enabled
+            ls -al /etc/apache2/sites-available
             if [ ! -f /etc/apache2/sites-enabled/project.conf ]; then
               sudo a2ensite project
             fi
+            ls -al /etc/apache2/sites-enabled
+            ls -al /etc/apache2/sites-available
             sudo service apache2 start
 
 #      - save_cache:

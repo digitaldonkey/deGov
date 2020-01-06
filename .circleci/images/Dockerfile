@@ -77,6 +77,8 @@ RUN { \
 		echo 'opcache.fast_shutdown=1'; \
 	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
+COPY vhost.conf /etc/apache2/sites-available/project.conf
+
 USER circleci
 
 ENV PATH /home/circleci/project/bin:/home/circleci/.local/bin:/home/circleci/bin:${PATH}
