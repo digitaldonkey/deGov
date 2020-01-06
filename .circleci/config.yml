@@ -195,7 +195,8 @@ jobs:
       - persist_to_workspace:
           root: /
           paths:
-            - home/circleci
+            - home/circleci/.ssh
+            - home/circleci/project
             - tmp/ci-cache/*
 
   test1:
@@ -217,7 +218,7 @@ jobs:
             echo "###"
             echo "working_directory: $(pwd)"
             echo "###"
-            ls -al /home/circleci/project
+            ls -al /home/circleci
             ls -al docroot/sites/default/settings.php
             find . | grep \\.git$
 
