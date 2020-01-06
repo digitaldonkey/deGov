@@ -114,6 +114,15 @@ jobs:
 
       # INSTALL PROFILE
       - run:
+          name: TEST LOCK CACHING
+          command: | # if not in cache
+            if [ -f /tmp/ci-cache/profile-setup-lock ]; then
+              composer update --lock --ansi --no-progress
+            fi
+            diff composer.lock /tmp/ci-cache/profile-setup-lock
+
+
+      - run:
           name: Composer require deGov
           command: | # if not in cache
             if [ ! -f /tmp/ci-cache/profile-setup-lock ]; then
@@ -190,8 +199,11 @@ jobs:
 #           - project-dependencies-checkout-config-{{ checksum "docroot/profiles/contrib/.circleci/config.yml" }}
 #
 
+      - run:
+          name: Remove Git Repos
+          command: |
+            find . | grep \\.git$ | xargs rm -rf
 
-      # TODO THIS REQUIRES OPTIMISATION
       - persist_to_workspace:
           root: /
           paths:
@@ -220,7 +232,7 @@ jobs:
             echo "###"
             ls -al /home/circleci
             ls -al docroot/sites/default/settings.php
-            find . | grep \\.git$ | xargs du -h
+            find . | grep \\.git$ | xargs du -sh
 
 
 workflows:
