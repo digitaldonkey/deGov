@@ -122,7 +122,7 @@ jobs:
             else
               composer update --ansi --no-progress
             fi
-              cp composer.lock /tmp/ci-cache/profile-setup-lock
+            cp composer.lock /tmp/ci-cache/profile-setup-lock
 
       # TODO
       # composer update --lock ??
@@ -193,7 +193,7 @@ jobs:
           root: /
           paths:
             - home/circleci
-            - etc/apache2
+            - etc/apache2/sites-*/project.conf
             - tmp/ci-cache
 
   test1:
@@ -215,9 +215,6 @@ jobs:
             echo "###"
             echo "working_directory: $(pwd)"
             echo "###"
-            du -h /etc/apache2
-            du -h /home/circleci
-            du -h /tmp/ci-cache
             ls -al /home/circleci/project
             ls -al docroot/sites/default/settings.php
             find . | grep \\.git$
@@ -231,8 +228,3 @@ workflows:
       - test1:
           requires:
             - build
-
-
-dependencies:
-  cache_directories:
-    - ~/.composer/cache
