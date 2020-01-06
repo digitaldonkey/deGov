@@ -97,6 +97,11 @@ jobs:
 #           - project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
 #           - project-dependencies-checkout-config-{{ checksum "docroot/profiles/contrib/.circleci/config.yml" }}
 
+     - restore_cache:
+        keys:
+          - composer-global-cache
+
+
       # PROJECT SETUP
       - run:
           name: Set up Project
@@ -173,6 +178,11 @@ jobs:
           paths:
            - .
            - /tmp/ci-cache
+
+      - save_cache:
+          key: composer-global-cache
+          paths:
+           - ~/.composer/cache
 
       - run:
           name: Configure & start Apache
