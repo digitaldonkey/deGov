@@ -59,10 +59,10 @@ jobs:
 #            git config --global url."ssh://git@github.com".insteadOf "https://github.com" || true
 #            git config --global gc.auto 0 || true
 
-#      - save_cache:
-#          key: project-dependencies-checkout-config-{{ checksum "docroot/profiles/contrib/.circleci/config.yml" }}
-#          paths:
-#            - .
+     - save_cache:
+         key: project-dependencies-checkout-config-{{ checksum "docroot/profiles/contrib/.circleci/config.yml" }}
+         paths:
+           - .
 
       - run:
           name: Repository Environment Variables for project and LFS
@@ -87,11 +87,11 @@ jobs:
                 echo "$PROJECT_BRANCH, $LFS_BRANCH, $CIRCLECI_CACHE_TAG," > /tmp/ci-cache/project-setup
                 echo "$CIRCLE_SHA1, $CIRCLE_BRANCH, $PROJECT_BRANCH, $LFS_BRANCH, $CIRCLECI_CACHE_TAG" > /tmp/ci-cache/composer
 
-#      - restore_cache:
-#         keys:
+      - restore_cache:
+         keys:
 #           - project-dependencies-composer-{{ checksum "/tmp/ci-cache/composer" }}-{{ checksum "docroot/profiles/contrib/.circleci/config.yml" }}--{{ checksum "docroot/profiles/contrib/composer.json" }}
-#           - project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
-#           - project-dependencies-checkout-config-{{ checksum "docroot/profiles/contrib/.circleci/config.yml" }}
+           - project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
+           - project-dependencies-checkout-config-{{ checksum "docroot/profiles/contrib/.circleci/config.yml" }}
 
       # PROJECT SETUP
       - run:
@@ -102,11 +102,11 @@ jobs:
               composer create-project --remove-vcs "degov/degov-project:dev-$PROJECT_BRANCH" --no-install --ansi --no-progress .
             fi
 
-#      - save_cache:
-#          key: project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
-#          paths:
-#           - .
-#           - /tmp/ci-cache
+      - save_cache:
+          key: project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
+          paths:
+           - .
+           - /tmp/ci-cache
 
       # INSTALL PROFILE
       - run:
@@ -115,15 +115,17 @@ jobs:
             if [ ! -f /tmp/project-setup-done ]; then
               rm composer.lock
               composer require "degov/degov:dev-$CIRCLE_BRANCH#$CIRCLE_SHA1" degov/degov_devel_git_lfs:dev-$LFS_BRANCH --update-with-all-dependencies --ansi --no-progress
-              cp composer.lock /tmp/ci-cache/project-setup-done
+            else
+              composer update --ansi --no-progress
             fi
+              cp composer.lock /tmp/ci-cache/profile-setup-lock
 
       # TODO
       # composer update --lock ??
       # For propper caching we would require a solution invloving composer.lock from commit which is not committed.
       # We should ensure to have everything updated at build time. ??
       # Probably
-      # - check the lock file and compare with /tmp/ci-cache/project-setup-done
+      # - check the lock file and compare with /tmp/ci-cache/profile-setup-lock
       #   - if lock differs then update project and "project-setup-done", use cache somehow.
       # - run:
       #     name: Composer update composer.lock
@@ -153,12 +155,11 @@ jobs:
             fi
             cat docroot/sites/default/settings.php
 
-#      - save_cache:
-#          key: project-dependencies-composer-{{ checksum "/tmp/ci-cache/composer" }}-{{ checksum "docroot/profiles/contrib/degov/.circleci/config.yml" }}
-#          paths:
-#            - .
-          # TODO is paths ok?
-
+      - save_cache:
+          key: project-dependencies-composer-{{ checksum "/tmp/ci-cache/profile-setup-lock" }}-{{ checksum "/tmp/ci-cache/composer" }}-{{ checksum "docroot/profiles/contrib/degov/.circleci/config.yml" }}
+          paths:
+           - .
+           - /tmp/ci-cache
 
       - run:
           name: Configure & start Apache
@@ -198,13 +199,13 @@ jobs:
      - <<: *dbimage
     steps:
       - attach_workspace:
-          at: home/circleci
+          at: /home/circleci
       - attach_workspace:
-          at: etc/apache2/sites-available
+          at: /etc/apache2/sites-available
       - attach_workspace:
-          at: etc/apache2/sites-enabled
+          at: /etc/apache2/sites-enabled
       - attach_workspace:
-          at: tmp/ci-cache
+          at: /tmp/ci-cache
 
       - run:
           name: Start Apache
