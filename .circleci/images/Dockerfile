@@ -77,6 +77,9 @@ RUN { \
 		echo 'opcache.fast_shutdown=1'; \
 	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
+# Install git-lfs
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash && apt-get install git-lfs
+
 COPY vhost.conf /etc/apache2/sites-available/project.conf
 
 USER circleci

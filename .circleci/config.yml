@@ -3,7 +3,7 @@
 # Check https://circleci.com/docs/2.0/language-php/ for more details
 #
 x-baseimage: &baseimage
-  - image: digitaldonkey/circleci-degov:0.0.12
+  - image: digitaldonkey/circleci-degov:0.0.13
     environment:
       RELEASE_BRANCH: release/7.6.x-dev
       COMPOSER_ALLOW_SUPERUSER: 1
@@ -129,6 +129,7 @@ jobs:
           name: Composer require deGov
           command: | # if not in cache
             if [ ! -f /tmp/ci-cache/profile-setup-lock ]; then
+              git lfs install
               rm composer.lock
               composer require "degov/degov:dev-$CIRCLE_BRANCH#$CIRCLE_SHA1" degov/degov_devel_git_lfs:dev-$LFS_BRANCH --update-with-all-dependencies --ansi --no-progress
             else
@@ -331,3 +332,4 @@ workflows:
 # circleci@defc4957b553:~/project$ test  php-eval 'print(ini_get("memory_limit")."\n");'
 # 512M
 # --db-url=mysql://testing:testing@localhost:3306/testing -y
+# --db-url="mysql://testing:testing@localhost:3306/testing"
