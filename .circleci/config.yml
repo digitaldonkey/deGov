@@ -280,6 +280,11 @@ jobs:
             echo Failed waiting for MySQL && exit 1
 
       - run:
+          name: Drush Config
+          command: |
+            echo 'alias drush="PHPRC=/home/circleci/project/drush.ini /usr/local/bin/php  /home/circleci/project/bin/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=http://localhost"' >> $BASH_ENV
+
+      - run:
           name: Install DB dump
           command: |
             alias drush="PHPRC=/home/circleci/project/drush.ini /usr/local/bin/php  /home/circleci/project/bin/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=http://localhost"
