@@ -282,7 +282,7 @@ jobs:
       - run:
           name: Drush Config
           command: |
-            echo "alias drush='PHPRC=/home/circleci/project/drush.ini /usr/local/bin/php /home/circleci/project/bin/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=localhost --db-url="mysql://$MYSQL_USER:$MYSQL_PASSWORD@localhost:3306/$MYSQL_DATABASE --yes'" >> $BASH_ENV
+            echo "alias drush='PHPRC=/home/circleci/project/drush.ini /usr/local/bin/php /home/circleci/project/bin/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=localhost --db-url=\"mysql://$MYSQL_USER:$MYSQL_PASSWORD@localhost:3306/$MYSQL_DATABASE\" --yes'" >> $BASH_ENV
 
       - run:
           name: Install DB dump
