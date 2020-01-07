@@ -282,7 +282,7 @@ jobs:
       - run:
           name: Drush Config
           command: |
-            echo 'alias drush="PHPRC=/home/circleci/project/drush.ini /usr/local/bin/php  /home/circleci/project/bin/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=http://localhost" --yes' >> $BASH_ENV
+            echo "alias drush='PHPRC=/home/circleci/project/drush.ini /usr/local/bin/php /home/circleci/project/bin/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=localhost --db-url="mysql://$MYSQL_USER:$MYSQL_PASSWORD@localhost:3306/$MYSQL_DATABASE --yes'" >> $BASH_ENV
 
       - run:
           name: Install DB dump
@@ -298,7 +298,7 @@ jobs:
             drush cc drush
             cd docroot/
             drush status
-            drush sql:drop --db-url="mysql://$MYSQL_USER:$MYSQL_PASSWORD@localhost:3306/$MYSQL_DATABASE"
+            drush sql:drop"
             ll profiles/contrib/degov/testing/behat/degov-7.x-dev.sql.gz
             zcat profiles/contrib/degov/testing/behat/degov-7.x-dev.sql.gz | docker exec -i mysql-$1 mysql -u "$MYSQL_USER" -p "$MYSQL_PASSWORD" "$MYSQL_DATABASE"
 #            drush --yes --ansi cr
