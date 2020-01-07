@@ -223,7 +223,6 @@ jobs:
             - home/circleci/.drush
             - home/circleci/project
             - tmp/ci-cache/*
-            - etc/apache2/sites-enabled/project.conf
 
   test1:
     docker:
@@ -236,6 +235,9 @@ jobs:
       - run:
           name: Start Apache
           command: |
+            if [ ! -L /etc/apache2/sites-enabled/project.conf ]; then
+              sudo a2ensite project
+            fi
             sudo service apache2 start
 
       - run:
@@ -259,6 +261,9 @@ jobs:
       - run:
           name: Start Apache
           command: |
+            if [ ! -L /etc/apache2/sites-enabled/project.conf ]; then
+              sudo a2ensite project
+            fi
             sudo service apache2 start
 
       - run:
