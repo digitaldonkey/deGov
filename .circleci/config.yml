@@ -25,6 +25,7 @@ x-dbimage: &dbimage
       MYSQL_DATABASE: testing
       MYSQL_USER: testing
       MYSQL_PASSWORD: testing
+      MAX_ALLOWED_PACKET: 1024M
 
 version: 2
 jobs:
@@ -154,6 +155,8 @@ jobs:
       - run:
           name: Set up Drupal config & directories
           command: |
+            # For whatever stupid reson we cant do this in Dockerfile.
+            sudo apt install default-mysql-client --no-install-recommends
             if [ ! -d docroot/sites/default/files/private/ ]; then
               mkdir -p docroot/sites/default/files/private/
               mkdir docroot/sites/default/files/translations/
@@ -284,12 +287,11 @@ jobs:
           name: Drush Config
           command: |
             echo "alias drush='PHPRC=/home/circleci/project/drush.ini /usr/local/bin/php /home/circleci/project/bin/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=localhost --yes'" >> $BASH_ENV
-            echo 'export DRUPAL_DB_URL="mysql://$MYSQL_USER:$MYSQL_PASSWORD@localhost:3306/$MYSQL_DATABASE"' >> $BASH_ENV
+            echo 'export DRUPAL_DB_URL="mysql://$MYSQL_USER:$MYSQL_PASSWORD@127.0.0.1:3306/$MYSQL_DATABASE"' >> $BASH_ENV
 
       - run:
           name: Install DB dump
           command: |
-            sudo apt install default-mysql-client --no-install-recommends
             cp docroot/profiles/contrib/degov/testing/behat/template/settings.local.php docroot/sites/default/settings.local.php
             sed -i "s/{{ mysql_auth.db }}/$MYSQL_DATABASE/g" docroot/sites/default/settings.local.php
             sed -i "s/{{ mysql_auth.user }}/$MYSQL_USER/g" docroot/sites/default/settings.local.php
@@ -301,18 +303,17 @@ jobs:
             drush status
             echo "DRUPAL_DB_URL: $DRUPAL_DB_URL"
             drush sql:drop --db-url="$DRUPAL_DB_URL"
-            ls -alh profiles/contrib/degov/testing/behat/degov-7.x-dev.sql.gz
-#            zcat profiles/contrib/degov/testing/behat/degov-7.x-dev.sql.gz | docker exec -i mysql-$1 mysql -u "$MYSQL_USER" -p "$MYSQL_PASSWORD" "$MYSQL_DATABASE"
-#            drush --yes --ansi cr
-#            drush --yes --ansi watchdog:delete all
-#            drush --yes --ansi updb
-#            drush --yes --ansi cr
-#            drush --yes --ansi pm:uninstall degov_demo_content
-#            drush --yes --ansi en degov_demo_content
-#            drush --yes --ansi locale:check
-#            drush --yes --ansi locale:update
-#            drush --yes --ansi php-eval 'Drupal\degov\TranslationImporter::importForProfile()'
-#            drush --yes --ansi cr
+            gunzip -c project/docroot/profiles/contrib/degov/testing/lfs_data/degov-7.x-dev.sql.gz | drush sqlc --db-url="$DRUPAL_DB_URL"
+            drush cr
+            drush watchdog:delete all
+            drush updb
+            drush cr
+            drush pm:uninstall degov_demo_content
+            drush en degov_demo_content
+            drush locale:check
+            drush locale:update
+            drush php-eval 'Drupal\degov\TranslationImporter::importForProfile()'
+            drush cr
 
 workflows:
   version: 2
@@ -327,6 +328,7 @@ workflows:
             - build
 
 # SSH
+# source $BASH_ENV
 # sudo apt update && sudo apt install vim mysql-client nmap lynx
 # nmap localhost -Pn 3306
 # bin/drush status -c docroot/sites/default/drushrc.php
@@ -336,3 +338,4 @@ workflows:
 # 512M
 # --db-url=mysql://testing:testing@localhost:3306/testing -y
 # gunzip -c project/docroot/profiles/contrib/degov/testing/lfs_data/degov-7.x-dev.sql.gz | drush sqlc --db-url="mysql://testing:testing@localhost:3306/testing"
+# gunzip -c project/docroot/profiles/contrib/degov/testing/lfs_data/degov-7.x-dev.sql.gz | drush sqlc --db-url="$DRUPAL_DB_URL"
