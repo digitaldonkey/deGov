@@ -37,7 +37,11 @@ jobs:
       - run:
           name: Add mysql client
           command: |
-            sudo apt-get install default-mysql-client
+            echo "###"
+            echo "working_directory: $(pwd)"
+            echo "###"
+            echo "# ls -al docroot/profiles/contrib/.circleci/"
+            echo "###"
 
 ### Prepare git uses the code from "- checkout" step without cloning repository.
 #      - run:
@@ -150,6 +154,7 @@ jobs:
       - run:
           name: Set up Drupal config & directories
           command: |
+            sudo apt install default-mysql-client --no-install-recommends
             if [ ! -d docroot/sites/default/files/private/ ]; then
               mkdir -p docroot/sites/default/files/private/
               mkdir docroot/sites/default/files/translations/
