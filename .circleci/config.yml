@@ -3,7 +3,7 @@
 # Check https://circleci.com/docs/2.0/language-php/ for more details
 #
 x-baseimage: &baseimage
-  - image: digitaldonkey/circleci-degov:0.0.14
+  - image: digitaldonkey/circleci-degov:0.0.15
     environment:
       RELEASE_BRANCH: release/7.6.x-dev
       COMPOSER_ALLOW_SUPERUSER: 1
@@ -284,7 +284,7 @@ jobs:
           name: Drush Config
           command: |
             echo "alias drush='PHPRC=/home/circleci/project/drush.ini /usr/local/bin/php /home/circleci/project/bin/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=localhost --yes'" >> $BASH_ENV
-            echo "export DRUPAL_DB_URL='mysql://$MYSQL_USER:$MYSQL_PASSWORD@localhost:3306/$MYSQL_DATABASE'" >> $BASH_ENV
+            echo 'export DRUPAL_DB_URL="mysql://$MYSQL_USER:$MYSQL_PASSWORD@localhost:3306/$MYSQL_DATABASE"' >> $BASH_ENV
 
       - run:
           name: Install DB dump
@@ -298,7 +298,8 @@ jobs:
 
             cd docroot/
             drush status
-            drush sql:drop --db-url=$DRUPAL_DB_URL
+            echo "DRUPAL_DB_URL: $DRUPAL_DB_URL"
+            drush sql:drop --db-url="$DRUPAL_DB_URL"
             ls -alh profiles/contrib/degov/testing/behat/degov-7.x-dev.sql.gz
 #            zcat profiles/contrib/degov/testing/behat/degov-7.x-dev.sql.gz | docker exec -i mysql-$1 mysql -u "$MYSQL_USER" -p "$MYSQL_PASSWORD" "$MYSQL_DATABASE"
 #            drush --yes --ansi cr
