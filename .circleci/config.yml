@@ -282,12 +282,11 @@ jobs:
       - run:
           name: Drush Config
           command: |
-            echo 'alias drush="PHPRC=/home/circleci/project/drush.ini /usr/local/bin/php  /home/circleci/project/bin/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=http://localhost"' >> $BASH_ENV
+            echo 'alias drush="PHPRC=/home/circleci/project/drush.ini /usr/local/bin/php  /home/circleci/project/bin/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=http://localhost" --yes' >> $BASH_ENV
 
       - run:
           name: Install DB dump
           command: |
-            alias drush="PHPRC=/home/circleci/project/drush.ini /usr/local/bin/php  /home/circleci/project/bin/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=http://localhost"
             cp docroot/profiles/contrib/degov/testing/behat/template/settings.local.php docroot/sites/default/settings.local.php
             sed -i "s/{{ mysql_auth.db }}/$MYSQL_DATABASE/g" docroot/sites/default/settings.local.php
             sed -i "s/{{ mysql_auth.user }}/$MYSQL_USER/g" docroot/sites/default/settings.local.php
@@ -299,7 +298,7 @@ jobs:
             drush cc drush
             cd docroot/
             drush status
-            drush sql:drop --yes --ansi
+            drush sql:drop --db-url="mysql://$MYSQL_USER:$MYSQL_PASSWORD@localhost:3306/$MYSQL_DATABASE"
             ll profiles/contrib/degov/testing/behat/degov-7.x-dev.sql.gz
             zcat profiles/contrib/degov/testing/behat/degov-7.x-dev.sql.gz | docker exec -i mysql-$1 mysql -u "$MYSQL_USER" -p "$MYSQL_PASSWORD" "$MYSQL_DATABASE"
 #            drush --yes --ansi cr
@@ -330,6 +329,7 @@ workflows:
 # nmap localhost -Pn 3306
 # bin/drush status -c docroot/sites/default/drushrc.php
 # mysql -u testing -p -h 127.0.0.1 -P 3306 testing
-# alias test="PHPRC=/home/circleci/project/drush.ini /usr/local/bin/php  /home/circleci/project/bin/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=http://localhost"
+# alias test="PHPRC=/home/circleci/project/drush.ini /usr/local/bin/php  /home/circleci/project/bin/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=http://localhost -y"
 # circleci@defc4957b553:~/project$ test  php-eval 'print(ini_get("memory_limit")."\n");'
 # 512M
+# --db-url=mysql://testing:testing@localhost:3306/testing -y
