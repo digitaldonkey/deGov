@@ -277,6 +277,7 @@ jobs:
       - run:
           name: Install DB dump
           command: |
+            alias drush="PHPRC=/home/circleci/project/drush.ini /usr/local/bin/php  /home/circleci/project/bin/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=http://localhost"
             cp docroot/profiles/contrib/degov/testing/behat/template/settings.local.php docroot/sites/default/settings.local.php
             sed -i "s/{{ mysql_auth.db }}/$MYSQL_DATABASE/g" docroot/sites/default/settings.local.php
             sed -i "s/{{ mysql_auth.user }}/$MYSQL_USER/g" docroot/sites/default/settings.local.php
