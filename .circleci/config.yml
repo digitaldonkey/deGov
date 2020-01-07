@@ -223,6 +223,7 @@ jobs:
             - home/circleci/.drush
             - home/circleci/project
             - tmp/ci-cache/*
+            - etc/apache2/sites-enabled/project.conf
 
   test1:
     docker:
@@ -314,7 +315,10 @@ workflows:
             - build
 
 # SSH
-# sudo apt install vim mysql-client nmap
+# sudo apt update && sudo apt install vim mysql-client nmap lynx
 # nmap localhost -Pn 3306
 # bin/drush status -c docroot/sites/default/drushrc.php
 # mysql -u testing -p -h 127.0.0.1 -P 3306 testing
+# alias test="PHPRC=/home/circleci/project/drush.ini /usr/local/bin/php  /home/circleci/project/bin/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=http://localhost"
+# circleci@defc4957b553:~/project$ test  php-eval 'print(ini_get("memory_limit")."\n");'
+# 512M
