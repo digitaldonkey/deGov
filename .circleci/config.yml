@@ -167,7 +167,7 @@ jobs:
             \$config["locale.settings"]["translation"]["path"] = "sites/default/files/translations";
             \$config["swiftmailer.transport"]["transport"] = "spool";
             \$config["swiftmailer.transport"]["spool_directory"] = "/tmp/swiftmailer-spool";
-
+            \$base_url = 'http://localhost';
             if (file_exists('./settings.local.php')) {
               include './settings.local.php';
             }
@@ -175,16 +175,16 @@ jobs:
             EOF
             cat docroot/sites/default/settings.php
 
-            mkdir docroot/sites/all/
-            tee <<EOF > docroot/sites/all/drushrc.php
+            tee <<EOF > docroot/sites/default/drushrc.php
             <?php
 
-            \$options['root'] = /home/circleci/project/docroot';
-            \$options['uri'] = 'http://localhost';
+            ini_set('memory_limit', '512M');
+            \$options['r'] = '/home/circleci/project/docroot';
+            \$options['l'] = 'http://localhost';
 
             EOF
             fi
-            cat  docroot/sites/all/drushrc.php
+            cat  docroot/sites/default/drushrc.php
 
 #      - save_cache:
 #          key: project-dependencies-composer-{{ checksum "/tmp/ci-cache/profile-setup-lock" }}-{{ checksum "/tmp/ci-cache/composer" }}-{{ checksum "docroot/profiles/contrib/degov/.circleci/config.yml" }}
@@ -200,7 +200,7 @@ jobs:
       - run:
           name: Configure & start Apache
           command: |
-            if [ ! -f /etc/apache2/sites-enabled/project.conf ]; then
+            if [ ! -L /etc/apache2/sites-enabled/project.conf ]; then
               sudo a2ensite project
             fi
             sudo service apache2 start
@@ -312,3 +312,9 @@ workflows:
       - db_dump_setup:
           requires:
             - build
+
+# SSH
+# sudo apt install vim mysql-client nmap
+# nmap localhost -Pn 3306
+# bin/drush status -c docroot/sites/default/drushrc.php
+# mysql -u testing -p -h 127.0.0.1 -P 3306 testing
