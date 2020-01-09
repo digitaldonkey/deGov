@@ -2,41 +2,69 @@
 #
 # Check https://circleci.com/docs/2.0/language-php/ for more details
 #
-x-baseimage: &baseimage
-  - image: digitaldonkey/circleci-degov:0.0.17
-    environment:
-      RELEASE_BRANCH: release/7.6.x-dev
-      COMPOSER_ALLOW_SUPERUSER: 1
-      COMPOSER_MEMORY_LIMIT: -1
-      COMPOSER_EXIT_ON_PATCH_FAILURE: 1
-      CIRCLECI_CACHE_TAG: v1
-      MYSQL_DATABASE: testing
-      MYSQL_USER: testing
-      MYSQL_PASSWORD: testing
 
-    # Specify service dependencies here if necessary
-    # CircleCI maintains a library of pre-built images
-    # documented at https://circleci.com/docs/2.0/circleci-images/
-    # Using the RAM variation mitigates I/O contention
-    # for database intensive operations.
-x-dbimage: &dbimage
-  - image: circleci/mysql:5.7-ram
-    command: mysqld --max_allowed_packet=65011712
-    environment:
-      MYSQL_DATABASE: testing
-      MYSQL_USER: testing
-      MYSQL_PASSWORD: testing
 
-# YAML ALIASES FOR REUSED HELPER TASKS
+#x-baseimage: &baseimage
+#  - image: digitaldonkey/circleci-degov:0.0.17
+#    environment:
+#      RELEASE_BRANCH: release/7.6.x-dev
+#      COMPOSER_ALLOW_SUPERUSER: 1
+#      COMPOSER_MEMORY_LIMIT: -1
+#      COMPOSER_EXIT_ON_PATCH_FAILURE: 1
+#      CIRCLECI_CACHE_TAG: v1
+#      MYSQL_DATABASE: testing
+#      MYSQL_USER: testing
+#      MYSQL_PASSWORD: testing
+#
+#    # Specify service dependencies here if necessary
+#    # CircleCI maintains a library of pre-built images
+#    # documented at https://circleci.com/docs/2.0/circleci-images/
+#    # Using the RAM variation mitigates I/O contention
+#    # for database intensive operations.
+#x-dbimage: &dbimage
+#  - image: circleci/mysql:5.7-ram
+#    command: mysqld --max_allowed_packet=65011712
+#    environment:
+#      MYSQL_DATABASE: testing
+#      MYSQL_USER: testing
+#      MYSQL_PASSWORD: testing
+#
+## YAML ALIASES FOR REUSED HELPER TASKS
+#
+#x-run_start_apache: &runStartApache
+#  - run:
+#      name: Start Apache
+#      command: |
+#        if [ ! -L /etc/apache2/sites-enabled/project.conf ]; then
+#          sudo a2ensite project
+#        fi
+#        sudo service apache2 start
 
-x-run_start_apache: &run_start_apache
-  - run:
-      name: Start Apache
-      command: |
-        if [ ! -L /etc/apache2/sites-enabled/project.conf ]; then
-          sudo a2ensite project
-        fi
-        sudo service apache2 start
+docker_images:
+  - &baseimage
+    - image: digitaldonkey/circleci-degov:0.0.17
+      environment:
+        RELEASE_BRANCH: release/7.6.x-dev
+        COMPOSER_ALLOW_SUPERUSER: 1
+        COMPOSER_MEMORY_LIMIT: -1
+        COMPOSER_EXIT_ON_PATCH_FAILURE: 1
+        CIRCLECI_CACHE_TAG: v1
+        MYSQL_DATABASE: testing
+        MYSQL_USER: testing
+        MYSQL_PASSWORD: testing
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # Using the RAM variation mitigates I/O contention
+      # for database intensive operations.
+  - &dbimage
+    - image: circleci/mysql:5.7-ram
+      command: mysqld --max_allowed_packet=65011712
+      environment:
+        MYSQL_DATABASE: testing
+        MYSQL_USER: testing
+        MYSQL_PASSWORD: testing
 
 
 
@@ -44,7 +72,7 @@ version: 2
 jobs:
   build:
     docker:
-      - <<: *baseimage
+      - *baseimage
     steps:
       - checkout:
           path: /home/circleci/project/docroot/profiles/contrib/
@@ -254,13 +282,13 @@ jobs:
 
   example:
     docker:
-     - <<: *baseimage
-     - <<: *dbimage
+     - *baseimage
+     - *dbimage
     steps:
       - attach_workspace:
           at: /
 
-      - <<:*run_start_apache
+      - run_start_apache
 
       - run:
           name: Verify Checkout
@@ -333,8 +361,8 @@ jobs:
 
   install_with_behat:
     docker:
-     - <<: *baseimage
-     - <<: *dbimage
+     - *baseimage
+     - *dbimage
     steps:
       - attach_workspace:
           at: /
@@ -363,11 +391,12 @@ jobs:
             echo Failed waiting for MySQL && exit 1
 
       - run:
-          name: Setting up Behat
+          name: Install Drupal using Behat
           command: |
             mv docroot/profiles/contrib/degov/testing/behat/behat-no-drupal.dist.yml .
             mv docroot/profiles/contrib/degov/testing/behat/behat.dist.yml .
-            ls -al bin/behat
+            mkdir -p /tmp/behat/test-reports/install
+            bin/behat --format=pretty --out=std --format=junit --out=/tmp/test-reports/ -c behat-no-drupal.dist.yml --strict --colors
 
 workflows:
   version: 2
