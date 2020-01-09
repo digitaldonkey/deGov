@@ -293,6 +293,7 @@ jobs:
             /usr/local/bin/php /home/circleci/project/vendor/drush/drush/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=localhost --yes "\$@"
             EOF
             chmod 755 bin/drush
+            cat bin/drush
             echo 'export DRUPAL_DB_URL="mysql://$MYSQL_USER:$MYSQL_PASSWORD@127.0.0.1:3306/$MYSQL_DATABASE"' >> $BASH_ENV
 
       - run:
