@@ -355,8 +355,6 @@ jobs:
             done
             echo Failed waiting for MySQL && exit 1
 
-
-      # TODO the settings are spread out to settings.php and settings.local.php. It's unclear for me why/what should be where.
       - run:
           name: Setting up Behat"
           command: |
@@ -373,7 +371,10 @@ workflows:
       - test1:
           requires:
             - build
-      - db_dump_setup:
+      - install_with_db_dump:
+          requires:
+            - build
+      - install_with_behat:
           requires:
             - build
 
