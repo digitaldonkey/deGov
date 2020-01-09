@@ -40,7 +40,9 @@
 #        fi
 #        sudo service apache2 start
 
-docker_images:
+
+# Docker Images (YAML aliases @see https://github.com/cyklo/Bukkit-OtherBlocks/wiki/Aliases-(advanced-YAML-usage)#simple-example)
+x-docker_images:
   - &baseimage
     - image: digitaldonkey/circleci-degov:0.0.17
       environment:
@@ -66,7 +68,7 @@ docker_images:
         MYSQL_USER: testing
         MYSQL_PASSWORD: testing
 
-
+# Docker Images (YAML aliases @see https://github.com/cyklo/Bukkit-OtherBlocks/wiki/Aliases-(advanced-YAML-usage)#simple-example)
 
 version: 2
 jobs:
