@@ -159,6 +159,9 @@ jobs:
               mkdir -p docroot/sites/default/files/private/
               mkdir docroot/sites/default/files/translations/
               chmod 777 -R docroot/sites/default/files/
+              mkdir -p config/sync
+              chmod 777 config/sync
+
               tee <<EOF > docroot/sites/default/settings.php
             <?php
 
@@ -284,13 +287,17 @@ jobs:
       - run:
           name: Drush Config
           command: |
-            echo "alias drush='/usr/local/bin/php /home/circleci/project/bin/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=localhost --yes'" >> $BASH_ENV
+            unlink bin/drush
+            tee <<EOF > bin/drush
+            #!/bin/bash
+            /usr/local/bin/php /home/circleci/project/vendor/drush/drush/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=localhost --yes "$@"
+            EOF
+            chmod 755 bin/drush
             echo 'export DRUPAL_DB_URL="mysql://$MYSQL_USER:$MYSQL_PASSWORD@127.0.0.1:3306/$MYSQL_DATABASE"' >> $BASH_ENV
 
       - run:
           name: Install DB dump
           command: |
-            shopt -s expand_aliases
             cp docroot/profiles/contrib/degov/testing/behat/template/settings.local.php docroot/sites/default/settings.local.php
             sed -i "s/{{ mysql_auth.db }}/$MYSQL_DATABASE/g" docroot/sites/default/settings.local.php
             sed -i "s/{{ mysql_auth.user }}/$MYSQL_USER/g" docroot/sites/default/settings.local.php
