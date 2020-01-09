@@ -21,12 +21,11 @@ x-baseimage: &baseimage
     # for database intensive operations.
 x-dbimage: &dbimage
   - image: circleci/mysql:5.7-ram
-	  command: mysqld --max_allowed_packet=65011712
+    command: mysqld --max_allowed_packet=65011712
     environment:
       MYSQL_DATABASE: testing
       MYSQL_USER: testing
       MYSQL_PASSWORD: testing
-      MYSQL_MAX_ALLOWED_PACKET: 1024M
 
 version: 2
 jobs:
