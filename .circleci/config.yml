@@ -127,6 +127,7 @@ jobs:
             else
               composer update --lock --ansi --no-progress
             fi
+            # Prepare Git LFS checkout.
             (cd docroot/profiles/contrib/degov/testing/lfs_data/ && git lfs install)
             cp composer.lock /tmp/ci-cache/profile-setup-lock
 
@@ -156,23 +157,24 @@ jobs:
               ls -al docroot/sites/default/files/
 
               tee <<EOF > docroot/sites/default/settings.php
-            <?php
 
-            \$settings["file_private_path"] = "sites/default/files/private";
-            \$settings["file_public_path"] = "sites/default/files";
-            \$config["system.file"]["path"]["temporary"] = "/tmp";
-            \$settings["trusted_host_patterns"] = ["^127.0.0.1$","^localhost$","^host.docker.internal$"];
-            \$config["locale.settings"]["translation"]["path"] = "sites/default/files/translations";
-            \$config["swiftmailer.transport"]["transport"] = "spool";
-            \$config["swiftmailer.transport"]["spool_directory"] = "/tmp/swiftmailer-spool";
-            \$base_url = 'http://localhost';
-            \$config_directories[CONFIG_SYNC_DIRECTORY] = '../config/sync';
-            # Increase drush 9 memory limit
-            if (PHP_SAPI === 'cli') { ini_set('memory_limit', '512M'); }
-            require 'settings.local.php';
+              <?php
+                \$settings["file_private_path"] = "sites/default/files/private";
+                \$settings["file_public_path"] = "sites/default/files";
+                \$config["system.file"]["path"]["temporary"] = "/tmp";
+                \$settings["trusted_host_patterns"] = ["^127.0.0.1$","^localhost$","^host.docker.internal$"];
+                \$config["locale.settings"]["translation"]["path"] = "sites/default/files/translations";
+                \$config["swiftmailer.transport"]["transport"] = "spool";
+                \$config["swiftmailer.transport"]["spool_directory"] = "/tmp/swiftmailer-spool";
+                \$base_url = 'http://localhost';
+                \$config_directories[CONFIG_SYNC_DIRECTORY] = '../config/sync';
+                # Increase drush 9 memory limit
+                if (PHP_SAPI === 'cli') { ini_set('memory_limit', '512M'); }
+                require 'settings.local.php';
 
-            EOF
-            cat docroot/sites/default/settings.php
+              EOF
+              cat docroot/sites/default/settings.php
+            fi
 
       - run:
           name: Drush Config
@@ -189,13 +191,13 @@ jobs:
 
               # Replace bin/drush
               unlink bin/drush
+
               tee <<EOF > bin/drush
               #!/bin/bash
               /usr/local/bin/php /home/circleci/project/vendor/drush/drush/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=localhost --yes "\$@"
-              EOF
 
+              EOF
               chmod 755 bin/drush
-              cat bin/drush
               echo 'export DRUPAL_DB_URL="mysql://$MYSQL_USER:$MYSQL_PASSWORD@127.0.0.1:3306/$MYSQL_DATABASE"' >> $BASH_ENV
             fi
 
