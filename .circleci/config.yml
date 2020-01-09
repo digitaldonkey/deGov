@@ -35,16 +35,8 @@ jobs:
     steps:
       - checkout:
           path: /home/circleci/project/docroot/profiles/contrib/
-      - run:
-          name: Add mysql client
-          command: |
-            echo "###"
-            echo "working_directory: $(pwd)"
-            echo "###"
-            echo "# ls -al docroot/profiles/contrib/.circleci/"
-            echo "###"
 
-### Prepare git uses the code from "- checkout" step without cloning repository.
+### Prepare git uses the code from "- checkout" step WITHOUT cloning repository. would be:
 #      - run:
 #          name: Prepare Cloning
 #          command: |
@@ -185,24 +177,27 @@ jobs:
       - run:
           name: Drush Config
           command: |
-            tee <<EOF > docroot/sites/default/drushrc.php
-            <?php
+            if [ ! -L /etc/apache2/sites-enabled/project.conf ]; then
 
-            ini_set('memory_limit', '512M');
-            \$options['r'] = '/home/circleci/project/docroot';
-            \$options['l'] = 'http://localhost';
+              # Create drushrc.php
+              tee <<EOF > docroot/sites/default/drushrc.php
+              <?php
 
-            EOF
+              \$options['r'] = '/home/circleci/project/docroot';
+              \$options['l'] = 'http://localhost';
+              EOF
+
+              # Replace bin/drush
+              unlink bin/drush
+              tee <<EOF > bin/drush
+              #!/bin/bash
+              /usr/local/bin/php /home/circleci/project/vendor/drush/drush/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=localhost --yes "\$@"
+              EOF
+
+              chmod 755 bin/drush
+              cat bin/drush
+              echo 'export DRUPAL_DB_URL="mysql://$MYSQL_USER:$MYSQL_PASSWORD@127.0.0.1:3306/$MYSQL_DATABASE"' >> $BASH_ENV
             fi
-
-            unlink bin/drush
-            tee <<EOF > bin/drush
-            #!/bin/bash
-            /usr/local/bin/php /home/circleci/project/vendor/drush/drush/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=localhost --yes "\$@"
-            EOF
-            chmod 755 bin/drush
-            cat bin/drush
-            echo 'export DRUPAL_DB_URL="mysql://$MYSQL_USER:$MYSQL_PASSWORD@127.0.0.1:3306/$MYSQL_DATABASE"' >> $BASH_ENV
 
 
 #      - save_cache:
@@ -268,7 +263,6 @@ jobs:
             ls -al /home/circleci
             cat docroot/sites/default/settings.php
 
-
   db_dump_setup:
     docker:
      - <<: *baseimage
@@ -301,6 +295,7 @@ jobs:
             echo Failed waiting for MySQL && exit 1
 
 
+      # TODO the settings are spread out to settings.php and settings.local.php. It's unclear for me why/what should be where.
       - run:
           name: Install DB dump
           command: |
@@ -341,14 +336,13 @@ workflows:
             - build
 
 # SSH
+# To use SSH you can click on a jobs contextual menu in UI and select "rerun with SSH".
+#
 # source $BASH_ENV
 # sudo apt update && sudo apt install vim mysql-client nmap lynx
 # nmap localhost -Pn 3306
 # bin/drush status -c docroot/sites/default/drushrc.php
 # mysql -u testing -p -h 127.0.0.1 -P 3306 testing
-# alias test="PHPRC=/home/circleci/project/drush.ini /usr/local/bin/php  /home/circleci/project/bin/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=http://localhost -y"
+# alias drush='/usr/local/bin/php /home/circleci/project/vendor/drush/drush/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=localhost --yes'
 # circleci@defc4957b553:~/project$ test  php-eval 'print(ini_get("memory_limit")."\n");'
-# 512M
-# --db-url=mysql://testing:testing@localhost:3306/testing -y
 # gunzip -c project/docroot/profiles/contrib/degov/testing/lfs_data/degov-7.x-dev.sql.gz | drush sqlc --db-url="mysql://testing:testing@localhost:3306/testing"
-# gunzip -c project/docroot/profiles/contrib/degov/testing/lfs_data/degov-7.x-dev.sql.gz | drush sqlc --db-url="$DRUPAL_DB_URL"
