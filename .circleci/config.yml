@@ -30,12 +30,13 @@ x-dbimage: &dbimage
 # YAML ALIASES FOR REUSED HELPER TASKS
 
 x-run_start_apache: &run_start_apache
-  name: Start Apache
-  command: |
-    if [ ! -L /etc/apache2/sites-enabled/project.conf ]; then
-      sudo a2ensite project
-    fi
-    sudo service apache2 start
+  - run:
+      name: Start Apache
+      command: |
+        if [ ! -L /etc/apache2/sites-enabled/project.conf ]; then
+          sudo a2ensite project
+        fi
+        sudo service apache2 start
 
 
 
@@ -190,7 +191,7 @@ jobs:
       - run:
           name: Drush Config
           command: |
-            if [ ! -L /etc/apache2/sites-enabled/project.conf ]; then
+            if [ -L bin/drush ]; then
 
               # Create drushrc.php
               tee <<EOF > docroot/sites/default/drushrc.php
@@ -259,13 +260,7 @@ jobs:
       - attach_workspace:
           at: /
 
-      - run:
-          name: Start Apache
-          command: |
-            if [ ! -L /etc/apache2/sites-enabled/project.conf ]; then
-              sudo a2ensite project
-            fi
-            sudo service apache2 start
+      - <<:*run_start_apache
 
       - run:
           name: Verify Checkout
@@ -372,8 +367,7 @@ jobs:
           command: |
             mv docroot/profiles/contrib/degov/testing/behat/behat-no-drupal.dist.yml .
             mv docroot/profiles/contrib/degov/testing/behat/behat.dist.yml .
-            ls -al /bin
-            ls -al docroot/vendor/bin/behat
+            ls -al bin/behat
 
 workflows:
   version: 2
