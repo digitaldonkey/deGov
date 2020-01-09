@@ -170,9 +170,7 @@ jobs:
             \$config["swiftmailer.transport"]["transport"] = "spool";
             \$config["swiftmailer.transport"]["spool_directory"] = "/tmp/swiftmailer-spool";
             \$base_url = 'http://localhost';
-            if (file_exists('./settings.local.php')) {
-              include './settings.local.php';
-            }
+            require 'settings.local.php';
 
             EOF
             cat docroot/sites/default/settings.php
