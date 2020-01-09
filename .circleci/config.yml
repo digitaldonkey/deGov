@@ -21,11 +21,12 @@ x-baseimage: &baseimage
     # for database intensive operations.
 x-dbimage: &dbimage
   - image: circleci/mysql:5.7-ram
+	  command: mysqld --max_allowed_packet=65011712
     environment:
       MYSQL_DATABASE: testing
       MYSQL_USER: testing
       MYSQL_PASSWORD: testing
-      MAX_ALLOWED_PACKET: 1024M
+      MYSQL_MAX_ALLOWED_PACKET: 1024M
 
 version: 2
 jobs:
@@ -288,6 +289,7 @@ jobs:
           command: |
             echo "alias drush='PHPRC=/home/circleci/project/drush.ini /usr/local/bin/php /home/circleci/project/bin/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=localhost --yes'" >> $BASH_ENV
             echo 'export DRUPAL_DB_URL="mysql://$MYSQL_USER:$MYSQL_PASSWORD@127.0.0.1:3306/$MYSQL_DATABASE"' >> $BASH_ENV
+            source $BASH_ENV
 
       - run:
           name: Install DB dump
@@ -303,7 +305,7 @@ jobs:
             drush status
             echo "DRUPAL_DB_URL: $DRUPAL_DB_URL"
             drush sql:drop --db-url="$DRUPAL_DB_URL"
-            gunzip -c project/docroot/profiles/contrib/degov/testing/lfs_data/degov-7.x-dev.sql.gz | drush sqlc --db-url="$DRUPAL_DB_URL"
+            gunzip -c profiles/contrib/degov/testing/lfs_data/degov-7.x-dev.sql.gz | drush sqlc --db-url="$DRUPAL_DB_URL"
             drush cr
             drush watchdog:delete all
             drush updb
