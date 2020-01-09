@@ -175,6 +175,8 @@ jobs:
             \$config["swiftmailer.transport"]["spool_directory"] = "/tmp/swiftmailer-spool";
             \$base_url = 'http://localhost';
             \$config_directories[CONFIG_SYNC_DIRECTORY] = '../config/sync';
+            # Increase drush 9 memory limit
+            if (PHP_SAPI === 'cli') { ini_set('memory_limit', '512M'); }
             require 'settings.local.php';
 
             EOF
@@ -319,7 +321,7 @@ jobs:
             drush updb
             drush cr
             drush pm:uninstall degov_demo_content
-            drush en degov_demo_content
+            drush pm:enable degov_demo_content
             drush locale:check
             drush locale:update
             drush php-eval 'Drupal\degov\TranslationImporter::importForProfile()'
