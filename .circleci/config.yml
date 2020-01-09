@@ -284,13 +284,13 @@ jobs:
       - run:
           name: Drush Config
           command: |
-            echo "alias drush='PHPRC=/home/circleci/project/drush.ini /usr/local/bin/php /home/circleci/project/bin/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=localhost --yes'" >> $BASH_ENV
+            echo "alias drush='/usr/local/bin/php /home/circleci/project/bin/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=localhost --yes'" >> $BASH_ENV
             echo 'export DRUPAL_DB_URL="mysql://$MYSQL_USER:$MYSQL_PASSWORD@127.0.0.1:3306/$MYSQL_DATABASE"' >> $BASH_ENV
 
       - run:
           name: Install DB dump
           command: |
-            source $BASH_ENV
+            shopt -s expand_aliases
             cp docroot/profiles/contrib/degov/testing/behat/template/settings.local.php docroot/sites/default/settings.local.php
             sed -i "s/{{ mysql_auth.db }}/$MYSQL_DATABASE/g" docroot/sites/default/settings.local.php
             sed -i "s/{{ mysql_auth.user }}/$MYSQL_USER/g" docroot/sites/default/settings.local.php
