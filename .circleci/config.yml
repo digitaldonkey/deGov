@@ -27,6 +27,18 @@ x-dbimage: &dbimage
       MYSQL_USER: testing
       MYSQL_PASSWORD: testing
 
+# YAML ALIASES FOR REUSED HELPER TASKS
+
+x-run_start_apache: &run_start_apache
+  name: Start Apache
+  command: |
+    if [ ! -L /etc/apache2/sites-enabled/project.conf ]; then
+      sudo a2ensite project
+    fi
+    sudo service apache2 start
+
+
+
 version: 2
 jobs:
   build:
@@ -239,7 +251,7 @@ jobs:
             - home/circleci/project
             - tmp/ci-cache/*
 
-  test1:
+  example:
     docker:
      - <<: *baseimage
      - <<: *dbimage
@@ -356,19 +368,19 @@ jobs:
             echo Failed waiting for MySQL && exit 1
 
       - run:
-          name: Setting up Behat"
+          name: Setting up Behat
           command: |
             mv docroot/profiles/contrib/degov/testing/behat/behat-no-drupal.dist.yml .
             mv docroot/profiles/contrib/degov/testing/behat/behat.dist.yml .
-
-
+            ls -al /bin
+            ls -al docroot/vendor/bin/behat
 
 workflows:
   version: 2
   build-and-test:
     jobs:
       - build
-      - test1:
+      - example:
           requires:
             - build
       - install_with_db_dump:
