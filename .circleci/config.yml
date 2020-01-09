@@ -157,7 +157,6 @@ jobs:
               ls -al docroot/sites/default/files/
 
               tee <<EOF > docroot/sites/default/settings.php
-
               <?php
                 \$settings["file_private_path"] = "sites/default/files/private";
                 \$settings["file_public_path"] = "sites/default/files";
@@ -171,8 +170,8 @@ jobs:
                 # Increase drush 9 memory limit
                 if (PHP_SAPI === 'cli') { ini_set('memory_limit', '512M'); }
                 require 'settings.local.php';
+            EOF
 
-              EOF
               cat docroot/sites/default/settings.php
             fi
 
@@ -187,7 +186,7 @@ jobs:
 
               \$options['r'] = '/home/circleci/project/docroot';
               \$options['l'] = 'http://localhost';
-              EOF
+            EOF
 
               # Replace bin/drush
               unlink bin/drush
@@ -196,7 +195,7 @@ jobs:
               #!/bin/bash
               /usr/local/bin/php /home/circleci/project/vendor/drush/drush/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=localhost --yes "\$@"
 
-              EOF
+            EOF
               chmod 755 bin/drush
               echo 'export DRUPAL_DB_URL="mysql://$MYSQL_USER:$MYSQL_PASSWORD@127.0.0.1:3306/$MYSQL_DATABASE"' >> $BASH_ENV
             fi
@@ -265,7 +264,7 @@ jobs:
             ls -al /home/circleci
             cat docroot/sites/default/settings.php
 
-  db_dump_setup:
+  install_with_db_dump:
     docker:
      - <<: *baseimage
      - <<: *dbimage
@@ -324,6 +323,47 @@ jobs:
             drush locale:update
             drush php-eval 'Drupal\degov\TranslationImporter::importForProfile()'
             drush cr
+
+  install_with_behat:
+    docker:
+     - <<: *baseimage
+     - <<: *dbimage
+    steps:
+      - attach_workspace:
+          at: /
+
+      - run:
+          name: Start Apache
+          command: |
+            if [ ! -L /etc/apache2/sites-enabled/project.conf ]; then
+              sudo a2ensite project
+            fi
+            sudo service apache2 start
+
+      - run:
+          name: Waiting for MySQL to be ready
+          # Our primary container isn't MYSQL so run a sleep command until it's ready.
+          # @see https://circleci.com/docs/2.0/postgres-config/#example-mysql-project
+          command: |
+            # For whatever stupid reson we cant do this in Dockerfile, but drush requires mysql.
+            sudo apt install default-mysql-client --no-install-recommends
+            for i in `seq 1 10`;
+            do
+              nc -z 127.0.0.1 3306 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for MySQL && exit 1
+
+
+      # TODO the settings are spread out to settings.php and settings.local.php. It's unclear for me why/what should be where.
+      - run:
+          name: Setting up Behat"
+          command: |
+            mv docroot/profiles/contrib/degov/testing/behat/behat-no-drupal.dist.yml .
+            mv docroot/profiles/contrib/degov/testing/behat/behat.dist.yml .
+
+
 
 workflows:
   version: 2
