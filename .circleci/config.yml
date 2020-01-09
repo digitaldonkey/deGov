@@ -161,6 +161,7 @@ jobs:
               chmod 777 -R docroot/sites/default/files/
               mkdir -p config/sync
               chmod 777 config/sync
+              ls -al docroot/sites/default/files/
 
               tee <<EOF > docroot/sites/default/settings.php
             <?php
@@ -173,6 +174,7 @@ jobs:
             \$config["swiftmailer.transport"]["transport"] = "spool";
             \$config["swiftmailer.transport"]["spool_directory"] = "/tmp/swiftmailer-spool";
             \$base_url = 'http://localhost';
+            \$config_directories[CONFIG_SYNC_DIRECTORY] = '../config/sync';
             require 'settings.local.php';
 
             EOF
@@ -305,6 +307,7 @@ jobs:
             sed -i "s/{{ mysql_auth.password }}/$MYSQL_PASSWORD/g" docroot/sites/default/settings.local.php
             sed -i 's/{{ mysql_host }}/127.0.0.1/g' docroot/sites/default/settings.local.php
             echo '$settings["hash_salt"] = "7asdiugasd8f623gjwgasgf7a8stfasjdfsdafasdfasdfasdf";' >> docroot/sites/default/settings.local.php
+            ls -al docroot/sites/default/files/
 
             cd docroot/
             drush status
