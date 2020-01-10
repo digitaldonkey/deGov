@@ -321,7 +321,6 @@ jobs:
             - home/circleci/.drush
             - home/circleci/project
             - tmp/ci-cache/*
-            - tmp/test-reports
 
   example:
     docker:
