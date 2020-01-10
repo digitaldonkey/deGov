@@ -77,8 +77,16 @@ RUN { \
 		echo 'opcache.fast_shutdown=1'; \
 	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
+# circleci PHP Error config
+RUN mkdir -p /tmp/test-reports && chmod 777 /tmp/test-reports
+RUN { \
+		echo 'error_reporting = E_ALL'; \
+		echo 'display_error = On'; \
+		echo 'error_log = /tmp/test-reports/php_error.log'; \
+	} > /usr/local/etc/php/conf.d/circleci-errors.ini
+
 # Install git-lfs
-RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash && apt-get install git-lfs
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash && apt-get install git-lfs && sudo apt-get clean
 
 COPY vhost.conf /etc/apache2/sites-available/project.conf
 

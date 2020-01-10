@@ -29,7 +29,7 @@ workflows:
 # Docker Images
 docker_images:
   - &baseimage
-    image: digitaldonkey/circleci-degov:0.0.18
+    image: digitaldonkey/circleci-degov:0.0.19
     environment:
       RELEASE_BRANCH: release/7.6.x-dev
       COMPOSER_ALLOW_SUPERUSER: 1
@@ -88,9 +88,6 @@ common_steps:
     run:
       name: Start Selenium
       command: |
-        if [ ! -d /tmp/test-reports ]; then
-          mkdir -p /tmp/test-reports
-        fi
         java -jar selenium-server-standalone-3.5.3.jar -log /tmp/test-reports/selenium.log
       background: true
   - &runPrepareLocalSettings
@@ -115,21 +112,6 @@ jobs:
     steps:
       - checkout:
           path: /home/circleci/project/docroot/profiles/contrib/
-
-      - run:
-          name: PHP base config
-          command: |
-            if [ ! -f /usr/local/etc/php/php.ini ]; then
-              mkdir -p /tmp/test-reports
-              sudo bash -c "\
-                touch /usr/local/etc/php/php.ini; \
-                echo 'error_reporting = E_ALL' >> /usr/local/etc/php/php.ini; \
-                echo 'display_error = On' >> /usr/local/etc/php/php.ini; \
-                echo 'log_errors = On' >> /usr/local/etc/php/php.ini; \
-                echo 'error_log = /tmp/test-reports/php_error.log' >> /usr/local/etc/php/php.ini; \
-              "
-            fi
-            php -i | grep error
 
       ### Prepare git uses the code from "- checkout" step WITHOUT cloning repository. would be:
       #      - run:
@@ -416,9 +398,9 @@ jobs:
             mkdir -p /tmp/test-reports/behat/install
             bin/behat --format=pretty --out=std --format=junit --out=/tmp/test-reports/behat/install -c behat-no-drupal.dist.yml --strict --colors
       - store_artifacts:
-          path: /tmp/test-reports
+          path: /tmp/test-reports/php_error.log
       - store_test_results:
-          path: /tmp/test-reports
+          path: /tmp/test-reports/behat/install
 
 ################################################################################
 # SSH
