@@ -19,6 +19,7 @@ docker_images:
       MYSQL_DATABASE: testing
       MYSQL_USER: testing
       MYSQL_PASSWORD: testing
+      TAR_OPTIONS: --same-permissions --same-owner
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -151,6 +152,7 @@ jobs:
          keys:
           - project-dependencies-project-setup-{{ checksum "selenium-server-standalone-3.5.3.jar" }}-{{ checksum "/tmp/ci-cache/project-setup" }}
           - project-dependencies-project-setup-{{ checksum "selenium-server-standalone-3.5.3.jar" }}-
+          - project-dependencies-project-setup-
 
       - run:
           name: Set up Project
@@ -192,8 +194,6 @@ jobs:
             if [ ! -f /tmp/ci-cache/profile-setup-lock ]; then
               rm composer.lock
               composer require "degov/degov:dev-$CIRCLE_BRANCH#$CIRCLE_SHA1" degov/degov_devel_git_lfs:dev-$LFS_BRANCH --update-with-all-dependencies --ansi --no-progress
-            else
-              composer update --lock --ansi --no-progress
             fi
             # Prepare Git LFS checkout.
             (cd docroot/profiles/contrib/degov/testing/lfs_data/ && git lfs install)
@@ -283,13 +283,7 @@ jobs:
           paths:
            - ~/.composer/cache
 
-      - run:
-          name: Configure & start Apache
-          command: |
-            if [ ! -L /etc/apache2/sites-enabled/project.conf ]; then
-              sudo a2ensite project
-            fi
-            sudo service apache2 start
+      - *runStartApache
 
 # We need to save a cache based on the lock file which we don't commit :/
 #      - save_cache:
