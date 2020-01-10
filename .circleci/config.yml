@@ -85,15 +85,15 @@ common_steps:
           sleep 1
         done
         echo Failed waiting for MySQL && exit 1
-#  - &runStartSeleniumWebdriver
-#    run:
-#      name: Start Selenium
-#      command: |
-#        if [ ! -d /tmp/test-reports ]; then
-#          mkdir -p /tmp/test-reports
-#        fi
-#        java -jar selenium-server-standalone-3.5.3.jar -log /tmp/test-reports/selenium.log
-#      background: true
+  - &runStartSeleniumWebdriver
+    run:
+      name: Start Selenium
+      command: |
+        if [ ! -d /tmp/test-reports ]; then
+          mkdir -p /tmp/test-reports
+        fi
+        java -jar selenium-server-standalone-3.5.3.jar -log /tmp/test-reports/selenium.log
+      background: true
   - &runPrepareLocalSettings
     run:
       name: Prepare settings.local.php
@@ -399,7 +399,7 @@ jobs:
       - *runStartApache
       - *runStartMysql
       - *runPrepareLocalSettings
-      - *runStartSeleniumWebdriver
+#      - *runStartSeleniumWebdriver
       - run:
           name: Install Drupal using Behat
           command: |
