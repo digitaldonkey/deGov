@@ -29,7 +29,7 @@ workflows:
 # Docker Images
 docker_images:
   - &baseimage
-    image: digitaldonkey/circleci-degov:0.0.19
+    image: digitaldonkey/circleci-degov:0.0.20
     environment:
       RELEASE_BRANCH: release/7.6.x-dev
       COMPOSER_ALLOW_SUPERUSER: 1
@@ -415,3 +415,11 @@ jobs:
 # circleci@defc4957b553:~/project$ test  php-eval 'print(ini_get("memory_limit")."\n");'
 # gunzip -c project/docroot/profiles/contrib/degov/testing/lfs_data/degov-7.x-dev.sql.gz | drush sqlc --db-url="mysql://testing:testing@localhost:3306/testing"
 # sudo chown -R circleci:www-data . && chmod -R g+w .
+
+################################################################################
+# Dockerfile building.
+#
+# cd docroot/profiles/contrib/degov/.circleci/images
+# docker build -t digitaldonkey/circleci-degov:0.0.20 .
+# docker push digitaldonkey/circleci-degov:0.0.20
+################################################################################

@@ -78,7 +78,10 @@ RUN { \
 	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 # circleci PHP Error config
-RUN mkdir -p /tmp/test-reports && chmod 777 /tmp/test-reports
+RUN mkdir -p /tmp/test-reports && \
+    chmod 777 /tmp/test-reports && \
+    touch /tmp/test-reports/php_error.log && \
+    chmod 666 /tmp/test-reports/php_error.log
 RUN { \
 		echo 'error_reporting = E_ALL'; \
 		echo 'display_error = On'; \
