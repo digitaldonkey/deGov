@@ -121,7 +121,7 @@ jobs:
           name: PHP base config
           command: |
             if [ ! -f /usr/local/etc/php/php.ini ]; then
-              sudo su -c \
+              sudo sh -c \
               touch /usr/local/etc/php/php.ini; \
               echo 'error_reporting = E_ALL' >> /usr/local/etc/php/php.ini; \
               echo 'display_error = On' >> /usr/local/etc/php/php.ini; \
