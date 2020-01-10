@@ -142,11 +142,11 @@ jobs:
             fi
 
       - run:
-        name: Download Selenium
-        command: |
-          if [ ! -f bin/selenium-server-standalone-3.5.3.jar ]; then
-            curl http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar -o bin/selenium-server-standalone-3.5.3.jar
-          fi
+          name: Download Selenium
+          command: |
+            if [ ! -f bin/selenium-server-standalone-3.5.3.jar ]; then
+              curl http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar -o bin/selenium-server-standalone-3.5.3.jar
+            fi
 
       - save_cache:
           key: project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
