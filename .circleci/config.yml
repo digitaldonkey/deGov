@@ -121,13 +121,12 @@ jobs:
           name: PHP base config
           command: |
             if [ ! -f /usr/local/etc/php/php.ini ]; then
-              sudo su
-              touch /usr/local/etc/php/php.ini
-              echo 'error_reporting = E_ALL' >> /usr/local/etc/php/php.ini
-              echo 'display_error = On' >> /usr/local/etc/php/php.ini
-              echo 'log_errors = On' >> /usr/local/etc/php/php.ini
-              echo 'error_log = /tmp/php_error.log' >> /usr/local/etc/php/php.ini
-              exit
+              sudo su -c \
+              touch /usr/local/etc/php/php.ini; \
+              echo 'error_reporting = E_ALL' >> /usr/local/etc/php/php.ini; \
+              echo 'display_error = On' >> /usr/local/etc/php/php.ini; \
+              echo 'log_errors = On' >> /usr/local/etc/php/php.ini; \
+              echo 'error_log = /tmp/php_error.log' >> /usr/local/etc/php/php.ini;
             fi
             php -i | grep error
 
