@@ -78,6 +78,21 @@ common_steps:
           sudo a2ensite project
         fi
         sudo service apache2 start
+  -  &runStartMysql
+    run:
+      name: Waiting for MySQL to be ready
+      # Our primary container isn't MYSQL so run a sleep command until it's ready.
+      # @see https://circleci.com/docs/2.0/postgres-config/#example-mysql-project
+      command: |
+        # For whatever stupid reson we cant do this in Dockerfile, but drush requires mysql.
+        sudo apt install default-mysql-client --no-install-recommends
+        for i in `seq 1 10`;
+        do
+          nc -z 127.0.0.1 3306 && echo Success && exit 0
+          echo -n .
+          sleep 1
+        done
+        echo Failed waiting for MySQL && exit 1
 
 
 
@@ -300,7 +315,6 @@ jobs:
     steps:
       - attach_workspace:
           at: /
-
       - *runStartApache
 
       - run:
@@ -319,32 +333,11 @@ jobs:
     steps:
       - attach_workspace:
           at: /
-
-      - run:
-          name: Start Apache
-          command: |
-            if [ ! -L /etc/apache2/sites-enabled/project.conf ]; then
-              sudo a2ensite project
-            fi
-            sudo service apache2 start
-
-      - run:
-          name: Waiting for MySQL to be ready
-          # Our primary container isn't MYSQL so run a sleep command until it's ready.
-          # @see https://circleci.com/docs/2.0/postgres-config/#example-mysql-project
-          command: |
-            # For whatever stupid reson we cant do this in Dockerfile, but drush requires mysql.
-            sudo apt install default-mysql-client --no-install-recommends
-            for i in `seq 1 10`;
-            do
-              nc -z 127.0.0.1 3306 && echo Success && exit 0
-              echo -n .
-              sleep 1
-            done
-            echo Failed waiting for MySQL && exit 1
-
+      - *runStartApache
+      - *runStartMysql
 
       # TODO the settings are spread out to settings.php and settings.local.php. It's unclear for me why/what should be where.
+
       - run:
           name: Install DB dump
           command: |
@@ -379,29 +372,8 @@ jobs:
     steps:
       - attach_workspace:
           at: /
-
-      - run:
-          name: Start Apache
-          command: |
-            if [ ! -L /etc/apache2/sites-enabled/project.conf ]; then
-              sudo a2ensite project
-            fi
-            sudo service apache2 start
-
-      - run:
-          name: Waiting for MySQL to be ready
-          # Our primary container isn't MYSQL so run a sleep command until it's ready.
-          # @see https://circleci.com/docs/2.0/postgres-config/#example-mysql-project
-          command: |
-            # For whatever stupid reson we cant do this in Dockerfile, but drush requires mysql.
-            sudo apt install default-mysql-client --no-install-recommends
-            for i in `seq 1 10`;
-            do
-              nc -z 127.0.0.1 3306 && echo Success && exit 0
-              echo -n .
-              sleep 1
-            done
-            echo Failed waiting for MySQL && exit 1
+      - *runStartApache
+      - *runStartMysql
 
       - run:
           name: Install Drupal using Behat
