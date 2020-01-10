@@ -118,7 +118,7 @@ jobs:
           path: /home/circleci/project/docroot/profiles/contrib/
 
       - run:
-          name: Repository Environment Variables for project and LFS
+          name: PHP base config
           command: |
             if [ ! -f /usr/local/etc/php/php.ini ]; then
               sudo su
