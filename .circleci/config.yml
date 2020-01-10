@@ -92,7 +92,7 @@ common_steps:
       background: true
   - &runPrepareLocalSettings
     run:
-      name: Prepare settings.local.php
+      name: DB-Dump settings.local.php
       # TODO
       # I don't understand why we use settings.local.php. Shouldn't we test with production settings?
       # IMHO we should only create and use ONE SINGE settings.php if possible.
@@ -247,18 +247,18 @@ jobs:
               tee <<EOF > docroot/sites/default/settings.php
             <?php # Don't prepend spaces here!!
 
-                \$settings["file_private_path"] = "sites/default/files/private";
-                \$settings["file_public_path"] = "sites/default/files";
-                \$config["system.file"]["path"]["temporary"] = "/tmp";
-                \$settings["trusted_host_patterns"] = ["^127.0.0.1$","^localhost$","^host.docker.internal$"];
-                \$config["locale.settings"]["translation"]["path"] = "sites/default/files/translations";
-                \$config["swiftmailer.transport"]["transport"] = "spool";
-                \$config["swiftmailer.transport"]["spool_directory"] = "/tmp/swiftmailer-spool";
-                \$base_url = 'http://localhost';
-                \$config_directories[CONFIG_SYNC_DIRECTORY] = '../config/sync';
-                # Increase drush 9 memory limit
-                if (PHP_SAPI === 'cli') { ini_set('memory_limit', '512M'); }
-                require dirname(__FILE__) . '/settings.local.php';
+              \$settings["file_private_path"] = "sites/default/files/private";
+              \$settings["file_public_path"] = "sites/default/files";
+              \$config["system.file"]["path"]["temporary"] = "/tmp";
+              \$settings["trusted_host_patterns"] = ["^127.0.0.1$","^localhost$","^host.docker.internal$"];
+              \$config["locale.settings"]["translation"]["path"] = "sites/default/files/translations";
+              \$config["swiftmailer.transport"]["transport"] = "spool";
+              \$config["swiftmailer.transport"]["spool_directory"] = "/tmp/swiftmailer-spool";
+              \$base_url = 'http://localhost';
+              \$config_directories[CONFIG_SYNC_DIRECTORY] = '../config/sync';
+              # Increase drush 9 memory limit
+              if (PHP_SAPI === 'cli') { ini_set('memory_limit', '512M'); }
+              require dirname(__FILE__) . '/settings.local.php';
             EOF
 
               cat docroot/sites/default/settings.php
@@ -379,7 +379,7 @@ jobs:
           at: /
       - *runStartApache
       - *runStartMysql
-      - *runPrepareLocalSettings
+#      - *runPrepareLocalSettings
 #      - *runStartSeleniumWebdriver
 
       - run:
