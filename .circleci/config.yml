@@ -9,12 +9,12 @@ workflows:
   build-and-test:
     jobs:
       - build
-      - example:
-          requires:
-            - build
-      - install_with_db_dump:
-          requires:
-            - build
+#      - example:
+#          requires:
+#            - build
+#      - install_with_db_dump:
+#          requires:
+#            - build
       - install_with_behat:
           requires:
             - build
@@ -381,7 +381,7 @@ jobs:
       - *runStartApache
       - *runStartMysql
       - *runPrepareLocalSettings
-#      - *runStartSeleniumWebdriver
+      - *runStartSeleniumWebdriver
       - run:
           name: Install Drupal using Behat
           command: |
