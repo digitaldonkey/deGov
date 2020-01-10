@@ -66,7 +66,6 @@ common_steps:
         if [ ! -L /etc/apache2/sites-enabled/project.conf ]; then
           sudo a2ensite --quiet project
         fi
-        #sudo service apache2 start
         sudo apachectl -D FOREGROUND
       background: true
 
@@ -402,6 +401,7 @@ jobs:
 #      - *runStartSeleniumWebdriver
       - run:
           name: Install Drupal using Behat
+          no_output_timeout: "3m"
           command: |
             mv docroot/profiles/contrib/degov/testing/behat/behat-no-drupal.dist.yml .
             mv docroot/profiles/contrib/degov/testing/behat/behat.dist.yml .
