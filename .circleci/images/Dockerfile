@@ -12,7 +12,7 @@
 # We use circleci/php:apache-stretch image and add config from docker-library/drupal
 # (https://github.com/docker-library/docs/tree/master/drupal)
 
-FROM circleci/php:7.3-apache-stretch
+FROM circleci/php:7.3-apache-stretch-node-browsers
 # which is based on php:7.3.3-apache-stretch
 # @readme https://hub.docker.com/_/php
 # @see https://github.com/CircleCI-Public/circleci-dockerfiles/blob/master/php/images/7.3.3-apache-stretch/Dockerfile
