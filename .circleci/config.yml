@@ -67,6 +67,8 @@ common_steps:
           sudo a2ensite project
         fi
         sudo service apache2 start
+      background: true
+
   -  &runStartMysql
     run:
       name: Waiting for MySQL to be ready
