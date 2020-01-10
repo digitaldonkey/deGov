@@ -374,7 +374,7 @@ jobs:
     docker:
      - *baseimage
      - *dbimage
-     - image: selenium/standalone-chrome-debug:3.7.1-beryllium
+     - image: selenium/standalone-chrome:3
     steps:
       - attach_workspace:
           at: /

@@ -12,6 +12,10 @@ default:
   extensions:
     Behat\MinkExtension:
       base_url: http://localhost:80
+      goutte: ~
+      selenium2: ~
+      browser_name: chrome
+      Behat\Symfony2Extension: ~
       default_session: selenium_chrome
       sessions:
         selenium_chrome:
