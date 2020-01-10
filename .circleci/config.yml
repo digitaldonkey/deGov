@@ -61,10 +61,10 @@ common_steps:
       name: Start Apache
       command: |
         if [ -L /etc/apache2/sites-enabled/000-default.conf ]; then
-          sudo a2dissite 000-default
+          sudo a2dissite --quiet 000-default
         fi
         if [ ! -L /etc/apache2/sites-enabled/project.conf ]; then
-          sudo a2ensite project
+          sudo a2ensite --quiet project
         fi
         #sudo service apache2 start
         sudo apachectl -D FOREGROUND
@@ -116,6 +116,15 @@ jobs:
     steps:
       - checkout:
           path: /home/circleci/project/docroot/profiles/contrib/
+
+      - run:
+          name: Repository Environment Variables for project and LFS
+          command: |
+            echo 'error_reporting = E_ALL' >> /usr/local/etc/php/php.ini
+            echo 'display_error = On' >> /usr/local/etc/php/php.ini
+            echo 'log_errors = On' >> /usr/local/etc/php/php.ini
+            echo 'error_log = /tmp/php_error.log' >> /usr/local/etc/php/php.ini
+
 
       ### Prepare git uses the code from "- checkout" step WITHOUT cloning repository. would be:
       #      - run:
