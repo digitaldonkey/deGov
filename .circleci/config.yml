@@ -71,13 +71,13 @@ docker_images:
 # Commona steps (YAML aliases @see https://github.com/cyklo/Bukkit-OtherBlocks/wiki/Aliases-(advanced-YAML-usage)#simple-example)
 common_steps:
   -  &runStartApache
-    - run:
-        name: Start Apache
-        command: |
-          if [ ! -L /etc/apache2/sites-enabled/project.conf ]; then
-            sudo a2ensite project
-          fi
-          sudo service apache2 start
+    run:
+      name: Start Apache
+      command: |
+        if [ ! -L /etc/apache2/sites-enabled/project.conf ]; then
+          sudo a2ensite project
+        fi
+        sudo service apache2 start
 
 
 
