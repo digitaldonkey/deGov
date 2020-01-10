@@ -390,7 +390,7 @@ jobs:
 
       - run:
           name: Install Drupal using Behat
-          no_output_timeout: "3m"
+          no_output_timeout: "20m"
           command: |
             mv docroot/profiles/contrib/degov/testing/behat/behat-no-drupal.dist.yml .
             mv docroot/profiles/contrib/degov/testing/behat/behat.dist.yml .
