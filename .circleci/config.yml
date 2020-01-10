@@ -321,7 +321,7 @@ jobs:
             - home/circleci/.drush
             - home/circleci/project
             - tmp/ci-cache/*
-            - usr/local/etc/php/php.ini
+            - tmp/test-reports
 
   example:
     docker:
