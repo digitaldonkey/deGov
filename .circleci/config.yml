@@ -61,13 +61,6 @@ common_steps:
   - &runStartSeleniumWebdriver
     run:
       name: Start Selenium
-      command: |
-        if [ ! -f bin/selenium-server-standalone-3.5.3.jar ]; then
-          curl http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar -o bin/selenium-server-standalone-3.5.3.jar
-        fi
-
-    - run:
-      name: Start Selenium
       command: java -jar /bin/selenium-server-standalone-3.5.3.jar -log /tmp/test-reports/selenium.log
       background: true
 
