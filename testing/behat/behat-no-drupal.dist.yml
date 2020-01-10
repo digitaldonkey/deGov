@@ -28,5 +28,6 @@ default:
                     - "--no-sandbox"
                     - "--headless"
                     - "--disable-gpu"
+                    - "--allow-insecure-localhost"
                   w3c: false
 
