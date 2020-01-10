@@ -19,7 +19,7 @@ docker_images:
       MYSQL_DATABASE: testing
       MYSQL_USER: testing
       MYSQL_PASSWORD: testing
-      TAR_OPTIONS: --same-permissions --same-owner
+      TAR_OPTIONS: --same-permissions
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -222,8 +222,7 @@ jobs:
             if [ ! -d docroot/sites/default/files/private/ ]; then
               DIRS='docroot/sites/default/files docroot/sites/default/files/translations docroot/sites/default/files/private config/sync'
               mkdir -p $DIRS
-              sudo chown circleci:www-data $DIRS
-              chmod g+w $DIRS
+              chmod a+w $DIRS
               ls -al docroot/sites/default/files/
 
               tee <<EOF > docroot/sites/default/settings.php
