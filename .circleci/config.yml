@@ -58,14 +58,14 @@ common_steps:
           sleep 1
         done
         echo Failed waiting for MySQL && exit 1
-  -  &runStartSeleniumWebdriver
-      - run:
-          name: Download Selenium
-          command: curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar
-      - run:
-          name: Start Selenium
-          command: java -jar selenium-server-standalone-3.5.3.jar -log /tmp/test-reports/selenium.log
-          background: true
+  - &runStartSeleniumWebdriver
+    - run:
+        name: Download Selenium
+        command: curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar
+    - run:
+        name: Start Selenium
+        command: java -jar selenium-server-standalone-3.5.3.jar -log /tmp/test-reports/selenium.log
+        background: true
 
 
 version: 2
@@ -346,7 +346,6 @@ jobs:
       - *runStartApache
       - *runStartMysql
       - *runStartSeleniumWebdriver
-
       - run:
           name: Install Drupal using Behat
           command: |
