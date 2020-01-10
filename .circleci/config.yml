@@ -59,12 +59,16 @@ common_steps:
         done
         echo Failed waiting for MySQL && exit 1
   - &runStartSeleniumWebdriver
-    - run:
-      name: Download Selenium
-      command: curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar
+    run:
+      name: Start Selenium
+      command: |
+        if [ ! -f bin/selenium-server-standalone-3.5.3.jar ]; then
+          curl http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar -o bin/selenium-server-standalone-3.5.3.jar
+        fi
+
     - run:
       name: Start Selenium
-      command: java -jar selenium-server-standalone-3.5.3.jar -log /tmp/test-reports/selenium.log
+      command: java -jar /bin/selenium-server-standalone-3.5.3.jar -log /tmp/test-reports/selenium.log
       background: true
 
 
@@ -143,6 +147,14 @@ jobs:
             else
               echo "Restored from cache"
             fi
+
+      - run:
+        name: Download Selenium
+        command: |
+          if [ ! -f bin/selenium-server-standalone-3.5.3.jar ]; then
+            curl http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar -o bin/selenium-server-standalone-3.5.3.jar
+          fi
+
       - save_cache:
           key: project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
           paths:
@@ -157,6 +169,8 @@ jobs:
 #              composer update --lock --ansi --no-progress
 #              git diff --no-index composer.lock /tmp/ci-cache/profile-setup-lock
 #            fi
+
+
 
       - run:
           name: Composer require deGov
