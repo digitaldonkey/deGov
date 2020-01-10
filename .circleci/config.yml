@@ -12,7 +12,7 @@ workflows:
 #     - example:
 #         requires:
 #           - build
-     - install_with_db_dump:
+      - install_with_db_dump:
          requires:
            - build
       - install_with_behat:
