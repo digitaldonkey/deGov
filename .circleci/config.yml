@@ -220,7 +220,7 @@ jobs:
           name: Set up Drupal config & directories
           command: |
             if [ ! -d docroot/sites/default/files/private/ ]; then
-              DIRS='docroot/sites/default/files/{translations,private} config/sync'
+              DIRS='docroot/sites/default/files docroot/sites/default/files/translations docroot/sites/default/files/private config/sync'
               mkdir -p $DIRS
               sudo chown circleci:www-data $DIRS
               chmod g+w $DIRS
