@@ -61,7 +61,7 @@ common_steps:
   - &runStartSeleniumWebdriver
     run:
       name: Start Selenium
-      command: java -jar /bin/selenium-server-standalone-3.5.3.jar -log /tmp/test-reports/selenium.log
+      command: java -jar selenium-server-standalone-3.5.3.jar -log /tmp/test-reports/selenium.log
       background: true
 
 
@@ -130,7 +130,9 @@ jobs:
       # PROJECT SETUP
       - restore_cache:
          keys:
-          - project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
+          - project-dependencies-project-setup-{{ checksum "selenium-server-standalone-3.5.3.jar" }}-{{ checksum "/tmp/ci-cache/project-setup" }}
+          - project-dependencies-project-setup-{{ checksum "selenium-server-standalone-3.5.3.jar" }}-
+
       - run:
           name: Set up Project
           command: | # if not in cache
@@ -149,7 +151,7 @@ jobs:
             fi
 
       - save_cache:
-          key: project-dependencies-project-setup-{{ checksum "/tmp/ci-cache/project-setup" }}-v2
+          key: project-dependencies-project-setup-{{ checksum "selenium-server-standalone-3.5.3.jar" }}-{{ checksum "/tmp/ci-cache/project-setup" }}
           paths:
            - .
            - /tmp/ci-cache
