@@ -73,7 +73,9 @@ common_steps:
   - &runPrepareLocalSettings
     run:
       name: Prepare settings.local.php
-      # TODO I don't really understand why we do this. Shouldn't we test with production settings?
+      # TODO
+      # I don't understand why we use settings.local.php. Shouldn't we test with production settings?
+      # IMHO we should only create and use ONE SINGE settings.php if possible.
       command: |
         cp docroot/profiles/contrib/degov/testing/behat/template/settings.local.php docroot/sites/default/settings.local.php
         sed -i "s/{{ mysql_auth.db }}/$MYSQL_DATABASE/g" docroot/sites/default/settings.local.php
@@ -365,6 +367,7 @@ jobs:
           at: /
       - *runStartApache
       - *runStartMysql
+      - *runPrepareLocalSettings
       - *runStartSeleniumWebdriver
       - run:
           name: Install Drupal using Behat
