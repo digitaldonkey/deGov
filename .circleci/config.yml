@@ -374,13 +374,14 @@ jobs:
     docker:
      - *baseimage
      - *dbimage
+     - image: selenium/standalone-chrome-debug:3.7.1-beryllium
     steps:
       - attach_workspace:
           at: /
       - *runStartApache
       - *runStartMysql
       - *runPrepareLocalSettings
-      - *runStartSeleniumWebdriver
+#      - *runStartSeleniumWebdriver
       - run:
           name: Install Drupal using Behat
           command: |
@@ -388,7 +389,10 @@ jobs:
             mv docroot/profiles/contrib/degov/testing/behat/behat.dist.yml .
             mkdir -p /tmp/behat/test-reports/install
             bin/behat --format=pretty --out=std --format=junit --out=/tmp/test-reports/ -c behat-no-drupal.dist.yml --strict --colors
-
+      - store_artifacts:
+          path: /tmp/test-reports/
+      - store_test_results:
+          path: /tmp/test-reports/
 
 ################################################################################
 # SSH
