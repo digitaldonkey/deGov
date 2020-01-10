@@ -39,6 +39,9 @@ common_steps:
     run:
       name: Start Apache
       command: |
+        if [ -L /etc/apache2/sites-enabled/000-default.conf ]; then
+          sudo a2dissite 000-default
+        fi
         if [ ! -L /etc/apache2/sites-enabled/project.conf ]; then
           sudo a2ensite project
         fi
@@ -67,7 +70,17 @@ common_steps:
         fi
         java -jar selenium-server-standalone-3.5.3.jar -log /tmp/test-reports/selenium.log
       background: true
-
+  - &runPrepareLocalSettings
+    run:
+      name: Prepare settings.local.php
+      # TODO I don't really understand why we do this. Shouldn't we test with production settings?
+      command: |
+        cp docroot/profiles/contrib/degov/testing/behat/template/settings.local.php docroot/sites/default/settings.local.php
+        sed -i "s/{{ mysql_auth.db }}/$MYSQL_DATABASE/g" docroot/sites/default/settings.local.php
+        sed -i "s/{{ mysql_auth.user }}/$MYSQL_USER/g" docroot/sites/default/settings.local.php
+        sed -i "s/{{ mysql_auth.password }}/$MYSQL_PASSWORD/g" docroot/sites/default/settings.local.php
+        sed -i 's/{{ mysql_host }}/127.0.0.1/g' docroot/sites/default/settings.local.php
+        echo '$settings["hash_salt"] = "7asdiugasd8f623gjwgasgf7a8stfasjdfsdafasdfasdfasdf";' >> docroot/sites/default/settings.local.php
 
 version: 2
 jobs:
@@ -213,7 +226,8 @@ jobs:
               ls -al docroot/sites/default/files/
 
               tee <<EOF > docroot/sites/default/settings.php
-              <?php
+            <?php # Don't prepend spaces here!!
+
                 \$settings["file_private_path"] = "sites/default/files/private";
                 \$settings["file_public_path"] = "sites/default/files";
                 \$config["system.file"]["path"]["temporary"] = "/tmp";
@@ -225,7 +239,7 @@ jobs:
                 \$config_directories[CONFIG_SYNC_DIRECTORY] = '../config/sync';
                 # Increase drush 9 memory limit
                 if (PHP_SAPI === 'cli') { ini_set('memory_limit', '512M'); }
-                require 'settings.local.php';
+                require dirname(__FILE__) . '/settings.local.php';
             EOF
 
               cat docroot/sites/default/settings.php
@@ -322,17 +336,10 @@ jobs:
           at: /
       - *runStartApache
       - *runStartMysql
+      - *runPrepareLocalSettings
       - run:
           name: Install DB dump
           command: |
-            cp docroot/profiles/contrib/degov/testing/behat/template/settings.local.php docroot/sites/default/settings.local.php
-            sed -i "s/{{ mysql_auth.db }}/$MYSQL_DATABASE/g" docroot/sites/default/settings.local.php
-            sed -i "s/{{ mysql_auth.user }}/$MYSQL_USER/g" docroot/sites/default/settings.local.php
-            sed -i "s/{{ mysql_auth.password }}/$MYSQL_PASSWORD/g" docroot/sites/default/settings.local.php
-            sed -i 's/{{ mysql_host }}/127.0.0.1/g' docroot/sites/default/settings.local.php
-            echo '$settings["hash_salt"] = "7asdiugasd8f623gjwgasgf7a8stfasjdfsdafasdfasdfasdf";' >> docroot/sites/default/settings.local.php
-            ls -al docroot/sites/default/files/
-
             cd docroot/
             drush status
             echo "DRUPAL_DB_URL: $DRUPAL_DB_URL"
