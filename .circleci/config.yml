@@ -301,7 +301,7 @@ jobs:
       - attach_workspace:
           at: /
 
-      - *run_start_apache
+      - *runStartApache
 
       - run:
           name: Verify Checkout
