@@ -123,10 +123,10 @@ jobs:
               mkdir -p /tmp/test-reports
               sudo bash -c "\
                 touch /usr/local/etc/php/php.ini; \
-                echo 'error_log = /tmp/test-reports/php_error.log' >> /usr/local/etc/php/php.ini; \
                 echo 'error_reporting = E_ALL' >> /usr/local/etc/php/php.ini; \
                 echo 'display_error = On' >> /usr/local/etc/php/php.ini; \
                 echo 'log_errors = On' >> /usr/local/etc/php/php.ini; \
+                echo 'error_log = /tmp/test-reports/php_error.log' >> /usr/local/etc/php/php.ini; \
               "
             fi
             php -i | grep error
@@ -399,6 +399,13 @@ jobs:
       - *runStartMysql
       - *runPrepareLocalSettings
 #      - *runStartSeleniumWebdriver
+
+      - run:
+          name: PHP life error log
+          command: |
+            tail -f /tmp/test-reports/php_error.log
+          background: true
+
       - run:
           name: Install Drupal using Behat
           no_output_timeout: "3m"
