@@ -85,15 +85,15 @@ common_steps:
           sleep 1
         done
         echo Failed waiting for MySQL && exit 1
-  - &runStartSeleniumWebdriver
-    run:
-      name: Start Selenium
-      command: |
-        if [ ! -d /tmp/test-reports ]; then
-          mkdir -p /tmp/test-reports
-        fi
-        java -jar selenium-server-standalone-3.5.3.jar -log /tmp/test-reports/selenium.log
-      background: true
+#  - &runStartSeleniumWebdriver
+#    run:
+#      name: Start Selenium
+#      command: |
+#        if [ ! -d /tmp/test-reports ]; then
+#          mkdir -p /tmp/test-reports
+#        fi
+#        java -jar selenium-server-standalone-3.5.3.jar -log /tmp/test-reports/selenium.log
+#      background: true
   - &runPrepareLocalSettings
     run:
       name: Prepare settings.local.php
@@ -121,12 +121,13 @@ jobs:
           name: PHP base config
           command: |
             if [ ! -f /usr/local/etc/php/php.ini ]; then
+              mkdir -p /tmp/test-reports
               sudo bash -c "\
                 touch /usr/local/etc/php/php.ini; \
+                echo 'error_log = /tmp/test-reports/php_error.log' >> /usr/local/etc/php/php.ini; \
                 echo 'error_reporting = E_ALL' >> /usr/local/etc/php/php.ini; \
                 echo 'display_error = On' >> /usr/local/etc/php/php.ini; \
                 echo 'log_errors = On' >> /usr/local/etc/php/php.ini; \
-                echo 'error_log = /tmp/php_error.log' >> /usr/local/etc/php/php.ini; \
               "
             fi
             php -i | grep error
@@ -404,8 +405,8 @@ jobs:
           command: |
             mv docroot/profiles/contrib/degov/testing/behat/behat-no-drupal.dist.yml .
             mv docroot/profiles/contrib/degov/testing/behat/behat.dist.yml .
-            mkdir -p /tmp/behat/test-reports/install
-            bin/behat --format=pretty --out=std --format=junit --out=/tmp/test-reports/install -c behat-no-drupal.dist.yml --strict --colors
+            mkdir -p /tmp/test-reports/behat/install
+            bin/behat --format=pretty --out=std --format=junit --out=/tmp/test-reports/behat/install -c behat-no-drupal.dist.yml --strict --colors
       - store_artifacts:
           path: /tmp/test-reports
       - store_test_results:
