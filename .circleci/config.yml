@@ -220,11 +220,10 @@ jobs:
           name: Set up Drupal config & directories
           command: |
             if [ ! -d docroot/sites/default/files/private/ ]; then
-              mkdir -p docroot/sites/default/files/private/
-              mkdir docroot/sites/default/files/translations/
-              chmod 777 -R docroot/sites/default/files/
-              mkdir -p config/sync
-              chmod 777 config/sync
+              DIRS='docroot/sites/default/files/{translations,private} config/sync'
+              mkdir -p $DIRS
+              sudo chown circleci:www-data $DIRS
+              chmod g+w $DIRS
               ls -al docroot/sites/default/files/
 
               tee <<EOF > docroot/sites/default/settings.php
@@ -254,7 +253,7 @@ jobs:
 
               # Create drushrc.php
               tee <<EOF > docroot/sites/default/drushrc.php
-              <?php
+            <?php # Don't prepend spaces.
 
               \$options['r'] = '/home/circleci/project/docroot';
               \$options['l'] = 'http://localhost';
@@ -264,7 +263,7 @@ jobs:
               unlink bin/drush
 
               tee <<EOF > bin/drush
-              #!/bin/bash
+            #!/bin/bash
               /usr/local/bin/php /home/circleci/project/vendor/drush/drush/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=localhost --yes "\$@"
 
             EOF
@@ -403,3 +402,4 @@ workflows:
 # alias drush='/usr/local/bin/php /home/circleci/project/vendor/drush/drush/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=localhost --yes'
 # circleci@defc4957b553:~/project$ test  php-eval 'print(ini_get("memory_limit")."\n");'
 # gunzip -c project/docroot/profiles/contrib/degov/testing/lfs_data/degov-7.x-dev.sql.gz | drush sqlc --db-url="mysql://testing:testing@localhost:3306/testing"
+# sudo chown -R circleci:www-data . && chmod -R g+w .
