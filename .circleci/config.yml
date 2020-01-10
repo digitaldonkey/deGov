@@ -120,10 +120,10 @@ jobs:
       - run:
           name: Repository Environment Variables for project and LFS
           command: |
-            echo 'error_reporting = E_ALL' >> /usr/local/etc/php/php.ini
-            echo 'display_error = On' >> /usr/local/etc/php/php.ini
-            echo 'log_errors = On' >> /usr/local/etc/php/php.ini
-            echo 'error_log = /tmp/php_error.log' >> /usr/local/etc/php/php.ini
+            sudo echo 'error_reporting = E_ALL' >> /usr/local/etc/php/php.ini
+            sudo echo 'display_error = On' >> /usr/local/etc/php/php.ini
+            sudo echo 'log_errors = On' >> /usr/local/etc/php/php.ini
+            sudo echo 'error_log = /tmp/php_error.log' >> /usr/local/etc/php/php.ini
 
 
       ### Prepare git uses the code from "- checkout" step WITHOUT cloning repository. would be:
