@@ -64,9 +64,9 @@ docker_images:
     image: circleci/mysql:5.7-ram
     command: mysqld --max_allowed_packet=65011712
     environment:
-    MYSQL_DATABASE: testing
-    MYSQL_USER: testing
-    MYSQL_PASSWORD: testing
+      MYSQL_DATABASE: testing
+      MYSQL_USER: testing
+      MYSQL_PASSWORD: testing
 
 # Commona steps (YAML aliases @see https://github.com/cyklo/Bukkit-OtherBlocks/wiki/Aliases-(advanced-YAML-usage)#simple-example)
 common_steps:
