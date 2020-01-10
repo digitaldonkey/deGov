@@ -201,12 +201,12 @@ jobs:
               echo "Restored from cache"
             fi
 
-      - run:
-          name: Download Selenium
-          command: |
-            if [ ! -f selenium-server-standalone-3.5.3.jar ]; then
-              curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar
-            fi
+#      - run:
+#          name: Download Selenium
+#          command: |
+#            if [ ! -f selenium-server-standalone-3.5.3.jar ]; then
+#              curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar
+#            fi
 
       - save_cache:
           key: project-dependencies-project-setup-{{ checksum "selenium-server-standalone-3.5.3.jar" }}-{{ checksum "/tmp/ci-cache/project-setup" }}
@@ -339,6 +339,7 @@ jobs:
             - home/circleci/.drush
             - home/circleci/project
             - tmp/ci-cache/*
+            - usr/local/etc/php/php.ini
 
   example:
     docker:
