@@ -258,7 +258,7 @@ jobs:
               \$config_directories[CONFIG_SYNC_DIRECTORY] = '../config/sync';
               # Increase drush 9 memory limit
               if (PHP_SAPI === 'cli') { ini_set('memory_limit', '512M'); }
-              if(file_exists(dirname(__FILE__) . '/settings.local.php)) { require dirname(__FILE__) . '/settings.local.php'; }
+              if (file_exists(dirname(__FILE__) . '/settings.local.php')) { require dirname(__FILE__) . '/settings.local.php'; }
             EOF
 
               cat docroot/sites/default/settings.php
@@ -321,6 +321,7 @@ jobs:
             - home/circleci/.drush
             - home/circleci/project
             - tmp/ci-cache/*
+            - tmp/.bash_env-*
 
   example:
     docker:
