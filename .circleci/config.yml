@@ -10,8 +10,8 @@ workflows:
     jobs:
       - build
       - example:
-        requires:
-          - build
+          requires:
+            - build
       - install_with_db_dump:
          requires:
            - build
