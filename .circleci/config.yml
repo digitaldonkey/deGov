@@ -260,7 +260,6 @@ jobs:
               if (PHP_SAPI === 'cli') { ini_set('memory_limit', '512M'); }
               if (file_exists(dirname(__FILE__) . '/settings.local.php')) { require dirname(__FILE__) . '/settings.local.php'; }
             EOF
-
               cat docroot/sites/default/settings.php
             fi
 
@@ -393,6 +392,7 @@ jobs:
           name: Install Drupal using Behat
           no_output_timeout: "20m"
           command: |
+            chmod 666 docroot/sites/default/settings.php
             mv docroot/profiles/contrib/degov/testing/behat/behat-no-drupal.dist.yml .
             mv docroot/profiles/contrib/degov/testing/behat/behat.dist.yml .
             mkdir -p /tmp/test-reports/behat/install
