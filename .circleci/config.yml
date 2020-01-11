@@ -104,13 +104,15 @@ common_tests:
     run:
       name: Behat smoke tests
       command: |
+        cp docroot/profiles/contrib/degov/testing/behat/behat.dist.yml .
         mkdir -p /tmp/test-reports/smoke-tests
+        # The installation sets admin/password as login data, therefore we reset the data here to match with the behat config.
+        drush upwd admin admin
         bin/behat --format=pretty --out=std --format=junit --out=/tmp/test-reports/smoke-tests -c behat.dist.yml --suite=smoke-tests --strict --colors
         EXIT_CODE=$?
         drush watchdog-show --extended --count 1000 |  /tmp/test-reports/smoke-tests/watchdog.log
         cat  /tmp/test-reports/smoke-tests/watchdog.log
         exit $EXIT_CODE
-
 
 jobs:
   build:
@@ -393,8 +395,7 @@ jobs:
           no_output_timeout: "20m"
           command: |
             chmod 666 docroot/sites/default/settings.php
-            mv docroot/profiles/contrib/degov/testing/behat/behat-no-drupal.dist.yml .
-            mv docroot/profiles/contrib/degov/testing/behat/behat.dist.yml .
+            cp docroot/profiles/contrib/degov/testing/behat/behat-no-drupal.dist.yml .
             mkdir -p /tmp/test-reports/behat/install
             bin/behat --format=pretty --out=std --format=junit --out=/tmp/test-reports/behat/install -c behat-no-drupal.dist.yml --strict --colors
       - *runBehatSmokeTest
