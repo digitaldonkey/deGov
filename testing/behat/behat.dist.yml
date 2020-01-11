@@ -31,7 +31,7 @@ default:
         - Drupal\degov\Behat\Context\SmokeTestContext:
             - admin_account_credentials:
                 - admin
-                - admin
+                - password
       paths:
         features: '%paths.base%/docroot/profiles/contrib/degov/testing/behat/features_smoke_tests'
       translation:

@@ -9,15 +9,12 @@ workflows:
   build-and-test:
     jobs:
       - build
-#     - example:
-#         requires:
-#           - build
+      - example:
+        requires:
+          - build
       - install_with_db_dump:
          requires:
            - build
-      - test:
-         requires:
-           - install_with_db_dump
       - install_with_behat:
           requires:
             - build
@@ -100,6 +97,19 @@ common_steps:
         sed -i "s/{{ mysql_auth.password }}/$MYSQL_PASSWORD/g" docroot/sites/default/settings.local.php
         sed -i 's/{{ mysql_host }}/127.0.0.1/g' docroot/sites/default/settings.local.php
         echo '$settings["hash_salt"] = "7asdiugasd8f623gjwgasgf7a8stfasjdfsdafasdfasdfasdf";' >> docroot/sites/default/settings.local.php
+
+# Tests
+tests:
+  - &runBehatSmokeTest
+    run:
+      name: Behat smoke tests
+      command: |
+        mkdir -p /tmp/test-reports/smoke-tests
+        bin/behat --format=pretty --out=std --format=junit --out=/tmp/test-reports/smoke-tests -c behat.dist.yml --suite=smoke-tests --strict --colors
+        EXIT_CODE=$?
+        drush watchdog-show --extended --count 1000 |  /tmp/test-reports/smoke-tests/watchdog.log
+        cat  /tmp/test-reports/smoke-tests/watchdog.log
+        exit $EXIT_CODE
 
 
 jobs:
@@ -355,6 +365,12 @@ jobs:
             drush locale:update
             drush php-eval 'Drupal\degov\TranslationImporter::importForProfile()'
             drush cr
+      - *runBehatSmokeTest
+      - store_test_results:
+          path: /tmp/test-reports
+      - store_artifacts:
+          path: /tmp/test-reports/php_error.log
+          destination: php_error_install_with_db_dump.log
 
   install_with_behat:
     docker:
@@ -381,28 +397,12 @@ jobs:
             mv docroot/profiles/contrib/degov/testing/behat/behat.dist.yml .
             mkdir -p /tmp/test-reports/behat/install
             bin/behat --format=pretty --out=std --format=junit --out=/tmp/test-reports/behat/install -c behat-no-drupal.dist.yml --strict --colors
+      - *runBehatSmokeTest
+      - store_test_results:
+          path: /tmp/test-reports
       - store_artifacts:
           path: /tmp/test-reports/php_error.log
-      - store_test_results:
-          path: /tmp/test-reports/behat/install
-
-  test:
-      docker:
-       - *baseimage
-       - *dbimage
-      steps:
-        - attach_workspace:
-            at: /
-        - *runStartApache
-
-        - run:
-            name: Verify Checkout
-            command: |
-              echo "###"
-              echo "working_directory: $(pwd)"
-              echo "###"
-              ls -al /home/circleci
-              cat docroot/sites/default/settings.php
+          destination: php_error_install_with_behat.log
 
 ################################################################################
 # SSH
