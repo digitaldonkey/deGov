@@ -386,23 +386,23 @@ jobs:
       - store_test_results:
           path: /tmp/test-reports/behat/install
 
-test:
-    docker:
-     - *baseimage
-     - *dbimage
-    steps:
-      - attach_workspace:
-          at: /
-      - *runStartApache
+  test:
+      docker:
+       - *baseimage
+       - *dbimage
+      steps:
+        - attach_workspace:
+            at: /
+        - *runStartApache
 
-      - run:
-          name: Verify Checkout
-          command: |
-            echo "###"
-            echo "working_directory: $(pwd)"
-            echo "###"
-            ls -al /home/circleci
-            cat docroot/sites/default/settings.php
+        - run:
+            name: Verify Checkout
+            command: |
+              echo "###"
+              echo "working_directory: $(pwd)"
+              echo "###"
+              ls -al /home/circleci
+              cat docroot/sites/default/settings.php
 
 ################################################################################
 # SSH
