@@ -99,7 +99,7 @@ common_steps:
         echo '$settings["hash_salt"] = "7asdiugasd8f623gjwgasgf7a8stfasjdfsdafasdfasdfasdf";' >> docroot/sites/default/settings.local.php
 
 # Tests
-tests:
+common_tests:
   - &runBehatSmokeTest
     run:
       name: Behat smoke tests
