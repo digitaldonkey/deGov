@@ -15,6 +15,9 @@ workflows:
       - install_with_db_dump:
          requires:
            - build
+      - test:
+         requires:
+           - install_with_db_dump
       - install_with_behat:
           requires:
             - build
@@ -263,7 +266,6 @@ jobs:
 
               # Replace bin/drush
               unlink bin/drush
-
               tee <<EOF > bin/drush
             #!/bin/bash
               /usr/local/bin/php /home/circleci/project/vendor/drush/drush/drush -c /home/circleci/project/docroot/sites/default/drushrc.php --root=/home/circleci/project/docroot/ -l default --uri=localhost --yes "\$@"
@@ -383,6 +385,24 @@ jobs:
           path: /tmp/test-reports/php_error.log
       - store_test_results:
           path: /tmp/test-reports/behat/install
+
+test:
+    docker:
+     - *baseimage
+     - *dbimage
+    steps:
+      - attach_workspace:
+          at: /
+      - *runStartApache
+
+      - run:
+          name: Verify Checkout
+          command: |
+            echo "###"
+            echo "working_directory: $(pwd)"
+            echo "###"
+            ls -al /home/circleci
+            cat docroot/sites/default/settings.php
 
 ################################################################################
 # SSH
