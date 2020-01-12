@@ -1,3 +1,5 @@
+imports:
+  - { resource: behat.extension.mink.inc.yml }
 default:
   suites:
     default:
@@ -10,4 +12,4 @@ default:
       paths:
         features: '%paths.base%/docroot/profiles/contrib/degov/testing/behat/features_install'
   extensions:
-    Behat\MinkExtension: !include: behat.extension.mink.inc.yml
+    <<: *behatMinkDefault
