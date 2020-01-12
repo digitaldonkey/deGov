@@ -1,4 +1,4 @@
-include: behat.extension.mink.inc.yml
+includes: behat.extension.mink.inc.yml
 default:
   suites:
     default:
