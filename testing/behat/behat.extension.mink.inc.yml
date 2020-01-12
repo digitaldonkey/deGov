@@ -5,18 +5,20 @@ default:
       goutte: ~
       selenium2: ~
       browser_name: chrome
-      default_session: selenium_chrome
-      javascript_session: selenium_chrome
+      default_session: selenium
+      javascript_session: selenium
       sessions:
-        selenium_chrome:
-          selenium2:
-            wd_host: http://localhost:4444/wd/hub
-            capabilities:
-              extra_capabilities:
-                chromeOptions:
-                  args:
-                    - "--no-sandbox"
-                    - "--headless"
-                    - "--disable-gpu"
-                    - "--allow-insecure-localhost"
-                  w3c: false
+        selenium:
+          wd_host: http://localhost:4444/wd/hub
+          capabilities:
+            browserName: "chrome"
+            browser: "chrome"
+            version:  "*"
+            chrome:
+              switches:
+                - "--no-sandbox"
+                - "--headless"
+                - "--disable-gpu"
+                - "--allow-insecure-localhost"
+            extra_capabilities:
+              w3c: false
