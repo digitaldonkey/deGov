@@ -12,5 +12,6 @@ default:
         - Drupal\degov\Behat\Context\JavaScriptContext
       paths:
         features: '%paths.base%/docroot/profiles/contrib/degov/testing/behat/features_install'
-  extensions:
-    <<: *BehatMinkExtension
+# @see behat.extension.mink.inc.yml
+#  extensions:
+#    Behat\MinkExtension:
