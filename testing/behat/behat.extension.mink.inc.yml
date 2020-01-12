@@ -1,22 +1,21 @@
-default:
-  extensions:
-    Behat\MinkExtension:
-      base_url: http://localhost:80
-      goutte: ~
-      selenium2: ~
-      browser_name: chrome
-      default_session: selenium_chrome
-      javascript_session: selenium_chrome
-      sessions:
-        selenium_chrome:
-          selenium2:
-            wd_host: http://localhost:4444/wd/hub
-            capabilities:
-              extra_capabilities:
-                chromeOptions:
-                  args:
-                    - "--no-sandbox"
-                    - "--headless"
-                    - "--disable-gpu"
-                    - "--allow-insecure-localhost"
-                  w3c: false
+x-includes: &BehatMinkExtension
+  Behat\MinkExtension:
+    base_url: http://localhost:80
+    goutte: ~
+    selenium2: ~
+    browser_name: chrome
+    default_session: selenium_chrome
+    javascript_session: selenium_chrome
+    sessions:
+      selenium_chrome:
+        selenium2:
+          wd_host: http://localhost:4444/wd/hub
+          capabilities:
+            extra_capabilities:
+              chromeOptions:
+                args:
+                  - "--no-sandbox"
+                  - "--headless"
+                  - "--disable-gpu"
+                  - "--allow-insecure-localhost"
+                w3c: false
