@@ -54,7 +54,7 @@ default:
       paths:
         features: '%paths.base%/docroot/profiles/contrib/degov/testing/behat/features'
   extensions:
-    <<: *behatMinkDefault
+    Behat\MinkExtension:behatMinkDefault
       files_path: '%paths.base%/docroot/profiles/contrib/degov/modules/degov_demo_content/fixtures'
     Drupal\DrupalExtension:
       blackbox: ~
