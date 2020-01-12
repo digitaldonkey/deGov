@@ -52,25 +52,8 @@ default:
       paths:
         features: '%paths.base%/docroot/profiles/contrib/degov/testing/behat/features'
   extensions:
-    Behat\MinkExtension:
+    Behat\MinkExtension: !include: behat.extension.mink.inc.yml
       files_path: '%paths.base%/docroot/profiles/contrib/degov/modules/degov_demo_content/fixtures'
-      browser_name: chrome
-      javascript_session: selenium2
-      default_session: selenium2
-      goutte: ~
-      selenium2:
-        wd_host: "http://127.0.0.1:4444/wd/hub"
-        browser: "chrome"
-        capabilities:
-          browserName: "chrome"
-          browser: "chrome"
-          version:  "*"
-          chrome:
-            switches:
-              - "--no-sandbox"
-              - "--headless"
-              - "--disable-gpu"
-      base_url: http://127.0.0.1:80
     Drupal\DrupalExtension:
       blackbox: ~
       drupal:

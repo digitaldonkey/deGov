@@ -104,7 +104,7 @@ common_tests:
     run:
       name: Behat smoke tests
       command: |
-        cp docroot/profiles/contrib/degov/testing/behat/behat.dist.yml .
+        cp docroot/profiles/contrib/degov/testing/behat/behat.dist.yml docroot/profiles/contrib/degov/testing/behat/behat.extension.mink.inc.yml .
         mkdir -p /tmp/test-reports/smoke-tests
         # The installation sets admin/password as login data, therefore we reset the data here to match with the behat config.
         drush upwd admin admin
@@ -395,7 +395,7 @@ jobs:
           no_output_timeout: "20m"
           command: |
             chmod 666 docroot/sites/default/settings.php
-            cp docroot/profiles/contrib/degov/testing/behat/behat-no-drupal.dist.yml .
+            cp docroot/profiles/contrib/degov/testing/behat/behat-no-drupal.dist.yml docroot/profiles/contrib/degov/testing/behat/behat.extension.mink.inc.yml .
             mkdir -p /tmp/test-reports/behat/install
             bin/behat --format=pretty --out=std --format=junit --out=/tmp/test-reports/behat/install -c behat-no-drupal.dist.yml --strict --colors
       - *runBehatSmokeTest
