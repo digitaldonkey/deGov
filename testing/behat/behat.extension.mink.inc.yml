@@ -14,11 +14,13 @@ default:
             browserName: "chrome"
             browser: "chrome"
             version:  "*"
-            chrome:
-              switches:
-                - "--no-sandbox"
-                - "--headless"
-                - "--disable-gpu"
-                - "--allow-insecure-localhost"
             extra_capabilities:
               w3c: false
+              chromeOptions:
+                args:
+                  - "--no-sandbox"
+                  - "--headless"
+                  - "--disable-gpu"
+                  - "--allow-insecure-localhost"
+
+
