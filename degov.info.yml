@@ -5,7 +5,7 @@ distribution:
   install:
     theme: degov_theme
 description: 'deGov - Drupal 8 for Government'
-version: 8.x-7.601
+version: 8.x-7.602
 core: '8.x'
 project: degov
 php version conflicts:
