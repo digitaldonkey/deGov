@@ -13,7 +13,7 @@ use Drupal\Core\TypedData\DataDefinition;
  *   id = "entity_reference_date",
  *   label = @Translation("Entity reference date"),
  *   description = @Translation("An entity field containing an entity reference with a date."),
- *   category = @Translation("Reference"),
+ *   category = @Translation("Timed reference"),
  *   default_widget = "entity_reference_autocomplete_date",
  *   default_formatter = "entity_reference_label",
  *   list_class = "\Drupal\Core\Field\EntityReferenceFieldItemList",

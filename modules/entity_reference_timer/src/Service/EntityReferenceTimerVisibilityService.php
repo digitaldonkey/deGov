@@ -46,7 +46,7 @@ class EntityReferenceTimerVisibilityService {
   }
 
   /**
-   * Add expiration date to parant node.
+   * Add expiration date to parent node.
    */
   public function addExpirationDateToParentNode(FieldItemInterface $item): void {
     $node = \Drupal::routeMatch()->getParameter('node');

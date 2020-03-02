@@ -39,6 +39,10 @@ msgstr ""
 msgid "An entity field containing an entity reference with a date."
 msgstr ""
 
+#: src/Plugin/Field/FieldType/EntityReferenceDate.php:13
+msgid "Timed reference"
+msgstr "Zeitgesteuerte Referenz"
+
 #: src/Plugin/Field/FieldType/EntityReferenceDate.php:11
 msgid "Reference"
 msgstr "Referenz"

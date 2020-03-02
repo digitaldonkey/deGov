@@ -41,14 +41,14 @@ Feature: deGov - Content creation
     And I should see "Ansichtssteuerung"
     And I choose "Header" via translation from tab menu
     And I should see "KOPFBEREICH"
-    And I should see HTML content matching "Paragraph hinzufügen"
+    And I should see 1 "#edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" elements after a while
     And I should see HTML content matching "Paragraph" via translated text
     And I choose "Seitenleiste rechts" from tab menu
     And I should see "Seitenleiste rechts"
-    And I should see HTML content matching "Paragraph hinzufügen"
+    And I should see 1 "#edit-field-sidebar-right-paragraphs-add-more-add-modal-form-area-add-more" elements after a while
     And I choose "Content" via translation from tab menu
     And I should see "INHALTSBEREICH"
-    And I should see HTML content matching "Paragraph hinzufügen"
+    And I should see 1 "#edit-field-sidebar-right-paragraphs-add-more-add-modal-form-area-add-more" elements after a while
 
   Scenario: I see all form fields in blog content type
     Given I am logged in as a user with the "administrator" role
@@ -65,13 +65,13 @@ Feature: deGov - Content creation
     And I should see "Social Media Buttons anzeigen"
     And I choose "Header" via translation from tab menu
     And I should see "KOPFBEREICH"
-    And I should see HTML content matching "Paragraph hinzufügen"
+    And I should see 1 "#edit-field-sidebar-right-paragraphs-add-more-add-modal-form-area-add-more" elements after a while
     And I choose "Seitenleiste rechts" from tab menu
     And I should see "Seitenleiste rechts"
-    And I should see HTML content matching "Paragraph hinzufügen"
+    And I should see 1 "#edit-field-sidebar-right-paragraphs-add-more-add-modal-form-area-add-more" elements after a while
     And I choose "Content" via translation from tab menu
     And I should see "INHALTSBEREICH"
-    And I should see HTML content matching "Paragraph hinzufügen"
+    And I should see 1 "#edit-field-sidebar-right-paragraphs-add-more-add-modal-form-area-add-more" elements after a while
 
   Scenario: I see all form fields in faq content type
     Given I am logged in as a user with the "administrator" role
@@ -82,7 +82,7 @@ Feature: deGov - Content creation
     And I should see "Beschreibung"
     And I choose "Content" via translation from tab menu
     And I should see "INHALTSBEREICH"
-    And I should see HTML content matching "Paragraph hinzufügen"
+    And I scroll to bottom
     And I should see "VERWANDTE FAQ"
     And I choose "Allgemein" from tab menu
     And I should see "Bereich"
@@ -114,13 +114,13 @@ Feature: deGov - Content creation
     And I should see "Ansichtssteuerung"
     And I choose "Header" via translation from tab menu
     And I should see "KOPFBEREICH"
-    And I should see HTML content matching "Paragraph hinzufügen"
+    And I should see 1 "#edit-field-sidebar-right-paragraphs-add-more-add-modal-form-area-add-more" elements after a while
     And I choose "Seitenleiste rechts" from tab menu
     And I should see "Seitenleiste rechts"
-    And I should see HTML content matching "Paragraph hinzufügen"
+    And I should see 1 "#edit-field-sidebar-right-paragraphs-add-more-add-modal-form-area-add-more" elements after a while
     And I choose "Content" via translation from tab menu
     And I should see "INHALTSBEREICH"
-    And I should see HTML content matching "Paragraph hinzufügen"
+    And I should see 1 "#edit-field-sidebar-right-paragraphs-add-more-add-modal-form-area-add-more" elements after a while
 
   Scenario: I see all form fields in event content type
     Given I am logged in as a user with the "administrator" role
@@ -148,13 +148,13 @@ Feature: deGov - Content creation
     And I should see "Ansichtssteuerung"
     And I choose "Header" via translation from tab menu
     And I should see "KOPFBEREICH"
-    And I should see HTML content matching "Paragraph hinzufügen"
+    And I should see 1 "#edit-field-sidebar-right-paragraphs-add-more-add-modal-form-area-add-more" elements after a while
     And I choose "Seitenleiste rechts" from tab menu
     And I should see "Seitenleiste rechts"
-    And I should see HTML content matching "Paragraph hinzufügen"
+    And I should see 1 "#edit-field-sidebar-right-paragraphs-add-more-add-modal-form-area-add-more" elements after a while
     And I choose "Content" via translation from tab menu
     And I should see "INHALTSBEREICH"
-    And I should see HTML content matching "Paragraph hinzufügen"
+    And I should see 1 "#edit-field-sidebar-right-paragraphs-add-more-add-modal-form-area-add-more" elements after a while
 
   Scenario: I can select a view mode for views reference paragraphs
     Given I am logged in as a user with the "administrator" role
@@ -163,7 +163,7 @@ Feature: deGov - Content creation
     And I choose "Content" via translation from tab menu
     And I press the "edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" button
     And I wait 2 seconds
-    And I click by CSS id "field-content-paragraphs-view-reference-add-more"
+    And I trigger the "mousedown" event on ".ui-dialog [name=field_content_paragraphs_view_reference_add_more]"
     Then I should see text matching "Ansichtsreferenz" via translation after a while
     And I should see 1 ".viewreference_target_id" element
     And I set the value of element ".viewreference_target_id" to "latest_events" via JavaScript
@@ -185,7 +185,7 @@ Feature: deGov - Content creation
     And I choose "Content" via translation from tab menu
     And I press the "edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" button
     And I wait 2 seconds
-    And I click by CSS id "field-content-paragraphs-text-add-more"
+    And I trigger the "mousedown" event on ".ui-dialog [name=field_content_paragraphs_text_add_more]"
     Then I should see text matching "Text format" via translated text after a while
     And I click by selector "#cke_106" via JavaScript
     And I set the value of element ".form-textarea-wrapper:eq(1) .cke_source" to "<script>document.write(\'scripttest1234\');</script>" via JavaScript
@@ -200,7 +200,7 @@ Feature: deGov - Content creation
     And I choose "Content" via translation from tab menu
     And I press the "edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" button
     And I wait 2 seconds
-    And I click by CSS id "field-content-paragraphs-text-add-more"
+    And I trigger the "mousedown" event on ".ui-dialog [name=field_content_paragraphs_text_add_more]"
     Then I should see text matching "Text format" via translated text after a while
     And I click by selector "#cke_106" via JavaScript
     And I set the value of element ".form-textarea-wrapper:eq(1) .cke_source" to "<font>BehatFont</font>" via JavaScript
@@ -277,13 +277,13 @@ Feature: deGov - Content creation
     Then I open node view by node title "Page with views references"
     Then I should not see text matching "A press release without a tag" via translated text in "css" selector ".paragraph.view-reference:nth-child(2)"
 
-  Scenario: I confirm there are no duplicates in the block layout selection table
-    Given I have dismissed the cookie banner if necessary
-    And I am logged in as a user with the "administrator" role
-    And I am on "/admin/structure/block"
-    And I click by selector "a#edit-blocks-region-content-title" via JavaScript
-    Then I should see text matching "Place block" via translation after a while
-    And each HTML content element with css selector ".block-filter-text-source" is unique
+#  Scenario: I confirm there are no duplicates in the block layout selection table
+#    Given I have dismissed the cookie banner if necessary
+#    And I am logged in as a user with the "administrator" role
+#    And I am on "/admin/structure/block"
+#    And I click by selector "a#edit-blocks-region-content-title" via JavaScript
+#    Then I should see text matching "Place block" via translation after a while
+#    And each HTML content element with css selector ".block-filter-text-source" is unique
 
   Scenario: Verify that rich text editor does not show duplicate buttons
     And I am logged in as a user with the "administrator" role
