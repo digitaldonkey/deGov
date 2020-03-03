@@ -3,6 +3,7 @@
 namespace Drupal\entity_reference_timer;
 
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 
@@ -50,6 +51,9 @@ class FieldSwitchService {
    * Update field.
    */
   public static function updateField(): void {
+    if (!self::fieldExists()) {
+      return;
+    }
     self::switchFieldStorageAndMigrateContent();
     self::switchFieldWidget();
     self::switchFormDisplay();
@@ -78,9 +82,34 @@ class FieldSwitchService {
    * Uninstall field.
    */
   public static function uninstallField(): void {
+    if (!self::fieldExists()) {
+      return;
+    }
     self::$fieldType = 'entity_reference';
     self::$display = 'entity_reference_display_default';
     self::updateField();
+  }
+
+  /**
+   * Check if the field config we expect is present.
+   *
+   * @return bool
+   *   Does the config exist?
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public static function fieldExists(): bool {
+    $fields = \Drupal::entityTypeManager()->getStorage('field_config')
+      ->loadByProperties(['field_name' => self::$fieldName]);
+    return !empty($fields[self::getFieldConfigKey()]) && $fields[self::getFieldConfigKey()] instanceof EntityInterface;
+  }
+
+  /**
+   * Assemble and return the key of the field config we are going to work with.
+   */
+  public static function getFieldConfigKey(): string {
+    return self::$entityType . '.' . self::$bundle . '.' . self::$fieldName;
   }
 
   /**

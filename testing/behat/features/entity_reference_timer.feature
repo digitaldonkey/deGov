@@ -10,17 +10,17 @@ Feature: Entity reference timer
   Scenario: An entity reference element has a checkbox for scheduled publication
     And I am logged in as a user with the "administrator" role
     And I am on "/node/add/normal_page#edit-group-content"
-    And I should see HTML content matching "Paragraph hinzufügen" after a while
+    And I should see 1 "#edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" elements after a while
     And I click by selector "#edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" via JavaScript
-    And I press "field_content_paragraphs_node_reference_add_more"
+    And I trigger the "mousedown" event on ".ui-dialog [name=field_content_paragraphs_node_reference_add_more]"
     Then I should see HTML content matching "publish time scheduled" via translated text after a while
 
   Scenario: An entity reference element shows start and end date after checkbox click
     And I am logged in as a user with the "administrator" role
     And I am on "/node/add/normal_page#edit-group-content"
-    And I should see HTML content matching "Paragraph hinzufügen" after a while
+    And I should see 1 "#edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" elements after a while
     And I click by selector "#edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" via JavaScript
-    And I press "field_content_paragraphs_node_reference_add_more"
+    And I trigger the "mousedown" event on ".ui-dialog [name=field_content_paragraphs_node_reference_add_more]"
     Then I should see HTML content matching "publish time scheduled" via translated text after a while
     And I click checkbox by name attribute value "field_content_paragraphs[0][subform][field_node_reference_nodes][0][publish_timer]"
     And I should see HTML content matching "Start" via translated text after a while
@@ -33,9 +33,9 @@ Feature: Entity reference timer
   Scenario: Default start date is reflecting the current date
     And I am logged in as a user with the "administrator" role
     And I am on "/node/add/normal_page#edit-group-content"
-    And I should see HTML content matching "Paragraph hinzufügen" after a while
+    And I should see 1 "#edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" elements after a while
     And I click by selector "#edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" via JavaScript
-    And I press "field_content_paragraphs_node_reference_add_more"
+    And I trigger the "mousedown" event on ".ui-dialog [name=field_content_paragraphs_node_reference_add_more]"
     Then I should see HTML content matching "publish time scheduled" via translated text after a while
     And I click checkbox by name attribute value "field_content_paragraphs[0][subform][field_node_reference_nodes][0][publish_timer]"
     And I assert date field with name attribute value "field_content_paragraphs[0][subform][field_node_reference_nodes][0][start_date][date]" contains current date
@@ -44,9 +44,9 @@ Feature: Entity reference timer
   Scenario: I prove that the end date must be after the start date
     And I am logged in as a user with the "administrator" role
     And I am on "/node/add/normal_page#edit-group-content"
-    And I should see HTML content matching "Paragraph hinzufügen" after a while
+    And I should see 1 "#edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" elements after a while
     And I click by selector "#edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" via JavaScript
-    And I press "field_content_paragraphs_node_reference_add_more"
+    And I trigger the "mousedown" event on ".ui-dialog [name=field_content_paragraphs_node_reference_add_more]"
     Then I should see HTML content matching "publish time scheduled" via translated text after a while
     And I click checkbox by name attribute value "field_content_paragraphs[0][subform][field_node_reference_nodes][0][publish_timer]"
     And I fill in "field_content_paragraphs[0][subform][field_node_reference_nodes][0][start_date][date]" with "11112019"
@@ -60,9 +60,9 @@ Feature: Entity reference timer
   Scenario: I prove that saved dates are reflected on node edit page
     And I am logged in as a user with the "administrator" role
     And I am on "/node/add/normal_page#edit-group-content"
-    And I should see HTML content matching "Paragraph hinzufügen" after a while
+    And I should see 1 "#edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" elements after a while
     And I click by selector "#edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" via JavaScript
-    And I press "field_content_paragraphs_node_reference_add_more"
+    And I trigger the "mousedown" event on ".ui-dialog [name=field_content_paragraphs_node_reference_add_more]"
     Then I should see HTML content matching "publish time scheduled" via translated text after a while
     And I click checkbox by name attribute value "field_content_paragraphs[0][subform][field_node_reference_nodes][0][publish_timer]"
     And I fill in "field_content_paragraphs[0][subform][field_node_reference_nodes][0][start_date][date]" with "11112050"
@@ -84,9 +84,9 @@ Feature: Entity reference timer
   Scenario: I prove that time cannot be inserted without a date
     And I am logged in as a user with the "administrator" role
     And I am on "/node/add/normal_page#edit-group-content"
-    And I should see HTML content matching "Paragraph hinzufügen" after a while
+    And I should see 1 "#edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" elements after a while
     And I click by selector "#edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" via JavaScript
-    And I press "field_content_paragraphs_node_reference_add_more"
+    And I trigger the "mousedown" event on ".ui-dialog [name=field_content_paragraphs_node_reference_add_more]"
     Then I should see HTML content matching "publish time scheduled" via translated text after a while
     And I click checkbox by name attribute value "field_content_paragraphs[0][subform][field_node_reference_nodes][0][publish_timer]"
     And I fill in "field_content_paragraphs[0][subform][field_node_reference_nodes][0][start_date][date]" with ""
@@ -102,9 +102,9 @@ Feature: Entity reference timer
   Scenario: I prove that I can insert a start date only
     And I am logged in as a user with the "administrator" role
     And I am on "/node/add/normal_page#edit-group-content"
-    And I should see HTML content matching "Paragraph hinzufügen" after a while
+    And I should see 1 "#edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" elements after a while
     And I click by selector "#edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" via JavaScript
-    And I press "field_content_paragraphs_node_reference_add_more"
+    And I trigger the "mousedown" event on ".ui-dialog [name=field_content_paragraphs_node_reference_add_more]"
     Then I should see HTML content matching "publish time scheduled" via translated text after a while
     And I click checkbox by name attribute value "field_content_paragraphs[0][subform][field_node_reference_nodes][0][publish_timer]"
     And I fill in "field_content_paragraphs[0][subform][field_node_reference_nodes][0][start_date][date]" with "11112050"
@@ -124,9 +124,9 @@ Feature: Entity reference timer
   Scenario: I prove that a scheduled teaser is hidden before its start date and visible afterwards
     And I am logged in as a user with the "administrator" role
     And I am on "/node/add/normal_page#edit-group-content"
-    And I should see HTML content matching "Paragraph hinzufügen" after a while
+    And I should see 1 "#edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" elements after a while
     And I click by selector "#edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" via JavaScript
-    And I press "field_content_paragraphs_node_reference_add_more"
+    And I trigger the "mousedown" event on ".ui-dialog [name=field_content_paragraphs_node_reference_add_more]"
     Then I should see HTML content matching "publish time scheduled" via translated text after a while
     And I click checkbox by name attribute value "field_content_paragraphs[0][subform][field_node_reference_nodes][0][publish_timer]"
     And I fill in "field_content_paragraphs[0][subform][field_node_reference_nodes][0][start_date][date]" with date "now + 10 seconds" formatted "mdY"
@@ -147,9 +147,9 @@ Feature: Entity reference timer
   Scenario: I prove that a scheduled teaser is hidden after its end date
     And I am logged in as a user with the "administrator" role
     And I am on "/node/add/normal_page#edit-group-content"
-    And I should see HTML content matching "Paragraph hinzufügen" after a while
+    And I should see 1 "#edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" elements after a while
     And I click by selector "#edit-field-content-paragraphs-add-more-add-modal-form-area-add-more" via JavaScript
-    And I press "field_content_paragraphs_node_reference_add_more"
+    And I trigger the "mousedown" event on ".ui-dialog [name=field_content_paragraphs_node_reference_add_more]"
     Then I should see HTML content matching "publish time scheduled" via translated text after a while
     And I click checkbox by name attribute value "field_content_paragraphs[0][subform][field_node_reference_nodes][0][publish_timer]"
     And I fill in "field_content_paragraphs[0][subform][field_node_reference_nodes][0][start_date][date]" with date "now - 1 minute" formatted "mdY"

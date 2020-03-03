@@ -3,6 +3,21 @@
 use Drupal\entity_reference_timer\FieldSwitchService;
 use Drupal\locale\Gettext;
 
+function entity_reference_timer_requirements(string $phase): array {
+  $requirements = [];
+
+  if($phase === 'runtime' && !FieldSwitchService::fieldExists()) {
+    $requirements['entity_reference_timer'] = [
+      'title' => t('Entity Reference Timer'),
+      'value' => t('Required field missing.'),
+      'description' => t('entity_reference_timer expects the field <em>:fieldName</em> to be present. The module is marked as installed, but it will no work. You should uninstall it.', [':fieldName' => FieldSwitchService::getFieldConfigKey()]),
+      'severity' => REQUIREMENT_ERROR,
+    ];
+  }
+
+  return $requirements;
+}
+
 /**
  * Implements hook_install().
  */
