@@ -20,7 +20,7 @@ export COMPOSER_MEMORY_LIMIT
 CI_ROOT_DIR=$BITBUCKET_CLONE_DIR
 export CI_ROOT_DIR
 
-RELEASE_BRANCH=feature/degov-1250-drupal-core-8712
+RELEASE_BRANCH=release/7.6.x-dev
 export RELEASE_BRANCH
 
 _info() {
@@ -76,7 +76,7 @@ done
 docker run --name mysql-$1 -e MYSQL_USER=testing -e MYSQL_PASSWORD=testing -e MYSQL_DATABASE=testing -p 3306:3306 -d mysql/mysql-server:5.7 --max_allowed_packet=1024M
 
 _info "### Setting up project folder"
-_composer create-project --no-progress degov/degov-project:dev-$RELEASE_BRANCH --no-install
+_composer create-project --no-progress degov/degov-project:dev-feature/degov-1250-drupal-core-8712 --no-install
 cd degov-project
 rm composer.lock
 
