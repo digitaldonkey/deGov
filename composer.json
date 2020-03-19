@@ -18,10 +18,10 @@
         "drupal/admin_toolbar": "^2.0",
         "drupal/block_field": "^1.0.0",
         "drupal/block_permissions": "^1.0",
-        "drupal/calendar": "1.x-dev",
+        "drupal/calendar": "~1.0@alpha",
         "drupal/config_replace": "^1.0",
         "drupal/contact_storage": "^1.0",
-        "drupal/core": "~8.7.8",
+        "drupal/core": "~8.7.12",
         "drupal/crop": "^2.0.0-rc1",
         "drupal/date_popup": "^1.0",
         "drupal/degov_simplenews": "^1.5",
@@ -133,9 +133,6 @@
             },
             "drupal/ultimate_cron": {
                 "2890428 - Using 'continue' outside of a loop or switch structure": "https://www.drupal.org/files/issues/continue_in_loop-2890428-2.patch"
-            },
-            "drupal/calendar": {
-                "3066015 - 'continue' targeting switch is equivalent to 'break'": "https://www.drupal.org/files/issues/2019-08-07/calendar-3066015-continue-in-php7.3.patch"
             },
             "drupal/search_api": {
                 "2931562 - Notice: Undefined index: total When we enable the module in the installation step": "https://www.drupal.org/files/issues/2019-09-25/2931562-results-php-notice.patch"
