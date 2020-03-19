@@ -20,7 +20,7 @@ export COMPOSER_MEMORY_LIMIT
 CI_ROOT_DIR=$BITBUCKET_CLONE_DIR
 export CI_ROOT_DIR
 
-RELEASE_BRANCH=release/7.6.x-dev
+RELEASE_BRANCH=feature/degov-1250-drupal-core-8712
 export RELEASE_BRANCH
 
 _info() {
