@@ -37,7 +37,7 @@
         "drupal/eu_cookie_compliance": "^1.5",
         "drupal/facets": "^1.0@beta",
         "drupal/features": "^3.5",
-        "drupal/field_group": "3.x-dev",
+        "drupal/field_group": "^3.0",
         "drupal/geocoder": "^2.0-alpha5",
         "drupal/geofield": "^1.6",
         "drupal/image_widget_crop": "^2.1",
