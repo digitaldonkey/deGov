@@ -6,7 +6,7 @@
     "@babel/plugin-transform-arrow-functions": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
     "awesome-notifications": "^2.2.9",
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "babel-cli": "^6.26.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-loader": "^7.1.5",
