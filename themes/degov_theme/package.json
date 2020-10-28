@@ -12,7 +12,7 @@
     "jquery": "^1.9",
     "lodash": "^4.17.10",
     "mini-css-extract-plugin": "^0.4",
-    "node-sass": "^4.9.3",
+    "node-sass": "^4.13.1",
     "popper.js": "^1.14.4",
     "sass-loader": "^6.0.7",
     "style-loader": "^0.20.3",
