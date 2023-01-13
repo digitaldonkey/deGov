@@ -31,6 +31,6 @@
     "bat": "npm run-script build-and-test"
   },
   "devDependencies": {
-    "webpack-cli": "^3.2.1"
+    "webpack-cli": "^3.3.12"
   }
 }
